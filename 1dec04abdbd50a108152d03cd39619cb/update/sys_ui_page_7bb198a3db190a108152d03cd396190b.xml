@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[function handleSubmit() {
+	var sTargetRecordId = trim(gel('map_cfg_target_record').value);
+	g_form.setValue('target_value', sTargetRecordId);
+    GlideModal.get().destroy();
+	gsftSubmit(null, g_form.getFormElement(), 'sysverb_update_and_stay');
+}
+
+function handleCancel() {
+    var modal = GlideModal.get().destroy();
+}]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_snc_mapping_cm_MappingCfgTargetRecord.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+	<g:evaluate var="jvar_mappingid">
+		var sValue = RP.getParameterValue('sysparm_mappingid');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_popupmessage">
+		var sValue = RP.getParameterValue('sysparm_popupmessage');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_targettable">
+		var sValue = RP.getParameterValue('sysparm_targettable');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_targetquery">
+		var sValue = RP.getParameterValue('sysparm_targetquery');
+		sValue;
+	</g:evaluate>
+	<p>
+	<div>${sysparm_popupmessage}</div>
+	</p>
+	<p>
+	<div>
+		<g:ui_reference name="map_cfg_target_record" id="map_cfg_target_record" table="${jvar_targettable}"
+			completer="AJAXTableCompleter" query="${jvar_targetquery}" />
+	</div>
+	</p>
+	<p>
+	<div>
+		<g:dialog_buttons_ok_cancel ok="handleSubmit();" ok_type="button" cancel="handleCancel()"
+			cancel_type="button" />
+	</div>
+	</p>
+</j:jelly>]]></html>
+        <name>MappingCfgTargetRecord</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-07 06:03:01</sys_created_on>
+        <sys_id>7bb198a3db190a108152d03cd396190b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>MappingCfgTargetRecord</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_ui_page_7bb198a3db190a108152d03cd396190b</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-04-07 06:03:01</sys_updated_on>
+    </sys_ui_page>
+</record_update>
