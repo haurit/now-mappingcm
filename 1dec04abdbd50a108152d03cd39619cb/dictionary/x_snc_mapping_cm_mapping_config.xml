@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="3c2d042fdbd50a108152d03cd39619cd" label="Mapping Config" max_length="40" name="x_snc_mapping_cm_mapping_config" type="collection">
+        <element label="Choice Field" max_length="80" name="choice_field" read_only="true" type="string"/>
+        <element label="Choice Table" max_length="80" name="choice_table" read_only="true" type="table_name"/>
+        <element label="Parent Tables" max_length="4000" name="parent_tables" read_only="true" reference="sys_db_object" type="glide_list"/>
+        <element label="Source Value" max_length="255" name="source_value" read_only="true" type="string"/>
+        <element label="Target Table" max_length="80" name="target_table" type="table_name"/>
+        <element dependent="target_table" dependent_on_field="target_table" label="Target Value" max_length="32" name="target_value" read_only="true" type="document_id" use_dependent_field="true"/>
+        <element choice="3" default="reference" label="Type" max_length="40" name="type" read_only="true" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Choice" sequence="100" value="choice"/>
+                <element inactive_on_update="false" label="Reference" sequence="200" value="reference"/>
+            </choice>
+        </element>
+        <index name="index">
+            <element name="target_value"/>
+        </index>
+    </element>
+</database>

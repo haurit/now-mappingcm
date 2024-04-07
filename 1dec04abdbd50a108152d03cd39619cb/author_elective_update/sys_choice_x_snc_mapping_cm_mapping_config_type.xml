@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="type" table="x_snc_mapping_cm_mapping_config" version="3">
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>type</element>
+            <name>x_snc_mapping_cm_mapping_config</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2024-04-07 05:51:42</sys_created_on>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>type</sys_name>
+            <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+            <sys_update_name>sys_choice_x_snc_mapping_cm_mapping_config_type</sys_update_name>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2024-04-07 05:51:42</sys_updated_on>
+        </sys_choice_set>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Choice</label>
+            <language>en</language>
+            <name>x_snc_mapping_cm_mapping_config</name>
+            <sequence>100</sequence>
+            <synonyms/>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2024-04-07 05:51:56</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>3</sys_mod_count>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2024-04-07 05:52:11</sys_updated_on>
+            <value>choice</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Reference</label>
+            <language>en</language>
+            <name>x_snc_mapping_cm_mapping_config</name>
+            <sequence>200</sequence>
+            <synonyms/>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2024-04-07 05:51:42</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>3</sys_mod_count>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2024-04-07 05:52:09</sys_updated_on>
+            <value>reference</value>
+        </sys_choice>
+    </sys_choice>
+</record_update>

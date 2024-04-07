@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_app">
+    <sys_app action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <can_edit_in_studio>true</can_edit_in_studio>
+        <enforce_license>log</enforce_license>
+        <guided_setup_guid/>
+        <hide_on_ui>false</hide_on_ui>
+        <ide_created>DS</ide_created>
+        <installed_as_dependency>false</installed_as_dependency>
+        <js_level>es_latest</js_level>
+        <licensable>true</licensable>
+        <license/>
+        <license_category>none</license_category>
+        <license_definition/>
+        <license_model>none</license_model>
+        <logo>c6ec886bdbd50a108152d03cd39619be</logo>
+        <menu display_value="Mapping Config Manager">966d482fdbd50a108152d03cd39619b2</menu>
+        <name>Mapping Configuration Manager</name>
+        <package_json/>
+        <private>false</private>
+        <restrict_table_access>false</restrict_table_access>
+        <runtime_access_tracking>permissive</runtime_access_tracking>
+        <scope>x_snc_mapping_cm</scope>
+        <scoped_administration>false</scoped_administration>
+        <short_description>Allows to manage mappings from choice lists, reference fields etc. in a controlled fashion.</short_description>
+        <source>x_snc_mapping_cm</source>
+        <store_correlation_id/>
+        <store_url/>
+        <subscription_entitlement/>
+        <sys_class_name>sys_app</sys_class_name>
+        <sys_code/>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-07 05:41:15</sys_created_on>
+        <sys_id>1dec04abdbd50a108152d03cd39619cb</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-04-07 05:52:48</sys_updated_on>
+        <template/>
+        <trackable>true</trackable>
+        <uninstall_blocked>false</uninstall_blocked>
+        <user_role display_value="admin" name="admin">2831a114c611228501d4ea6c309d626d</user_role>
+        <vendor/>
+        <vendor_prefix/>
+        <version>1.0.0</version>
+    </sys_app>
+    <sys_translated_text action="delete_multiple" query="documentkey=1dec04abdbd50a108152d03cd39619cb"/>
+    <sys_attachment action="INSERT_OR_UPDATE">
+        <average_image_color/>
+        <chunk_size_bytes>700000</chunk_size_bytes>
+        <compressed>true</compressed>
+        <content_type>image/png</content_type>
+        <file_name>Picture1.png</file_name>
+        <hash>8e7944b006888a2b2e618f2489f308ecf0bfecc0a51356ce35bf13d5aaf8fa30</hash>
+        <image_height>128</image_height>
+        <image_width>172</image_width>
+        <size_bytes>1515</size_bytes>
+        <size_compressed>1538</size_compressed>
+        <state>available</state>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-07 05:41:18</sys_created_on>
+        <sys_id>c6ec886bdbd50a108152d03cd39619be</sys_id>
+        <sys_mod_count>2</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-04-07 05:41:18</sys_updated_on>
+        <table_name>sys_app</table_name>
+        <table_sys_id>1dec04abdbd50a108152d03cd39619cb</table_sys_id>
+    </sys_attachment>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>H4sIAAAAAAAA/w==</data>
+        <length>16</length>
+        <position>0</position>
+        <sys_attachment display_value="Picture1.png" sys_id="c6ec886bdbd50a108152d03cd39619be">c6ec886bdbd50a108152d03cd39619be</sys_attachment>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-07 05:41:18</sys_created_on>
+        <sys_id>0aec886bdbd50a108152d03cd39619be</sys_id>
+    </sys_attachment_doc>
+    <sys_attachment_doc action="INSERT_OR_UPDATE">
+        <data>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</data>
+        <length>2040</length>
+        <position>1</position>
+        <sys_attachment display_value="Picture1.png" sys_id="c6ec886bdbd50a108152d03cd39619be">c6ec886bdbd50a108152d03cd39619be</sys_attachment>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-07 05:41:18</sys_created_on>
+        <sys_id>8aec886bdbd50a108152d03cd39619be</sys_id>
+    </sys_attachment_doc>
+</record_update>
