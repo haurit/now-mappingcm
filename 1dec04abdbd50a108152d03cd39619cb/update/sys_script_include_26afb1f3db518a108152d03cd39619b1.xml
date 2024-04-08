@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_snc_mapping_cm.MappingConfigApplyAJAX</api_name>
+        <caller_access/>
+        <client_callable>true</client_callable>
+        <description/>
+        <name>MappingConfigApplyAJAX</name>
+        <script><![CDATA[var MappingConfigApplyAJAX = Class.create();
+MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
+
+	getApplyMappingPopupInformation: function () {
+		var sMapId = this.getParameter('sysparm_mapid');
+		var bAutoApproval = (String(gs.getProperty('x_snc_mapping_cm_autoapproval', true)) === 'true');
+		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		if ((sMapId) && (grMappingCfg.get(sMapId))) {
+			var sTitle = gs.getMessage('map_apply_target_title');
+			var aParentTableInfos = [];
+			var bEnableWorkflow = gs.getProperty('x_snc_mapping_cm_enableworkflow', false);
+			var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
+			aParentTables.forEach(function (sParentTable) {
+				var sParentTableInfo = '';
+				var grTable = new GlideRecord(sParentTable);
+				sParentTableInfo = grTable.getClassDisplayValue() + ' [' + sParentTable + ']';
+				if ((bEnableWorkflow === 'true') || (gs.getProperty('x_snc_mapping_cm_enableworkflow_' + sParentTable, false) === 'true')) {
+					sParentTableInfo = sParentTableInfo + ' (with workflow)';
+				} // if workflow true
+				aParentTableInfos.push(sParentTableInfo);
+			}, this); // each table
+			var aMessageParameters = [];
+			aMessageParameters.push(aParentTableInfos.join(', '));
+			aMessageParameters.push(grMappingCfg.getValue('type'));
+			aMessageParameters.push(grMappingCfg.getValue('source_value'));
+			aMessageParameters.push(grMappingCfg.getValue('target_value'));
+			var sDescription = (bAutoApproval) ? gs.getMessage('map_apply_target_description_autoapprove', aMessageParameters) : gs.getMessage('map_apply_target_description', aMessageParameters);
+			var oReturn = {
+				'sTitle': sTitle,
+				'sDescription': sDescription,
+			}; // return obj
+			return JSON.stringify(oReturn);
+		} else {
+			gs.error('MappingConfigApplyAJAX.getApplyMappingPopupInformation could not find map id');
+			return '';
+		} // if map id
+	}, // function getApplyMappingPopupInformation
+
+	applyMapping: function () {
+		var sMapId = this.getParameter('sysparm_mapid');
+		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		if ((sMapId) && (grMappingCfg.get(sMapId))) {
+			var bAutoApproval = (String(gs.getProperty('x_snc_mapping_cm_autoapproval', true)) === 'true');
+			var sStatus = (bAutoApproval) ? 'approved' : 'approval';
+			grMappingCfg.setValue('apply_job_status', sStatus);
+			if (!grMappingCfg.update()) {
+				gs.error('MappingConfigApplyAJAX.applyMapping error updating mapping record: ' + grMappingCfg.getLastErrorMessage());
+			} // if insert
+			var sMessage = (bAutoApproval) ? gs.getMessage('map_apply_target_message_autoapprove') : gs.getMessage('map_apply_target_message_approval');
+			var sMessageType = 'info';
+			var oReturn = {
+				'sMessage': sMessage,
+				'sMessageType': sMessageType,
+			}; // return obj
+			return JSON.stringify(oReturn);
+		} else {
+			gs.error('MappingConfigApplyAJAX.applyMapping could not find map id');
+			return '';
+		} // if map id
+	}, // function applyMapping
+
+	type: 'MappingConfigApplyAJAX',
+	version: '1.0.0',
+	author: 'Tom Hauri',
+	email: 'tom@hauri.biz'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-08 08:41:28</sys_created_on>
+        <sys_id>26afb1f3db518a108152d03cd39619b1</sys_id>
+        <sys_mod_count>23</sys_mod_count>
+        <sys_name>MappingConfigApplyAJAX</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_script_include_26afb1f3db518a108152d03cd39619b1</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-04-08 11:59:20</sys_updated_on>
+    </sys_script_include>
+</record_update>
