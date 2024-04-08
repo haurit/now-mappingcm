@@ -10,19 +10,19 @@
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 06:01:14</sys_created_on>
         <sys_id>4761d0a3db190a108152d03cd3961927</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>1</sys_mod_count>
         <sys_name>choice_table</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_ui_policy_action_4761d0a3db190a108152d03cd3961927</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-07 06:01:14</sys_updated_on>
+        <sys_updated_on>2024-04-08 07:30:33</sys_updated_on>
         <table>x_snc_mapping_cm_mapping_config</table>
         <ui_policy display_value="Show choice table and choice field if type is &quot;Choice&quot;">0221d863db190a108152d03cd396191c</ui_policy>
         <value/>
         <value_action>ignore</value_action>
-        <visible>true</visible>
+        <visible>ignore</visible>
     </sys_ui_policy_action>
     <sys_translated_text action="delete_multiple" query="documentkey=4761d0a3db190a108152d03cd3961927"/>
 </record_update>

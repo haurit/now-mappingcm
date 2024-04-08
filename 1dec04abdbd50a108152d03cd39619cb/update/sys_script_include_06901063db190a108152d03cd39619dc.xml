@@ -5,54 +5,83 @@
         <api_name>x_snc_mapping_cm.MappingConfigManager</api_name>
         <caller_access/>
         <client_callable>false</client_callable>
-        <description/>
+        <description>Interface to integrations that can create, update or read mappings values.</description>
         <name>MappingConfigManager</name>
         <script><![CDATA[var MappingConfigManager = Class.create();
 MappingConfigManager.prototype = {
 	initialize: function () {
-		this.bLog = true;
-		//this._gtRead = new global.GlobalToolsRecordRead();
-		//this._gtWrite = new global.GlobalToolsRecordWrite();
+		this.bLog = false;
 	}, // function initialize
 
 	doMappingValue: function (sParentTable, sSourceValue, sRefOrChoiceTable, sChoiceField) {
-		if ((!sSourceValue) && (!sRefOrChoiceTable)) {
-			if (this.bLog) { gs.warn('MappingConfigManager.getMappingCfg empty source value or table!'); }
-			return;
+		sSourceValue = (sSourceValue) ? String(sSourceValue) : '';
+		sRefOrChoiceTable = (sRefOrChoiceTable) ? String(sRefOrChoiceTable) : '';
+		if ((!sSourceValue) || (!sRefOrChoiceTable) || (!new GlideRecord(String(sRefOrChoiceTable)).isValid())) {
+			gs.warn('MappingConfigManager.doMappingValue empty or invalid source value or table!');
+			return sSourceValue;
 		} // if no source or table
-		var sType = (sChoiceField) ? 'choice' : 'reference';
 		var grMappingCfg = this._getMappingCfg(sSourceValue, sRefOrChoiceTable, sChoiceField);
 		if (grMappingCfg) {
 			if ((sParentTable) && (grMappingCfg.getValue('parent_tables')).split(',').indexOf(sParentTable) == -1) {
 				grMappingCfg.setValue('parent_tables', grMappingCfg.getValue('parent_tables') + ',' + sParentTable);
+				if (!grMappingCfg.update()) {
+					gs.warn('MappingConfigManager.doMappingValue error updating parent table "' + sParentTable + '" in mapping record: ' + grMappingCfg.getLastErrorMessage());
+				} // if insert
 			} // if parent table not yet set
-			return grMappingCfg.getValue('target_value');
+			var sTargetValue = grMappingCfg.getValue('target_value');
+			if (grMappingCfg.getValue('type') == 'choice') {
+				var grChoice = new GlideRecord('sys_choice');
+				if (grChoice.get(sTargetValue)) {
+					sTargetValue = grChoice.getValue('value');
+				} else {
+					return sSourceValue;
+				} // if ho
+			} // if choice
+			return sTargetValue;
 		} else {
-			//sRefValue = this._gtWrite.doRecordByName(sRefTable, sErrorHandlingRecordName);
+			sChoiceField = (sChoiceField) ? String(sChoiceField) : '';
+			var sType = 'reference';
+			if (sChoiceField) {
+				if (!new GlideRecord(sRefOrChoiceTable).isValidField(sChoiceField)) {
+					gs.error('MappingConfigManager.doMappingValue invalid choice field!');
+					return sSourceValue;
+				} // if valid field
+				sType = 'choice';
+			} // if choice field
 			grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
 			grMappingCfg.setValue('type', sType);
+			grMappingCfg.setValue('choice_table', sRefOrChoiceTable);
 			grMappingCfg.setValue('source_value', sSourceValue);
 			if (sType == 'choice') {
-				grMappingCfg.setValue('choice_table', sRefOrChoiceTable);
 				grMappingCfg.setValue('choice_field', sChoiceField);
 				grMappingCfg.setValue('target_table', 'sys_choice');
 			} else {
-				grMappingCfg.setValue('choice_table', '');
 				grMappingCfg.setValue('choice_field', '');
 				grMappingCfg.setValue('target_table', sRefOrChoiceTable);
 			} // if choice
-			grMappingCfg.setValue('parent_tables', sParentTable);
+			if (sParentTable) {
+				grMappingCfg.setValue('parent_tables', sParentTable);
+			} // if parent table
 			if (!grMappingCfg.insert()) {
-				gs.error('MappingConfigManager.getOrCreateMappingValue error inserting mapping record: ' + grMappingCfg.getLastErrorMessage());
+				gs.error('MappingConfigManager.doMappingValue error inserting mapping record: ' + grMappingCfg.getLastErrorMessage());
 			} // if insert
 		} // if mapping value found
-	}, // function getOrCreateMappingValue
+		return sSourceValue;
+	}, // function doMappingValue
 
 	getMappedValue: function (sSourceValue, sRefOrChoiceTable, sChoiceField) {
 		var grMappingCfg = this._getMappingCfg(sSourceValue, sRefOrChoiceTable, sChoiceField);
-		if (grMappingCfg) {
+		if ((grMappingCfg) && (sSourceValue != grMappingCfg)) {
 			var sTargetValue = grMappingCfg.getValue('target_value');
 			if (sTargetValue) {
+				if (grMappingCfg.getValue('type') == 'choice') {
+					var grChoice = new GlideRecord('sys_choice');
+					if (grChoice.get(sTargetValue)) {
+						sTargetValue = grChoice.getValue('value');
+					} else {
+						return sSourceValue;
+					} // if ho
+				} // if choice
 				return sTargetValue;
 			} // if target value
 		} // if mapped cfg
@@ -61,21 +90,25 @@ MappingConfigManager.prototype = {
 
 	_getMappingCfg: function (sSourceValue, sRefOrChoiceTable, sChoiceField) {
 		var aQuery = [];
-		if ((!sSourceValue) && (!sRefOrChoiceTable)) {
-			if (this.bLog) { gs.warn('MappingConfigManager.getMappingCfg empty source value or table!'); }
-			return;
+		sSourceValue = (sSourceValue) ? String(sSourceValue) : '';
+		sRefOrChoiceTable = String(sRefOrChoiceTable);
+		sChoiceField = (sChoiceField) ? String(sChoiceField) : '';
+		if ((!sSourceValue) || (!sRefOrChoiceTable) || (!new GlideRecord(String(sRefOrChoiceTable)).isValid())) {
+			gs.warn('MappingConfigManager.getMappingCfg empty or invalid source value or table!');
+			return sSourceValue;
 		} // if no source or table
 		var sType = (sChoiceField) ? 'choice' : 'reference';
 		aQuery.push('type=' + sType);
+		aQuery.push('choice_table=' + sRefOrChoiceTable);
 		if (sType == 'choice') {
-			aQuery.push('choice_table=' + sRefOrChoiceTable);
 			aQuery.push('choice_field=' + sChoiceField);
 		} else {
-			aQuery.push('target_table=' + sRefOrChoiceTable);
+			aQuery.push('choice_fieldISEMPTY');
 		} // if choice
 		aQuery.push('source_value=' + sSourceValue);
 		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
 		grMappingCfg.addEncodedQuery(aQuery.join('^'));
+		grMappingCfg.setLimit(1);
 		grMappingCfg.query();
 		if (grMappingCfg.next()) {
 			return grMappingCfg;
@@ -92,13 +125,13 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>8</sys_mod_count>
+        <sys_mod_count>25</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-07 09:54:54</sys_updated_on>
+        <sys_updated_on>2024-04-08 07:58:01</sys_updated_on>
     </sys_script_include>
 </record_update>
