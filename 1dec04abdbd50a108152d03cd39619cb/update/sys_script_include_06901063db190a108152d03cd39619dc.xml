@@ -13,8 +13,9 @@ MappingConfigManager.prototype = {
 		this.bLog = false;
 	}, // function initialize
 
-	doMappingValue: function (sParentTable, sSourceValue, sRefOrChoiceTable, sChoiceField) {
+	doMappingValue: function (sParentTable, sSourceValue, sRefOrChoiceTable, sChoiceField, sSourceDisplayValue) {
 		sSourceValue = (sSourceValue) ? String(sSourceValue) : '';
+		sSourceDisplayValue = (sSourceDisplayValue) ? sSourceDisplayValue : '';
 		sRefOrChoiceTable = (sRefOrChoiceTable) ? String(sRefOrChoiceTable) : '';
 		if ((!sSourceValue) || (!sRefOrChoiceTable) || (!new GlideRecord(String(sRefOrChoiceTable)).isValid())) {
 			gs.warn('MappingConfigManager.doMappingValue empty or invalid source value or table!');
@@ -52,6 +53,7 @@ MappingConfigManager.prototype = {
 			grMappingCfg.setValue('type', sType);
 			grMappingCfg.setValue('choice_table', sRefOrChoiceTable);
 			grMappingCfg.setValue('source_value', sSourceValue);
+			grMappingCfg.setValue('source_display_value', sSourceDisplayValue);
 			if (sType == 'choice') {
 				grMappingCfg.setValue('choice_field', sChoiceField);
 				grMappingCfg.setValue('target_table', 'sys_choice');
@@ -125,13 +127,13 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>25</sys_mod_count>
+        <sys_mod_count>28</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-08 07:58:01</sys_updated_on>
+        <sys_updated_on>2024-04-08 12:55:27</sys_updated_on>
     </sys_script_include>
 </record_update>
