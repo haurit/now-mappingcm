@@ -8,34 +8,34 @@
         <hint/>
         <homepage/>
         <image/>
-        <link_type>LIST</link_type>
+        <link_type>DIRECT</link_type>
         <map_page/>
-        <mobile_title>Mapping Configs</mobile_title>
+        <mobile_title>Properties</mobile_title>
         <mobile_view_name>Mobile</mobile_view_name>
-        <name>x_snc_mapping_cm_mapping_config</name>
-        <order>100</order>
+        <name/>
+        <order>300</order>
         <override_menu_roles>false</override_menu_roles>
-        <query/>
+        <query>system_properties_ui.do?sysparm_title=Mapping Config Manager Properties&amp;sysparm_category=Mapping Config Manager</query>
         <report/>
         <require_confirmation>true</require_confirmation>
-        <roles>admin</roles>
+        <roles/>
         <sys_class_name>sys_app_module</sys_class_name>
         <sys_created_by>tom.hauri</sys_created_by>
-        <sys_created_on>2024-04-07 05:43:30</sys_created_on>
+        <sys_created_on>2024-04-07 09:49:23</sys_created_on>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
-        <sys_id>1a6d482fdbd50a108152d03cd39619b6</sys_id>
-        <sys_mod_count>1</sys_mod_count>
-        <sys_name>Mapping Configs</sys_name>
+        <sys_id>63754d6fdbd90a108152d03cd39619d4</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Properties</sys_name>
         <sys_overrides/>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
-        <sys_update_name>sys_app_module_1a6d482fdbd50a108152d03cd39619b6</sys_update_name>
+        <sys_update_name>sys_app_module_63754d6fdbd90a108152d03cd39619d4</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-07 09:27:15</sys_updated_on>
+        <sys_updated_on>2024-04-07 09:49:23</sys_updated_on>
         <timeline_page/>
-        <title>Mapping Configs</title>
+        <title>Properties</title>
         <uncancelable>false</uncancelable>
         <view_name/>
         <window_name/>
