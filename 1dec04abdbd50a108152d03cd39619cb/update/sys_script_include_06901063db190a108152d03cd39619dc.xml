@@ -25,7 +25,9 @@ MappingConfigManager.prototype = {
 		if (grMappingCfg) {
 			if ((sParentTable) && (grMappingCfg.getValue('parent_tables')).split(',').indexOf(sParentTable) == -1) {
 				grMappingCfg.setValue('parent_tables', grMappingCfg.getValue('parent_tables') + ',' + sParentTable);
-				if (!grMappingCfg.update()) {
+				if (grMappingCfg.update()) {
+					this._doAffectedTable(sParentTable, sRefOrChoiceTable, sChoiceField);
+				} else {
 					gs.warn('MappingConfigManager.doMappingValue error updating parent table "' + sParentTable + '" in mapping record: ' + grMappingCfg.getLastErrorMessage());
 				} // if insert
 			} // if parent table not yet set
@@ -64,7 +66,9 @@ MappingConfigManager.prototype = {
 			if (sParentTable) {
 				grMappingCfg.setValue('parent_tables', sParentTable);
 			} // if parent table
-			if (!grMappingCfg.insert()) {
+			if (grMappingCfg.insert()) {
+				this._doAffectedTable(sParentTable, sRefOrChoiceTable, sChoiceField);
+			} else {
 				gs.error('MappingConfigManager.doMappingValue error inserting mapping record: ' + grMappingCfg.getLastErrorMessage());
 			} // if insert
 		} // if mapping value found
@@ -117,6 +121,50 @@ MappingConfigManager.prototype = {
 		} // if found
 	}, // function getMappingCfg
 
+	_doAffectedTable: function (sParentTable, sRefOrChoiceTable, sChoiceField) {
+		var aFields = [];
+		var sQuery = '';
+		if (sChoiceField) {
+			var grChoice = new GlideRecord('sys_choice');
+			grChoice.addEncodedQuery('name=' + sParentTable + '^element=' + sChoiceField);
+			grChoice.setLimit(1);
+			grChoice.query();
+			if (grChoice.hasNext()) {
+				sQuery = 'name=' + sParentTable + '^element=' + grChoice.getValue('element') + '^';
+			} // if has choice
+			sQuery += 'name=' + sParentTable + '^choice_table=' + sRefOrChoiceTable + '^choice_field=' + sChoiceField;
+		} else {
+			sQuery = 'name=' + sParentTable + '^internal_typeINglide_list,reference^reference=' + sRefOrChoiceTable;
+		} // if choice
+		var grDictionary = new GlideRecord('sys_dictionary');
+		grDictionary.addEncodedQuery(sQuery);
+		grDictionary.query();
+		while (grDictionary.next()) {
+			aFields.push(grDictionary.getUniqueValue());
+		} // if ref or choices
+		this._saveAffectedTable(sParentTable, sRefOrChoiceTable, aFields);
+	}, // function _doAffectedTable
+
+	_saveAffectedTable: function (sParentTable, sRefOrChoiceTable, aFields) {
+		var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
+		grAffectedTable.addEncodedQuery('affected_table=' + sParentTable + '^choice_table=' + sRefOrChoiceTable);
+		grAffectedTable.query();
+		if (grAffectedTable.next()) {
+			grAffectedTable.setValue('affected_fields', aFields.join(','));
+			if (!grAffectedTable.update()) {
+				gs.warn('MappingConfigManager._saveAffectedTable error updating table "' + sParentTable + '" / "' + sRefOrChoiceTable + '" in affected table record: ' + grAffectedTable.getLastErrorMessage());
+			} // if update
+		} else {
+			grAffectedTable.initialize();
+			grAffectedTable.setValue('affected_table', sParentTable);
+			grAffectedTable.setValue('choice_table', sRefOrChoiceTable);
+			grAffectedTable.setValue('affected_fields', aFields.join(','));
+			if (!grAffectedTable.insert()) {
+				gs.warn('MappingConfigManager._saveAffectedTable error updating table "' + sParentTable + '" / "' + sRefOrChoiceTable + '" in affected table record: ' + grAffectedTable.getLastErrorMessage());
+			} // if insert
+		} // if affected table
+	}, // function _saveAffectedTable
+
 	type: 'MappingConfigManager',
 	version: '1.0.0',
 	author: 'Tom Hauri',
@@ -127,13 +175,13 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>28</sys_mod_count>
+        <sys_mod_count>34</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-08 12:55:27</sys_updated_on>
+        <sys_updated_on>2024-04-09 06:23:57</sys_updated_on>
     </sys_script_include>
 </record_update>

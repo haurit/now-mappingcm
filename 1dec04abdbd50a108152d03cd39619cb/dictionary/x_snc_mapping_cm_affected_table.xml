@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="29832e44db65ca108152d03cd39619be" label="Affected Table" max_length="40" name="x_snc_mapping_cm_affected_table" type="collection">
+        <element default="true" label="Active" max_length="40" name="active" read_only="true" type="boolean"/>
+        <element label="Affected Fields" max_length="4000" name="affected_fields" read_only="true" reference="sys_dictionary" type="glide_list"/>
+        <element label="Affected Table" max_length="80" name="affected_table" read_only="true" type="table_name"/>
+        <element label="Choice Table" max_length="80" name="choice_table" read_only="true" type="table_name"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;return current.affected_table.getDisplayValue() + ' - ' + current.choice_table.getDisplayValue();&#13;&#10;&#13;&#10;})(current);" display="true" label="Name" max_length="255" name="name" read_only="true" type="string" virtual="true"/>
+    </element>
+</database>
