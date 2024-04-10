@@ -14,18 +14,81 @@ MappingConfigApply.prototype = {
 		//this._gtWrite = new global.GlobalToolsRecordWrite();
 	}, // function initialize
 
-	processBusinessRule: function () {
-		// loop through all tables
-		// get all reference fields on the given table
-		// loop through reference fields and build query
-		// loop through records where source value is found in one of the reference fields
-		// run query and replace source value with target value on all fields
+	processBusinessRule: function (grMappingCfg, grMappingCfgOld) {
+		var sSourceValue = grMappingCfg.getValue('source_value');
+		var sTargetValue = grMappingCfg.getValue('target_value');
+		var sChoiceField = grMappingCfg.getValue('choice_field');
+		var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
+		aParentTables.forEach(function (sParentTable) {
+			var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
+			var sQuery = 'affected_table=' + sParentTable + '^choice_table=' + grMappingCfg.getValue('choice_table');
+			if (sChoiceField) {
+				sQuery += '^choice_field=' + sChoiceField;
+			} // if choice field
+			grAffectedTable.addEncodedQuery(sQuery);
+			grAffectedTable.query();
+			if (grAffectedTable.next()) {
+				//grAffectedTable.getUniqueValue(), sSourceValue, sTargetValue
+				var grTrigger = new GlideRecord('sys_trigger');
+				grTrigger.newRecord();
+				grTrigger.setValue('name', 'MappingConfigApply');
+				grTrigger.setValue('trigger_type', '0');
+				var dtDelay = new GlideDateTime();
+				dtDelay.addSeconds(2);
+				grTrigger.setValue('next_action', dtDelay);
+				grTrigger.setValue('script', 'var _MappingConfigApply = new x_snc_mapping_cm.MappingConfigApply();\n_MappingConfigApply.runJob(' + grAffectedTable.getUniqueValue() + ', ' + sSourceValue + ', ' + sTargetValue + ')');
+				return grTrigger.insert();
+			} // if affected table
+		}, this); // each table
 	}, // function _process
 
-	runjob: function(sTableName) {
-		var bEnableWorkflow = gs.getProperty('x_snc_mapping_cm_enableworkflow', false);
-		var bEnableWorkflowByTable = gs.getProperty('x_snc_mapping_cm_enableworkflow_' + sTableName, false);
-	}, // function 
+	runJob: function (sAffectedTableId, sSourceValue, sTargetValue) {
+		var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
+		if (grAffectedTable.get(sAffectedTableId)) {
+			var bWorkflow = grAffectedTable.getValue('apply_workflow');
+			var bAutoSysFields = grAffectedTable.getValue('apply_autosysfield');
+			var bUseEngines = grAffectedTable.getValue('apply_useengine');
+			var grTable = new GlideRecord(sParentTable);
+			var aQuery = [];
+			var aFields = [];
+			var grDict = new GlideRecord('sys_dictionary');
+			grDict.addEncodedQuery('sys_idIN' + grAffectedTable.getValue('affected_fields'));
+			grDict.query();
+			while (grDict.next()) {
+				aFields.push(grDict.getValue('element'));
+				aQuery.push(grDict.getValue('element') + '=' + sSourceValue);
+			} // while fields
+			grTable.addEncodedQuery(sQuery + aQuery.join('^OR'));
+			if (bAutoSysFields === false) {
+				grTable.autoSysFields(false);
+			} // if workflow
+			if (bWorkflow === false) {
+				grTable.setWorkflow(false);
+			} // if workflow
+			if (bUseEngines === false) {
+				grTable.setUseEngines(false);
+			} // if workflow
+			grTable._query();
+			while (grTable._next()) {
+				var bChanged = false;
+				aFields.forEach(function (sField) {
+					var sCurrentValue = grTable.getValue(sField);
+					// check for glide list records
+					if (sCurrentValue == sSourceValue) {
+						grTable.setValue(sField, sTargetValue);
+						bChanged = true;
+					} else if (sCurrentValue.indexOf(sSourceValue) != -1) {
+						sCurrentValue = sCurrentValue.replace(sSourceValue, sTargetValue);
+						grTable.setValue(sField, sCurrentValue);
+						bChanged = true;
+					} // value is source value
+				}, this); // each field
+				if (bChanged) {
+					// update record
+				} // if changed
+			} // while table
+		} // if affected table
+	}, // function runJob
 
 	type: 'MappingConfigApply',
 	version: '1.0.0',
@@ -36,13 +99,13 @@ MappingConfigApply.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 09:56:51</sys_created_on>
         <sys_id>c00789afdbd90a108152d03cd39619d5</sys_id>
-        <sys_mod_count>4</sys_mod_count>
+        <sys_mod_count>10</sys_mod_count>
         <sys_name>MappingConfigApply</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_c00789afdbd90a108152d03cd39619d5</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-08 18:40:58</sys_updated_on>
+        <sys_updated_on>2024-04-10 13:30:05</sys_updated_on>
     </sys_script_include>
 </record_update>

@@ -45,53 +45,19 @@ function doConfirmationPopup(sReturn) {
 			sTitle = (oReturn.hasOwnProperty('sTitle')) ? oReturn['sTitle'] : '';
 			sDescription = (oReturn.hasOwnProperty('sDescription')) ? oReturn['sDescription'] : '';
 		} else {
-			g_form.addErrorMessage('Apply mapped value failed. Could not get service side information for popup.');
+			g_form.addErrorMessage('Apply mapped value failed. Could not get server side information for popup.');
 		} // if return obj
 	} catch (oEx) {
 		g_form.addErrorMessage('Apply mapped value failed. Error processing popup information: ' + String(oEx));
 		return;
 	} // try
-	var _fnCallbackOK = function () {
-		var gaApplyMappingOK = new GlideAjax('x_snc_mapping_cm.MappingConfigApplyAJAX');
-		gaApplyMappingOK.addParam('sysparm_name', 'applyMapping');
-		gaApplyMappingOK.addParam('sysparm_mapid', g_form.getUniqueValue());
-		gaApplyMappingOK.getXMLAnswer(checkApplyMappingResult);
-	}; // _fnCallbackOK
-	var _fnCallbackCancel = function () {
-		// do nothing
-	}; // function _fnCallbackCancel
-	var gModal = new GlideModal('glide_confirm_standard');
+	var gModal = new GlideModal('x_snc_mapping_cm_ConfirmApplyTargetValue');
 	gModal.setTitle(sTitle);
-	gModal.setPreference('warning', true);
-	gModal.setPreference('title', sDescription);
-	gModal.setPreference('onPromptComplete', _fnCallbackOK.bind(this));
-	gModal.setPreference('onPromptCancel', _fnCallbackCancel.bind(this));
+	gModal.setPreference('sysparm_mappingid', g_form.getUniqueValue());
+	gModal.setPreference('sysparm_popupmessage', sDescription);
 	gModal.render();
 } // function doConfirmationPopup
-
-function checkApplyMappingResult(sReturn) {
-	var sMessageType = '', sMessage = '';
-	try {
-		var oReturn = JSON.parse(sReturn);
-		if (oReturn) {
-			sMessageType = (oReturn.hasOwnProperty('sMessageType')) ? oReturn['sMessageType'] : '';
-			sMessage = (oReturn.hasOwnProperty('sMessage')) ? oReturn['sMessage'] : '';
-		} else {
-			g_form.addErrorMessage('Apply mapped value failed. Could not get server side information for apply job.');
-		} // if return obj
-	} catch (oEx) {
-		g_form.addErrorMessage('Apply mapped value failed. Error processing apply job information: ' + String(oEx));
-		return;
-	} // try
-	if (sMessage) {
-		if (sMessageType == 'info') {
-			g_form.addInfoMessage(sMessage);
-			location.reload();
-		} else if (sMessageType == 'error') {
-			g_form.addErrorMessage(sMessage);
-		} // if error message
-	} // if message
-} // function checkApplyMappingResult]]></script>
+]]></script>
         <show_insert>false</show_insert>
         <show_multiple_update>false</show_multiple_update>
         <show_query>false</show_query>
@@ -102,7 +68,7 @@ function checkApplyMappingResult(sReturn) {
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>cc78317fdb118a108152d03cd39619fb</sys_id>
-        <sys_mod_count>8</sys_mod_count>
+        <sys_mod_count>14</sys_mod_count>
         <sys_name>Apply mapped value</sys_name>
         <sys_overrides/>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
@@ -110,7 +76,7 @@ function checkApplyMappingResult(sReturn) {
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_ui_action_cc78317fdb118a108152d03cd39619fb</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-09 07:48:37</sys_updated_on>
+        <sys_updated_on>2024-04-09 13:59:23</sys_updated_on>
         <table>x_snc_mapping_cm_mapping_config</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>
