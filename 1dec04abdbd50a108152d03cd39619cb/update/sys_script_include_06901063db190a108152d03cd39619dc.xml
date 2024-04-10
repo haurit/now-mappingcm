@@ -176,6 +176,33 @@ MappingConfigManager.prototype = {
 		} // if affected table
 	}, // function _saveAffectedTable
 
+	processBusinessRule: function (grMappingCfg, grMappingCfgOld) {
+		var sChoiceField = grMappingCfg.getValue('choice_field');
+		var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
+		aParentTables.forEach(function (sParentTable) {
+			var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
+			var sQuery = 'active=true^affected_table=' + sParentTable + '^choice_table=' + grMappingCfg.getValue('choice_table');
+			if (sChoiceField) {
+				sQuery += '^choice_field=' + sChoiceField;
+			} // if choice field
+			grAffectedTable.addEncodedQuery(sQuery);
+			grAffectedTable.query();
+			if (grAffectedTable.next()) {
+				sQuery = 'sys_id!=' + grMappingCfg.getUniqueValue() + '^parent_tables=' + sParentTable + '^choice_table=' + grMappingCfg.getValue('choice_table');
+				if (sChoiceField) {
+					sQuery += '^choice_field=' + sChoiceField;
+				} // if choice field
+				var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+				grMappingCfg.addEncodedQuery(sQuery);
+				grMappingCfg.setLimit(1);
+				grMappingCfg.query();
+				if (!grMappingCfg.hasNext()) {
+					grAffectedTable.deleteRecord();
+				} // if no other mapping found
+			} // if affected table
+		}, this); // each table
+	}, // function processBusinessRule
+
 	type: 'MappingConfigManager',
 	version: '1.0.0',
 	author: 'Tom Hauri',
@@ -186,13 +213,13 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>43</sys_mod_count>
+        <sys_mod_count>45</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-10 10:59:58</sys_updated_on>
+        <sys_updated_on>2024-04-10 15:15:41</sys_updated_on>
     </sys_script_include>
 </record_update>
