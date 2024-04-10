@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element audit="true" db_object_id="3c2d042fdbd50a108152d03cd39619cd" label="Mapping Config" max_length="40" name="x_snc_mapping_cm_mapping_config" type="collection">
+        <element choice="3" default="not_started" label="Apply Job Status" max_length="40" name="apply_job_status" read_only="true" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Not started" sequence="100" value="not_started"/>
+                <element inactive_on_update="false" label="Send for approval" sequence="200" value="approval"/>
+                <element inactive_on_update="false" label="Approved" sequence="300" value="approved"/>
+                <element inactive_on_update="false" label="Running" sequence="400" value="running"/>
+                <element inactive_on_update="false" label="Completed" sequence="500" value="completed"/>
+            </choice>
+        </element>
         <element label="Choice Field" max_length="80" name="choice_field" read_only="true" type="string"/>
-        <element label="Choice Table" max_length="80" name="choice_table" read_only="true" type="table_name"/>
+        <element label="Choice or Reference Table" max_length="80" name="choice_table" read_only="true" type="table_name"/>
+        <element calculation="(function calculatedFieldValue(current) {&#13;&#10;&#13;&#10;&#9;var sSourceValue = current.getValue('source_display_value');&#13;&#10;&#9;sSourceValue = (sSourceValue) ? sSourceValue : current.getValue('source_value');&#13;&#10;&#9;if (current.choice_field.nil()) {&#13;&#10;&#9;&#9;return current.getDisplayValue('choice_table') + '-' + sSourceValue;&#13;&#10;&#9;} else {&#13;&#10;&#9;&#9;return current.choice_table.getDisplayValue() + '-' + current.getValue('choice_field') + '-' + sSourceValue;&#13;&#10;&#9;} // if choice field&#13;&#10;&#13;&#10;})(current);" display="true" label="Name" max_length="80" name="name" read_only="true" type="string" virtual="true"/>
         <element label="Parent Tables" max_length="4000" name="parent_tables" read_only="true" reference="sys_db_object" type="glide_list"/>
+        <element label="Source Display Value" max_length="255" name="source_display_value" read_only="true" type="string"/>
         <element label="Source Value" max_length="255" name="source_value" read_only="true" type="string"/>
         <element label="Target Table" max_length="80" name="target_table" type="table_name"/>
         <element dependent="target_table" dependent_on_field="target_table" label="Target Value" max_length="32" name="target_value" read_only="true" type="document_id" use_dependent_field="true"/>
@@ -14,6 +25,12 @@
         </element>
         <index name="index">
             <element name="target_value"/>
+        </index>
+        <index name="index2" unique="true">
+            <element name="type"/>
+            <element name="choice_table"/>
+            <element name="choice_field"/>
+            <element name="source_value"/>
         </index>
     </element>
 </database>

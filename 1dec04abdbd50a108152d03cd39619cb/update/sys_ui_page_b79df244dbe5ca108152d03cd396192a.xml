@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[(function(){
+    try {
+        var elText = gel('text');
+        elText.innerHTML = decodeURIComponent('${sysparm_popupmessage}');
+    } catch (e) {
+	}
+})(); // function on load
+
+function handleSubmit() {
+	var gaApplyMappingOK = new GlideAjax('x_snc_mapping_cm.MappingConfigApplyAJAX');
+	gaApplyMappingOK.addParam('sysparm_name', 'applyMapping');
+	gaApplyMappingOK.addParam('sysparm_mapid', g_form.getUniqueValue());
+	gaApplyMappingOK.getXMLAnswer(checkApplyMappingResult);
+	GlideModal.get().destroy();
+	//location.reload();
+} // function handleSubmit
+
+function handleCancel() {
+	var modal = GlideModal.get().destroy();
+} // function handleCancel
+
+function checkApplyMappingResult(sReturn) {
+	var sMessageType = '', sMessage = '';
+	try {
+		var oReturn = JSON.parse(sReturn);
+		if (oReturn) {
+			sMessageType = (oReturn.hasOwnProperty('sMessageType')) ? oReturn['sMessageType'] : '';
+			sMessage = (oReturn.hasOwnProperty('sMessage')) ? oReturn['sMessage'] : '';
+		} else {
+			g_form.addErrorMessage('Apply mapped value failed. Could not get server side information for apply job.');
+		} // if return obj
+	} catch (oEx) {
+		g_form.addErrorMessage('Apply mapped value failed. Error processing apply job information: ' + String(oEx));
+		return;
+	} // try
+	if (sMessage) {
+		if (sMessageType == 'info') {
+			g_form.addInfoMessage(sMessage);
+			setTimeout(reloadPage, 3000);
+		} else if (sMessageType == 'error') {
+			g_form.addErrorMessage(sMessage);
+		} // if error message
+	} // if message
+} // function checkApplyMappingResult
+
+function reloadPage() {
+	location.reload();
+} // function reloadPage]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_snc_mapping_cm_ConfirmApplyTargetValue.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	<g:no_escape><div id="text"/></g:no_escape>
+	<p>
+	<div>
+		<g:dialog_buttons_ok_cancel ok="handleSubmit();" ok_type="button" cancel="handleCancel()"
+			cancel_type="button" />
+	</div>
+	</p>
+</j:jelly>]]></html>
+        <name>ConfirmApplyTargetValue</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-09 07:50:20</sys_created_on>
+        <sys_id>b79df244dbe5ca108152d03cd396192a</sys_id>
+        <sys_mod_count>25</sys_mod_count>
+        <sys_name>ConfirmApplyTargetValue</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_ui_page_b79df244dbe5ca108152d03cd396192a</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-04-09 13:44:04</sys_updated_on>
+    </sys_ui_page>
+</record_update>

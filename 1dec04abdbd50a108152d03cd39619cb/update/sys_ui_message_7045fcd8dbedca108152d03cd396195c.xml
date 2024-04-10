@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_message">
+    <sys_ui_message action="INSERT_OR_UPDATE">
+        <application/>
+        <code/>
+        <commented_message/>
+        <key>map_apply_target_message_source_value</key>
+        <language>en</language>
+        <message>Source Value</message>
+        <sys_class_name>sys_ui_message</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-09 16:33:10</sys_created_on>
+        <sys_id>7045fcd8dbedca108152d03cd396195c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>map_apply_target_message_source_value</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_ui_message_7045fcd8dbedca108152d03cd396195c</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-04-09 16:33:10</sys_updated_on>
+    </sys_ui_message>
+</record_update>

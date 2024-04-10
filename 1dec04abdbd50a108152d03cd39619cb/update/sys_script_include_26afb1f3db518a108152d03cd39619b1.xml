@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_snc_mapping_cm.MappingConfigApplyAJAX</api_name>
+        <caller_access/>
+        <client_callable>true</client_callable>
+        <description>AJAX Functions used by UI Actions</description>
+        <name>MappingConfigApplyAJAX</name>
+        <script><![CDATA[var MappingConfigApplyAJAX = Class.create();
+MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
+
+	_gtRecordRead: new global.GlobalToolsRecordRead(),
+
+	getApplyMappingPopupInformation: function () {
+		var sMapId = this.getParameter('sysparm_mapid');
+		var bAutoApproval = (String(gs.getProperty('x_snc_mapping_cm_autoapproval', true)) === 'true');
+		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		if ((sMapId) && (grMappingCfg.get(sMapId))) {
+			var sTitle = gs.getMessage('map_apply_target_title');
+			var aParentTableInfos = [];
+			var sSourceValue = grMappingCfg.getValue('source_value');
+			var sSourceDisplayValue = grMappingCfg.getValue('source_display_value');
+			if ((sSourceDisplayValue) && (sSourceDisplayValue != sSourceValue)) {
+				sSourceDisplayValue = sSourceDisplayValue + ' (' + sSourceValue + ')';
+			} // if source and source disp are not same
+			var sTargetValue = grMappingCfg.getValue('target_value');
+			if (sTargetValue) {
+				var grTargetRecord = new GlideRecord(grMappingCfg.getValue('choice_table'));
+				if (grTargetRecord.get(sTargetValue)) {
+					sTargetValue = grTargetRecord.getDisplayValue() + ' (' + sTargetValue + ')';
+				} // if target record
+			} // if target value
+			var sMessage = (bAutoApproval) ? 'map_apply_target_description_autoapprove' : 'map_apply_target_description';
+			var sDescription = this._getParentTableInformation(sMessage, sSourceValue, sSourceDisplayValue, sTargetValue, grMappingCfg);
+			var oReturn = {
+				'sTitle': sTitle,
+				'sDescription': encodeURIComponent(sDescription),
+			}; // return obj
+			return JSON.stringify(oReturn);
+		} else {
+			gs.error('MappingConfigApplyAJAX.getApplyMappingPopupInformation could not find map id');
+			return '';
+		} // if map id
+	}, // function getApplyMappingPopupInformation
+
+	applyMapping: function () {
+		var sMapId = this.getParameter('sysparm_mapid');
+		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		if ((sMapId) && (grMappingCfg.get(sMapId))) {
+			var bAutoApproval = (String(gs.getProperty('x_snc_mapping_cm_autoapproval', true)) === 'true');
+			var sStatus = (bAutoApproval) ? 'approved' : 'approval';
+			grMappingCfg.setValue('apply_job_status', sStatus);
+			// Below is for testing only
+			// var iNumber = (isNaN(grMappingCfg.getValue('source_display_value'))) ? 1 : Number(grMappingCfg.getValue('source_display_value'));
+			// iNumber++;
+			// grMappingCfg.setValue('source_display_value', iNumber);
+			if (!grMappingCfg.update()) {
+				gs.error('MappingConfigApplyAJAX.applyMapping error updating mapping record: ' + grMappingCfg.getLastErrorMessage());
+			} // if insert
+			var sMessage = (bAutoApproval) ? gs.getMessage('map_apply_target_message_autoapprove') : gs.getMessage('map_apply_target_message_approval');
+			var sMessageType = 'info';
+			var oReturn = {
+				'sMessage': sMessage,
+				'sMessageType': sMessageType,
+			}; // return obj
+			return JSON.stringify(oReturn);
+		} else {
+			gs.error('MappingConfigApplyAJAX.applyMapping could not find map id');
+			return '';
+		} // if map id
+	}, // function applyMapping
+
+	_getParentTableInformation: function (sMessage, sSourceValue, sSourceDisplayValue, sTargetValue, grMappingCfg) {
+		var aHTML = [];
+		aHTML.push('<style>td {border-left:1px solid black; border-top:1px solid black; padding: 5px;} tr:nth-child(even) {background-color: #f2f2f2;} table {border-right:1px solid black; border-bottom:1px solid black;} thead {background-color: #f2f2f2;} </style>');
+		aHTML.push('<div><p>' + gs.getMessage(sMessage) + '</p></div>');
+		aHTML.push('<table width="100%">');
+		aHTML.push('<thead><tr><td><strong>' + gs.getMessage('map_apply_target_message_source_value') + '</strong></td><td><strong>' + gs.getMessage('map_apply_target_message_target_value') + '</strong></td></tr></thead>');
+		aHTML.push('<tr><td>' + sSourceDisplayValue + '</td><td>' + sTargetValue + '</td></tr>');
+		aHTML.push('</table>');
+		aHTML.push('<div><p>&nbsp;</p></div>');
+		aHTML.push('<table width="100%">');
+		aHTML.push('<thead><tr><td><strong>' + gs.getMessage('map_apply_target_message_table') + '</strong></td><td><strong>' + gs.getMessage('map_apply_target_message_fields') + '</strong></td><td><strong>' + gs.getMessage('map_apply_target_message_count') + '</strong></td></tr></thead>');
+		var sChoiceField = grMappingCfg.getValue('choice_field');
+		var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
+		aParentTables.forEach(function (sParentTable) {
+			var grTable = new GlideRecord(sParentTable);
+			var sParentTableInfo = grTable.getClassDisplayValue() + ' [' + sParentTable + ']';
+			var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
+			var sQuery = 'active=true^affected_table=' + sParentTable + '^choice_table=' + grMappingCfg.getValue('choice_table');
+			if (sChoiceField) {
+				sQuery += '^choice_field=' + sChoiceField;
+			} // if choice field
+			grAffectedTable.addEncodedQuery(sQuery);
+			grAffectedTable.query();
+			if (grAffectedTable.next()) {
+				iRecordCount = this._getAffectedRecordCount(sSourceValue, grAffectedTable);
+				aHTML.push('<tr><td>' + sParentTableInfo + '</td><td>' + grAffectedTable.getDisplayValue('affected_fields') + '</td><td>' + String(iRecordCount) + '</td></tr>');
+			} // if affected table
+		}, this); // each table
+		aHTML.push('</table>');
+		aHTML.push('<div><p>&nbsp;</p></div>');
+		return aHTML.join('\n');
+	}, // function _getParentTableInformation
+
+	_getAffectedRecordCount: function (sSourceValue, grAffectedTable) {
+		try {
+			var aQuery = [];
+			var grDict = new GlideRecord('sys_dictionary');
+			grDict.addEncodedQuery('sys_idIN' + grAffectedTable.getValue('affected_fields'));
+			grDict.query();
+			while (grDict.next()) {
+				aQuery.push(grDict.getValue('element') + '=' + sSourceValue);
+			} // while fields
+			var iCountAffectedRecords = this._gtRecordRead.countRecords(grAffectedTable.getValue('affected_table'), aQuery.join('^OR'));
+			if ((iCountAffectedRecords) || (iCountAffectedRecords === 0)) {
+				return iCountAffectedRecords;
+			} else {
+				return -1;
+			} // if count
+		} catch (oEx) {
+			gs.error('MappingConfigApplyAJAX._getAffectedRecordCount error: ' + String(oEx));
+			return -1;
+		} // if error
+	}, // function _getAffectedRecordCount
+
+	type: 'MappingConfigApplyAJAX',
+	version: '1.0.0',
+	author: 'Tom Hauri',
+	email: 'tom@hauri.biz'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-08 08:41:28</sys_created_on>
+        <sys_id>26afb1f3db518a108152d03cd39619b1</sys_id>
+        <sys_mod_count>89</sys_mod_count>
+        <sys_name>MappingConfigApplyAJAX</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_script_include_26afb1f3db518a108152d03cd39619b1</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-04-10 14:49:26</sys_updated_on>
+    </sys_script_include>
+</record_update>

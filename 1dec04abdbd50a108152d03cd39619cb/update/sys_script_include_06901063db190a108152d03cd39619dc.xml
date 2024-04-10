@@ -5,28 +5,209 @@
         <api_name>x_snc_mapping_cm.MappingConfigManager</api_name>
         <caller_access/>
         <client_callable>false</client_callable>
-        <description/>
+        <description>Interface to integrations that can create, update or read mappings values.</description>
         <name>MappingConfigManager</name>
         <script><![CDATA[var MappingConfigManager = Class.create();
 MappingConfigManager.prototype = {
 	initialize: function () {
+		this.bLog = false;
 	}, // function initialize
 
-	getOrCreateMappingValue: function() {
-		var sMappingValue = this.getMappingValue();
-		if (sMappingValue) {
-			return sMappingValue;
+	doMappingValue: function (sParentTable, sSourceValue, sSourceDisplayValue, sRefOrChoiceTable, sChoiceField) {
+		sSourceValue = (sSourceValue) ? String(sSourceValue) : '';
+		sSourceDisplayValue = (sSourceDisplayValue) ? sSourceDisplayValue : '';
+		sRefOrChoiceTable = (sRefOrChoiceTable) ? String(sRefOrChoiceTable) : '';
+		if ((!sSourceValue) || (!sRefOrChoiceTable) || (!new GlideRecord(String(sRefOrChoiceTable)).isValid())) {
+			gs.warn('MappingConfigManager.doMappingValue empty or invalid source value or table!');
+			return sSourceValue;
+		} // if no source or table
+		var grMappingCfg = this._getMappingCfg(sSourceValue, sRefOrChoiceTable, sChoiceField);
+		if (grMappingCfg) {
+			if ((sParentTable) && (grMappingCfg.getValue('parent_tables')).split(',').indexOf(sParentTable) == -1) {
+				grMappingCfg.setValue('parent_tables', grMappingCfg.getValue('parent_tables') + ',' + sParentTable);
+				if (grMappingCfg.update()) {
+					this._doAffectedTable(sParentTable, sRefOrChoiceTable, sChoiceField);
+				} else {
+					gs.warn('MappingConfigManager.doMappingValue error updating parent table "' + sParentTable + '" in mapping record: ' + grMappingCfg.getLastErrorMessage());
+				} // if insert
+			} // if parent table not yet set
+			var sTargetValue = grMappingCfg.getValue('target_value');
+			if (grMappingCfg.getValue('type') == 'choice') {
+				var grChoice = new GlideRecord('sys_choice');
+				if (grChoice.get(sTargetValue)) {
+					sTargetValue = grChoice.getValue('value');
+				} else {
+					return sSourceValue;
+				} // if ho
+			} // if choice
+			return sTargetValue;
+		} else {
+			sChoiceField = (sChoiceField) ? String(sChoiceField) : '';
+			var sType = 'reference';
+			if (sChoiceField) {
+				if (!new GlideRecord(sRefOrChoiceTable).isValidField(sChoiceField)) {
+					if (!new GlideRecord(sParentTable).isValidField(sChoiceField)) {
+						gs.error('MappingConfigManager.doMappingValue invalid choice field "' + sChoiceField + '" in table "' + sRefOrChoiceTable + '"!');
+						return sSourceValue;
+					} // if valid field
+				} // if valid field
+				sType = 'choice';
+			} // if choice field
+			grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+			grMappingCfg.setValue('type', sType);
+			grMappingCfg.setValue('choice_table', sRefOrChoiceTable);
+			grMappingCfg.setValue('source_value', sSourceValue);
+			grMappingCfg.setValue('source_display_value', sSourceDisplayValue);
+			if (sType == 'choice') {
+				grMappingCfg.setValue('choice_field', sChoiceField);
+				grMappingCfg.setValue('target_table', 'sys_choice');
+			} else {
+				grMappingCfg.setValue('choice_field', '');
+				grMappingCfg.setValue('target_table', sRefOrChoiceTable);
+			} // if choice
+			if (sParentTable) {
+				grMappingCfg.setValue('parent_tables', sParentTable);
+			} // if parent table
+			if (grMappingCfg.insert()) {
+				this._doAffectedTable(sParentTable, sRefOrChoiceTable, sChoiceField);
+			} else {
+				gs.error('MappingConfigManager.doMappingValue error inserting mapping record: ' + grMappingCfg.getLastErrorMessage());
+			} // if insert
 		} // if mapping value found
+		return sSourceValue;
+	}, // function doMappingValue
 
-	}, // function getOrCreateMappingValue
+	getMappedValue: function (sSourceValue, sRefOrChoiceTable, sChoiceField) {
+		var grMappingCfg = this._getMappingCfg(sSourceValue, sRefOrChoiceTable, sChoiceField);
+		if ((grMappingCfg) && (sSourceValue != grMappingCfg)) {
+			var sTargetValue = grMappingCfg.getValue('target_value');
+			if (sTargetValue) {
+				if (grMappingCfg.getValue('type') == 'choice') {
+					var grChoice = new GlideRecord('sys_choice');
+					if (grChoice.get(sTargetValue)) {
+						sTargetValue = grChoice.getValue('value');
+					} else {
+						return sSourceValue;
+					} // if ho
+				} // if choice
+				return sTargetValue;
+			} // if target value
+		} // if mapped cfg
+		return sSourceValue;
+	}, // function getMappedValue
 
-	getMappingValue: function() {
+	_getMappingCfg: function (sSourceValue, sRefOrChoiceTable, sChoiceField) {
+		var aQuery = [];
+		sSourceValue = (sSourceValue) ? String(sSourceValue) : '';
+		sRefOrChoiceTable = String(sRefOrChoiceTable);
+		sChoiceField = (sChoiceField) ? String(sChoiceField) : '';
+		if ((!sSourceValue) || (!sRefOrChoiceTable) || (!new GlideRecord(String(sRefOrChoiceTable)).isValid())) {
+			gs.warn('MappingConfigManager.getMappingCfg empty or invalid source value or table!');
+			return sSourceValue;
+		} // if no source or table
+		var sType = (sChoiceField) ? 'choice' : 'reference';
+		aQuery.push('type=' + sType);
+		aQuery.push('choice_table=' + sRefOrChoiceTable);
+		if (sType == 'choice') {
+			aQuery.push('choice_field=' + sChoiceField);
+		} else {
+			aQuery.push('choice_fieldISEMPTY');
+		} // if choice
+		aQuery.push('source_value=' + sSourceValue);
+		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		grMappingCfg.addEncodedQuery(aQuery.join('^'));
+		grMappingCfg.setLimit(1);
+		grMappingCfg.query();
+		if (grMappingCfg.next()) {
+			return grMappingCfg;
+		} // if found
+	}, // function getMappingCfg
 
-	}, // function getMappingValue
+	_doAffectedTable: function (sParentTable, sRefOrChoiceTable, sChoiceField) {
+		var aFields = [];
+		var sQuery = '';
+		if (sChoiceField) {
+			var grChoice = new GlideRecord('sys_choice');
+			grChoice.addEncodedQuery('name=' + sParentTable + '^element=' + sChoiceField);
+			grChoice.setLimit(1);
+			grChoice.query();
+			if (grChoice.hasNext()) {
+				sQuery = 'name=' + sParentTable + '^element=' + sChoiceField + '^NQ';
+			} // if has choice
+			sQuery += 'name=' + sParentTable + '^choice_table=' + sRefOrChoiceTable + '^choice_field=' + sChoiceField;
+		} else {
+			sQuery = 'name=' + sParentTable + '^internal_typeINglide_list,reference^reference=' + sRefOrChoiceTable;
+		} // if choice
+		var grDictionary = new GlideRecord('sys_dictionary');
+		grDictionary.addEncodedQuery(sQuery);
+		grDictionary.query();
+		while (grDictionary.next()) {
+			aFields.push(grDictionary.getUniqueValue());
+		} // if ref or choices
+		this._saveAffectedTable(sParentTable, sRefOrChoiceTable, sChoiceField, aFields);
+	}, // function _doAffectedTable
 
-	applyMappingConfig: function() {
+	_saveAffectedTable: function (sParentTable, sRefOrChoiceTable, sChoiceField, aFields) {
+		var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
+		if (sChoiceField) {
+			grAffectedTable.addEncodedQuery('affected_table=' + sParentTable + '^choice_table=' + sRefOrChoiceTable + '^choice_field=' + sChoiceField);
+		} else {
+			grAffectedTable.addEncodedQuery('affected_table=' + sParentTable + '^choice_table=' + sRefOrChoiceTable);
+		} // if choice field
+		grAffectedTable.query();
+		if (grAffectedTable.next()) {
+			grAffectedTable.setValue('affected_fields', aFields.join(','));
+			if (!grAffectedTable.update()) {
+				gs.warn('MappingConfigManager._saveAffectedTable error updating table "' + sParentTable + '" / "' + sRefOrChoiceTable + '" in affected table record: ' + grAffectedTable.getLastErrorMessage());
+			} // if update
+		} else {
+			grAffectedTable.initialize();
+			grAffectedTable.setValue('affected_table', sParentTable);
+			grAffectedTable.setValue('choice_table', sRefOrChoiceTable);
+			grAffectedTable.setValue('choice_field', sChoiceField);
+			grAffectedTable.setValue('affected_fields', aFields.join(','));
+			var bEnableWorkflow = gs.getProperty('x_snc_mapping_cm_enableworkflow', false);
+			if ((bEnableWorkflow === true) || (String(bEnableWorkflow) == 'true')) {
+				grAffectedTable.setValue('apply_workflow', true);
+			} // if property true
+			if (!grAffectedTable.insert()) {
+				gs.warn('MappingConfigManager._saveAffectedTable error inserting table "' + sParentTable + '" / "' + sRefOrChoiceTable + '" in affected table record: ' + grAffectedTable.getLastErrorMessage());
+			} // if insert
+		} // if affected table
+	}, // function _saveAffectedTable
 
-	}, // function applyMappingConfig
+	processBusinessRule: function (grMappingCfg, grMappingCfgOld) {
+		try {
+			var sMappingId = grMappingCfg.getUniqueValue();
+			var sChoiceTable = grMappingCfg.getValue('choice_table');
+			var sChoiceField = grMappingCfg.getValue('choice_field');
+			var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
+			aParentTables.forEach(function (sParentTable) {
+				var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
+				var sQuery = 'active=true^affected_table=' + sParentTable + '^choice_table=' + sChoiceTable;
+				if (sChoiceField) {
+					sQuery += '^choice_field=' + sChoiceField;
+				} // if choice field
+				grAffectedTable.addEncodedQuery(sQuery);
+				grAffectedTable.query();
+				if (grAffectedTable.next()) {
+					sQuery = 'sys_id!=' + sMappingId + '^parent_tables=' + sParentTable + '^choice_table=' + sChoiceTable;
+					if (sChoiceField) {
+						sQuery += '^choice_field=' + sChoiceField;
+					} // if choice field
+					var grMappingCfgCheck = new GlideRecord('x_snc_mapping_cm_mapping_config');
+					grMappingCfgCheck.addEncodedQuery(sQuery);
+					grMappingCfgCheck.setLimit(1);
+					grMappingCfgCheck.query();
+					if (!grMappingCfgCheck.hasNext()) {
+						grAffectedTable.deleteRecord();
+					} // if no other mapping found
+				} // if affected table
+			}, this); // each table
+		} catch (oEx) {
+			gs.error('MappingConfigManager.processBusinessRule failed with error: ' + String(oEx));
+		}
+	}, // function processBusinessRule
 
 	type: 'MappingConfigManager',
 	version: '1.0.0',
@@ -38,13 +219,13 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>47</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-07 06:10:33</sys_updated_on>
+        <sys_updated_on>2024-04-10 15:34:53</sys_updated_on>
     </sys_script_include>
 </record_update>
