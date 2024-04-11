@@ -11,7 +11,8 @@
 MappingConfigLookup.prototype = {
 	initialize: function () {
 		this.bLog = false;
-		this.sConnectionAndCredentialAlias = gs.getProperty('x_snc_mapping_cm.connection_credential_alias');
+		var sConnectionAndCredentialAlias = gs.getProperty('x_snc_mapping_cm.connection_credential_alias');
+		this.sConnectionAndCredentialAlias = sConnectionAndCredentialAlias;
 		if (sConnectionAndCredentialAlias) {
 			this._gtRESTAPI = new global.GlobalToolsRESTAPI(sConnectionAndCredentialAlias);
 		} // if property
@@ -89,13 +90,13 @@ MappingConfigLookup.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-11 05:32:52</sys_created_on>
         <sys_id>6ee07430dbe18e108152d03cd39619e9</sys_id>
-        <sys_mod_count>5</sys_mod_count>
+        <sys_mod_count>6</sys_mod_count>
         <sys_name>MappingConfigLookup</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_6ee07430dbe18e108152d03cd39619e9</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-11 06:43:44</sys_updated_on>
+        <sys_updated_on>2024-04-11 06:53:09</sys_updated_on>
     </sys_script_include>
 </record_update>
