@@ -31,25 +31,29 @@
         <onclick>selectTargetRecord()</onclick>
         <order>-10000</order>
         <script><![CDATA[function selectTargetRecord() {
-    var sSysId = g_form.getUniqueValue();
+	var sSysId = g_form.getUniqueValue();
 	var sTable = g_form.getValue('choice_table');
 	var sQuery = '';
 	if (g_form.getValue('type') == 'choice') {
-		sQuery = 'name=' + sTable + '^element=' + g_form.getValue('choice_field');
+		var sLangQuery = '';
+		if (typeof g_lang != undefined) {
+			sLangQuery = '^language=' + g_lang;
+		} // if g_lang 
+		sQuery = 'name=' + sTable + '^element=' + g_form.getValue('choice_field') + sLangQuery;
 		sTable = 'sys_choice';
 	} else {
 		sQuery = '';
 	} // if choice
-    var gModal = new GlideModal('x_snc_mapping_cm_MappingCfgTargetRecord');
-    gModal.setWidth(600);
-    gModal.setPreference('sysparm_mappingid', sSysId);
+	var gModal = new GlideModal('x_snc_mapping_cm_MappingCfgTargetRecord');
+	gModal.setWidth(600);
+	gModal.setPreference('sysparm_mappingid', sSysId);
 	gModal.setPreference('sysparm_targettable', sTable);
 	gModal.setPreference('sysparm_targetquery', sQuery);
 	var sSourceValue = g_form.getValue('source_display_value');
 	sSourceValue = (sSourceValue) ? sSourceValue + ' (' + g_form.getValue('source_value') + ')' : g_form.getValue('source_value');
 	gModal.setPreference('sysparm_popupmessage', getMessage('map_select_target_message') + ' ' + sSourceValue);
 	gModal.setTitle(getMessage('map_select_target_title'));
-    gModal.render();
+	gModal.render();
 } // function selectTargetRecord]]></script>
         <show_insert>false</show_insert>
         <show_multiple_update>false</show_multiple_update>
@@ -61,7 +65,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>23f1dca3db190a108152d03cd3961913</sys_id>
-        <sys_mod_count>7</sys_mod_count>
+        <sys_mod_count>8</sys_mod_count>
         <sys_name>Map Value</sys_name>
         <sys_overrides/>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
@@ -69,7 +73,7 @@
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_ui_action_23f1dca3db190a108152d03cd3961913</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-09 07:36:15</sys_updated_on>
+        <sys_updated_on>2024-04-11 16:12:25</sys_updated_on>
         <table>x_snc_mapping_cm_mapping_config</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>
