@@ -4,6 +4,13 @@
         <element label="Affected Fields" max_length="4000" name="affected_fields" read_only="true" reference="sys_dictionary" type="glide_list"/>
         <element label="Affected Table" max_length="80" name="affected_table" read_only="true" type="table_name"/>
         <element default="true" label="Update User and Timestamp" max_length="40" name="apply_autosysfield" type="boolean"/>
+        <element choice="1" default="not_started" label="Apply Job Status" max_length="40" name="apply_job_status" read_only="true" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Not started" sequence="100" value="not_started"/>
+                <element inactive_on_update="false" label="Running" sequence="200" value="running"/>
+                <element inactive_on_update="false" label="Completed" sequence="300" value="completed"/>
+            </choice>
+        </element>
         <element default="true" label="Apply Data Dictionary" max_length="40" name="apply_useengine" type="boolean"/>
         <element label="Run Business Rules" max_length="40" name="apply_workflow" type="boolean"/>
         <element label="Choice Field" max_length="80" name="choice_field" read_only="true" type="string"/>

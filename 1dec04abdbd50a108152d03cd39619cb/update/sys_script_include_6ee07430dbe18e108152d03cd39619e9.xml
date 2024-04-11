@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_snc_mapping_cm.MappingConfigLookup</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>MappingConfigLookup</name>
+        <script><![CDATA[var MappingConfigLookup = Class.create();
+MappingConfigLookup.prototype = {
+	initialize: function () {
+		this.bLog = false;
+		var sConnectionAndCredentialAlias = gs.getProperty('x_snc_mapping_cm.connection_credential_alias');
+		this.sConnectionAndCredentialAlias = sConnectionAndCredentialAlias;
+		if (sConnectionAndCredentialAlias) {
+			this._gtRESTAPI = new global.GlobalToolsRESTAPI(sConnectionAndCredentialAlias);
+		} // if property
+		this._gtArray = new global.GlobalToolsArray();
+	}, // function initialize
+
+	processBusinessRule: function (grMappingCfg) {
+		try {
+			if (this.sConnectionAndCredentialAlias) {
+				var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
+				sParentTable = aParentTables[0];
+				if (sParentTable) {
+					var sMappingId = grMappingCfg.getUniqueValue();
+					var sSourceValue = grMappingCfg.getValue('source_value');
+					var sRefOrChoiceTable = grMappingCfg.getValue('choice_table');
+					var sChoiceField = grMappingCfg.getValue('choice_field');
+					var sRefTable = '';
+					var sRefField = '';
+					var sQuery = '';
+					if (sChoiceField) {
+						var grChoice = new GlideRecord('sys_choice');
+						grChoice.addEncodedQuery('name=' + sParentTable + '^element=' + sChoiceField);
+						grChoice.setLimit(1);
+						grChoice.query();
+						if (grChoice.hasNext()) {
+							sQuery = 'name=' + sParentTable + '^element=' + sChoiceField + '^NQ';
+						} // if has choice
+						sQuery += 'name=' + sParentTable + '^choice_table=' + sRefOrChoiceTable + '^choice_field=' + sChoiceField;
+					} else {
+						sQuery = 'name=' + sParentTable + '^internal_typeINglide_list,reference^reference=' + sRefOrChoiceTable;
+					} // if choice
+					var grDictionary = new GlideRecord('sys_dictionary');
+					grDictionary.addEncodedQuery(sQuery);
+					grDictionary.setLimit(1);
+					grDictionary.query();
+					if (grDictionary.next()) {
+						sRefTable = grDictionary.getValue('name');
+						sRefField = grDictionary.getValue('element');
+					} // if ref or choices
+					var oResponse = this._gtRESTAPI.doNOWRESTQuery(sRefTable, sRefField + '=' + sSourceValue, '', '1', [sRefField], 'true');
+					if ((oResponse) && (this._gtArray.isValidArray(oResponse)) && (oResponse[0].hasOwnProperty(sRefField))) {
+						sDisplayValue = oResponse[0][sRefField];
+						if ((sDisplayValue) && (sSourceValue != sDisplayValue)) {
+							var grMappingCfgUpdate = new GlideRecord('x_snc_mapping_cm_mapping_config');
+							grMappingCfgUpdate.addEncodedQuery('sys_id=' + sMappingId);
+							grMappingCfgUpdate.setWorkflow(false);
+							grMappingCfgUpdate.autoSysFields(false);
+							grMappingCfgUpdate.query();
+							if (grMappingCfgUpdate.next()) {
+								grMappingCfgUpdate.setValue('source_display_value', sDisplayValue);
+								if (!grMappingCfgUpdate.update()) {
+									gs.error('MappingConfigManager.doMappingValue error inserting mapping record: ' + grMappingCfg.getLastErrorMessage());
+								} // if update failed
+							} // if mapping found
+						} else {
+							if (this.bLog) { gs.error('MappingConfigLookup.processBusinessRule display value (' + sDisplayValue + ') empty or same as source value (' + sSourceValue + '): ' + JSON.stringify(oResponse)); }
+						} // if display value
+					} else {
+						if (this.bLog) { gs.error('MappingConfigLookup.processBusinessRule cannot connect to remote system: ' + JSON.stringify(oResponse)); }
+					} // if lookup successful
+				} else {
+					if (this.bLog) { gs.error('MappingConfigLookup.processBusinessRule parent table not found.'); }
+				} // if parent table
+			} else {
+				if (this.bLog) { gs.error('MappingConfigLookup.processBusinessRule conn & cred alias not found.'); }
+			} // no lookup possible
+		} catch (oEx) {
+			gs.error('MappingConfigLookup.processBusinessRule failed with error: ' + String(oEx));
+		} // try
+	}, // function processBusinessRule
+
+	type: 'MappingConfigLookup',
+	version: '1.0.0',
+	author: 'Tom Hauri',
+	email: 'tom@hauri.biz'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-11 05:32:52</sys_created_on>
+        <sys_id>6ee07430dbe18e108152d03cd39619e9</sys_id>
+        <sys_mod_count>8</sys_mod_count>
+        <sys_name>MappingConfigLookup</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_script_include_6ee07430dbe18e108152d03cd39619e9</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-04-11 07:49:45</sys_updated_on>
+    </sys_script_include>
+</record_update>

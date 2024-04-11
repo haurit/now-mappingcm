@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties_category_m2m">
+    <sys_properties_category_m2m action="INSERT_OR_UPDATE">
+        <category display_value="Mapping Config Manager">a225096fdbd90a108152d03cd3961910</category>
+        <order>200</order>
+        <property display_value="x_snc_mapping_cm.apply_workflow" name="x_snc_mapping_cm.apply_workflow">5fdc60f8dba18e108152d03cd3961958</property>
+        <sys_class_name>sys_properties_category_m2m</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-11 05:16:41</sys_created_on>
+        <sys_id>a0ada03cdba18e108152d03cd3961991</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>x_snc_mapping_cm.apply_workflow.Mapping Config Manager</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_properties_category_m2m_a0ada03cdba18e108152d03cd3961991</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-04-11 05:26:33</sys_updated_on>
+    </sys_properties_category_m2m>
+</record_update>

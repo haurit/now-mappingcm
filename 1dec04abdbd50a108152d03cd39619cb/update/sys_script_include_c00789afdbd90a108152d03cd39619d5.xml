@@ -16,28 +16,43 @@ MappingConfigApply.prototype = {
 	}, // function initialize
 
 	processBusinessRule: function (grMappingCfg, grMappingCfgOld) {
-		var sSourceValue = grMappingCfg.getValue('source_value');
-		var sTargetValue = grMappingCfg.getValue('target_value');
-		var sChoiceField = grMappingCfg.getValue('choice_field');
-		var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
-		aParentTables.forEach(function (sParentTable) {
-			var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
-			var sQuery = 'active=true^affected_table=' + sParentTable + '^choice_table=' + grMappingCfg.getValue('choice_table');
-			if (sChoiceField) {
-				sQuery += '^choice_field=' + sChoiceField;
-			} // if choice field
-			grAffectedTable.addEncodedQuery(sQuery);
-			grAffectedTable.query();
-			if (grAffectedTable.next()) {
-				this._gt.scheduleScript('x_snc_mapping_cm.MappingConfigApply', 'runJob', 1, [grAffectedTable.getUniqueValue(), sSourceValue, sTargetValue], [], 'MappingConfigApply_' + sParentTable + '_' + grMappingCfg.getValue('choice_table') + '_' + sChoiceField);
-			} // if affected table
-		}, this); // each table
+		if (grMappingCfg.operation() == 'update') {
+			var sSourceValue = grMappingCfg.getValue('source_value');
+			var sTargetValue = grMappingCfg.getValue('target_value');
+			var sChoiceField = grMappingCfg.getValue('choice_field');
+			var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
+			aParentTables.forEach(function (sParentTable) {
+				var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
+				var sQuery = 'active=true^affected_table=' + sParentTable + '^choice_table=' + grMappingCfg.getValue('choice_table');
+				if (sChoiceField) {
+					var grChoice = new GlideRecord('sys_choice');
+					if (grChoice.get(sTargetValue)) {
+						sTargetValue = grChoice.getValue('value');
+					} // if choice
+					sQuery += '^choice_field=' + sChoiceField;
+				} // if choice field
+				grAffectedTable.addEncodedQuery(sQuery);
+				grAffectedTable.query();
+				if (grAffectedTable.next()) {
+					this._gt.scheduleScript('x_snc_mapping_cm.MappingConfigApply', 'runJob', 1, [grAffectedTable.getUniqueValue(), sSourceValue, sTargetValue], [], 'MappingConfigApply_' + sParentTable + '_' + grMappingCfg.getValue('choice_table') + '_' + sChoiceField);
+				} // if affected table
+			}, this); // each table
+			grMappingCfg.setValue('apply_job_status', 'running');
+			grMappingCfg.setWorkflow(false);
+			grMappingCfg.autoSysFields(false);
+			grMappingCfg.update();
+		} // if update
 	}, // function processBusinessRule
 
 	runJob: function (sAffectedTableId, sSourceValue, sTargetValue) {
 		try {
 			var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
 			if (grAffectedTable.get(sAffectedTableId)) {
+				grAffectedTable.setValue('apply_job_status', 'running');
+				grAffectedTable.setWorkflow(false);
+				grAffectedTable.autoSysFields(false);
+				grAffectedTable.update();
+				grAffectedTable.get(sAffectedTableId);
 				var iUpdateCount = 0;
 				var iErrorCount = 0;
 				var sParentTable = grAffectedTable.getValue('affected_table');
@@ -72,7 +87,7 @@ MappingConfigApply.prototype = {
 						if (bChanged) {
 							if (grTable.update()) {
 								iUpdateCount++;
-								if (this.bLog) {gs.error('MappingConfigApply.runJob updating record: ' + grTable.getUniqueValue() + ' aFields: ' + aFields.join(', ') + ' sSourceValue: ' + sSourceValue + ' sTargetValue: ' + sTargetValue);}
+								if (this.bLog) { gs.error('MappingConfigApply.runJob updating record: ' + grTable.getUniqueValue() + ' aFields: ' + aFields.join(', ') + ' sSourceValue: ' + sSourceValue + ' sTargetValue: ' + sTargetValue); }
 							} else {
 								iErrorCount++;
 								gs.error('MappingConfigApply.runJob error updating record: ' + grTable.getUniqueValue() + ' aFields: ' + aFields.join(', ') + ' sSourceValue: ' + sSourceValue + ' sTargetValue: ' + sTargetValue + ' error: ' + grTable.getLastErrorMessage());
@@ -80,7 +95,35 @@ MappingConfigApply.prototype = {
 						} // if changed
 					} // while records found
 				} // if records found
-				if (this.bLog) {gs.error('MappingConfigApply.runJob finished iUpdateCount: ' + String(iUpdateCount) + ' iErrorCount: ' + String(iErrorCount));}
+				if (this.bLog) { gs.error('MappingConfigApply.runJob finished iUpdateCount: ' + String(iUpdateCount) + ' iErrorCount: ' + String(iErrorCount)); }
+				grAffectedTable.setValue('apply_job_status', 'completed');
+				grAffectedTable.setWorkflow(false);
+				grAffectedTable.autoSysFields(false);
+				grAffectedTable.update();
+				var sQuery = 'sys_id!=' + sAffectedTableId + '^apply_job_status=running^choice_table=' + grAffectedTable.getValue('choice_table');
+				var sChoiceField = grAffectedTable.getValue('choice_field');
+				if (sChoiceField) {
+					sQuery += '^choice_field=' + sChoiceField;
+				} // if choice field
+				var grAffectedTableRunning = new GlideRecord('x_snc_mapping_cm_affected_table');
+				grAffectedTableRunning.addEncodedQuery(sQuery);
+				grAffectedTableRunning.query();
+				if (!grAffectedTableRunning.hasNext()) {
+					sQuery = 'choice_table=' + grAffectedTable.getValue('choice_table') + '^parent_tablesIN' + grAffectedTable.getValue('affected_table');
+					sChoiceField = grAffectedTable.getValue('choice_field');
+					if (sChoiceField) {
+						sQuery += '^choice_field=' + sChoiceField;
+					} // if choice field
+					var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+					grMappingCfg.addEncodedQuery(sQuery);
+					grMappingCfg.query();
+					if (grMappingCfg.next()) {
+						grMappingCfg.setValue('apply_job_status', 'completed');
+						grMappingCfg.setWorkflow(false);
+						grMappingCfg.autoSysFields(false);
+						grMappingCfg.update();
+					} // if mapping found
+				} // if all jobs finished, update mapping
 			} // if affected table
 		} catch (oEx) {
 			gs.error('MappingConfigApply.runJob failed with error: ' + String(oEx));
@@ -96,13 +139,13 @@ MappingConfigApply.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 09:56:51</sys_created_on>
         <sys_id>c00789afdbd90a108152d03cd39619d5</sys_id>
-        <sys_mod_count>21</sys_mod_count>
+        <sys_mod_count>25</sys_mod_count>
         <sys_name>MappingConfigApply</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_c00789afdbd90a108152d03cd39619d5</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-10 14:49:59</sys_updated_on>
+        <sys_updated_on>2024-04-11 06:19:37</sys_updated_on>
     </sys_script_include>
 </record_update>
