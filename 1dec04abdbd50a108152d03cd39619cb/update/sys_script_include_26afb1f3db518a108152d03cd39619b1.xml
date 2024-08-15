@@ -6,11 +6,13 @@
         <caller_access/>
         <client_callable>true</client_callable>
         <description>AJAX Functions used by UI Actions</description>
+        <mobile_callable>false</mobile_callable>
         <name>MappingConfigApplyAJAX</name>
         <script><![CDATA[var MappingConfigApplyAJAX = Class.create();
 MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProcessor, {
 
 	_gtRecordRead: new global.GlobalToolsRecordRead(),
+	_gtTable: new global.GlobalToolsTable(),
 
 	getApplyMappingPopupInformation: function () {
 		var sMapId = this.getParameter('sysparm_mapid');
@@ -89,7 +91,8 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
 		aHTML.push('<thead><tr><td><strong>' + gs.getMessage('map_apply_target_message_table') + '</strong></td><td><strong>' + gs.getMessage('map_apply_target_message_fields') + '</strong></td><td><strong>' + gs.getMessage('map_apply_target_message_count') + '</strong></td></tr></thead>');
 		var sChoiceField = grMappingCfg.getValue('choice_field');
 		var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
-		aParentTables.forEach(function (sParentTable) {
+		aParentTables.forEach(function (sParentTableId) {
+			var sParentTable = this._gtTable.getTableName(sParentTableId);
 			var grTable = new GlideRecord(sParentTable);
 			var sParentTableInfo = grTable.getClassDisplayValue() + ' [' + sParentTable + ']';
 			var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
@@ -139,13 +142,24 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-08 08:41:28</sys_created_on>
         <sys_id>26afb1f3db518a108152d03cd39619b1</sys_id>
-        <sys_mod_count>92</sys_mod_count>
+        <sys_mod_count>93</sys_mod_count>
         <sys_name>MappingConfigApplyAJAX</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_26afb1f3db518a108152d03cd39619b1</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-10 19:49:21</sys_updated_on>
+        <sys_updated_on>2024-08-15 19:23:54</sys_updated_on>
     </sys_script_include>
+    <sys_es_latest_script action="INSERT_OR_UPDATE">
+        <id>26afb1f3db518a108152d03cd39619b1</id>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-08-15 19:23:54</sys_created_on>
+        <sys_id>afd760651b081a10e50ddc61ab4bcb54</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-08-15 19:23:54</sys_updated_on>
+        <table>sys_script_include</table>
+        <use_es_latest>true</use_es_latest>
+    </sys_es_latest_script>
 </record_update>
