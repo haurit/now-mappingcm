@@ -6,26 +6,30 @@
         <caller_access/>
         <client_callable>false</client_callable>
         <description>Interface to integrations that can create, update or read mappings values.</description>
+        <mobile_callable>false</mobile_callable>
         <name>MappingConfigManager</name>
         <script><![CDATA[var MappingConfigManager = Class.create();
 MappingConfigManager.prototype = {
 	initialize: function () {
 		this.bLog = false;
+		this._gtTable = new global.GlobalToolsTable();
 	}, // function initialize
 
 	doMappingValue: function (sParentTable, sSourceValue, sSourceDisplayValue, sRefOrChoiceTable, sChoiceField) {
 		sParentTable = (sParentTable) ? String(sParentTable) : '';
+		var sParentTableId = (sParentTable) ? this._gtTable.getTableId(sParentTable) : '';
 		sSourceValue = (sSourceValue) ? String(sSourceValue) : '';
 		sSourceDisplayValue = (sSourceDisplayValue) ? String(sSourceDisplayValue) : '';
 		sRefOrChoiceTable = (sRefOrChoiceTable) ? String(sRefOrChoiceTable) : '';
+		sChoiceField = (sChoiceField) ? String(sChoiceField) : '';
 		if ((!sSourceValue) || (!sRefOrChoiceTable) || (!new GlideRecord(String(sRefOrChoiceTable)).isValid())) {
 			gs.warn('MappingConfigManager.doMappingValue empty or invalid source value or table!');
 			return sSourceValue;
 		} // if no source or table
 		var grMappingCfg = this._getMappingCfg(sSourceValue, sRefOrChoiceTable, sChoiceField);
 		if (grMappingCfg) {
-			if ((sParentTable) && (grMappingCfg.getValue('parent_tables').split(',').indexOf(sParentTable) == -1)) {
-				grMappingCfg.setValue('parent_tables', grMappingCfg.getValue('parent_tables') + ',' + sParentTable);
+			if ((sParentTableId) && (grMappingCfg.getValue('parent_tables').split(',').indexOf(sParentTableId) == -1)) {
+				grMappingCfg.setValue('parent_tables', grMappingCfg.getValue('parent_tables') + ',' + sParentTableId);
 				if (grMappingCfg.update()) {
 					this._doAffectedTable(sParentTable, sRefOrChoiceTable, sChoiceField);
 				} else {
@@ -41,9 +45,8 @@ MappingConfigManager.prototype = {
 					return sSourceValue;
 				} // if ho
 			} // if choice
-			return sTargetValue;
+			return (sTargetValue) ? sTargetValue : sSourceValue;
 		} else {
-			sChoiceField = (sChoiceField) ? String(sChoiceField) : '';
 			var sType = 'reference';
 			if (sChoiceField) {
 				if (!new GlideRecord(sRefOrChoiceTable).isValidField(sChoiceField)) {
@@ -66,8 +69,8 @@ MappingConfigManager.prototype = {
 				grMappingCfg.setValue('choice_field', '');
 				grMappingCfg.setValue('target_table', sRefOrChoiceTable);
 			} // if choice
-			if (sParentTable) {
-				grMappingCfg.setValue('parent_tables', sParentTable);
+			if (sParentTableId) {
+				grMappingCfg.setValue('parent_tables', sParentTableId);
 			} // if parent table
 			if (grMappingCfg.insert()) {
 				this._doAffectedTable(sParentTable, sRefOrChoiceTable, sChoiceField);
@@ -187,8 +190,9 @@ MappingConfigManager.prototype = {
 				var sMappingId = grMappingCfg.getUniqueValue();
 				var sChoiceTable = grMappingCfg.getValue('choice_table');
 				var sChoiceField = grMappingCfg.getValue('choice_field');
-				var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
-				aParentTables.forEach(function (sParentTable) {
+				var aParentTableIds = String(grMappingCfg.getValue('parent_tables')).split(',');
+				aParentTableIds.forEach(function (sParentTableId) {
+					var sParentTable = this._gtTable.getTableName(sParentTableId);
 					var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
 					var sQuery = 'active=true^affected_table=' + sParentTable + '^choice_table=' + sChoiceTable;
 					if (sChoiceField) {
@@ -197,7 +201,7 @@ MappingConfigManager.prototype = {
 					grAffectedTable.addEncodedQuery(sQuery);
 					grAffectedTable.query();
 					if (grAffectedTable.next()) {
-						sQuery = 'sys_id!=' + sMappingId + '^parent_tables=' + sParentTable + '^choice_table=' + sChoiceTable;
+						sQuery = 'sys_id!=' + sMappingId + '^parent_tables=' + sParentTableId + '^choice_table=' + sChoiceTable;
 						if (sChoiceField) {
 							sQuery += '^choice_field=' + sChoiceField;
 						} // if choice field
@@ -226,13 +230,24 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>52</sys_mod_count>
+        <sys_mod_count>56</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-05-04 10:04:53</sys_updated_on>
+        <sys_updated_on>2024-08-16 09:45:13</sys_updated_on>
     </sys_script_include>
+    <sys_es_latest_script action="INSERT_OR_UPDATE">
+        <id>06901063db190a108152d03cd39619dc</id>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-08-15 19:17:10</sys_created_on>
+        <sys_id>f456e4a11b081a10e50ddc61ab4bcb60</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-08-15 19:17:10</sys_updated_on>
+        <table>sys_script_include</table>
+        <use_es_latest>true</use_es_latest>
+    </sys_es_latest_script>
 </record_update>
