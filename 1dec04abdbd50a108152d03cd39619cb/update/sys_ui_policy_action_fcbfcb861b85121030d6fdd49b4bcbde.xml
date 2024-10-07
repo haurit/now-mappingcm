@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_policy_action">
+    <sys_ui_policy_action action="INSERT_OR_UPDATE">
+        <cleared>false</cleared>
+        <disabled>ignore</disabled>
+        <field>dependent_mapping</field>
+        <field_message/>
+        <field_message_type>none</field_message_type>
+        <mandatory>ignore</mandatory>
+        <sys_class_name>sys_ui_policy_action</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-10-06 13:57:07</sys_created_on>
+        <sys_id>fcbfcb861b85121030d6fdd49b4bcbde</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>dependent_mapping</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_ui_policy_action_fcbfcb861b85121030d6fdd49b4bcbde</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-10-06 13:57:07</sys_updated_on>
+        <table>x_snc_mapping_cm_mapping_config</table>
+        <ui_policy display_value="Show choice table and choice field if type is &quot;Choice&quot;">0221d863db190a108152d03cd396191c</ui_policy>
+        <value/>
+        <value_action>ignore</value_action>
+        <visible>true</visible>
+    </sys_ui_policy_action>
+    <sys_translated_text action="delete_multiple" query="documentkey=fcbfcb861b85121030d6fdd49b4bcbde"/>
+</record_update>
