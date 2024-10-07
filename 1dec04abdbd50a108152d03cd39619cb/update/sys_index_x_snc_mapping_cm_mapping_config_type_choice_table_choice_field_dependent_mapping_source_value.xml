@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_index">
+    <sys_index action="INSERT_OR_UPDATE">
+        <access_method>btree</access_method>
+        <col_name_string>type,choice_table,choice_field,dependent_mapping,source_value</col_name_string>
+        <index_col_name>1bbf5f4c1bbb0210e50ddc61ab4bcb7f,d7bf5f4c1bbb0210e50ddc61ab4bcb5d,93bf5f4c1bbb0210e50ddc61ab4bcb5c,406c4b421b85121030d6fdd49b4bcb69,5bbf5f4c1bbb0210e50ddc61ab4bcb7b</index_col_name>
+        <logical_table_name>x_snc_mapping_cm_mapping_config</logical_table_name>
+        <sys_class_name>sys_index</sys_class_name>
+        <sys_created_by>system</sys_created_by>
+        <sys_created_on>2024-10-07 12:42:48</sys_created_on>
+        <sys_id>7858c0661b8d521030d6fdd49b4bcbf6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_snc_mapping_cm_mapping_config</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_index_x_snc_mapping_cm_mapping_config_type_choice_table_choice_field_dependent_mapping_source_value</sys_update_name>
+        <sys_updated_by>system</sys_updated_by>
+        <sys_updated_on>2024-10-07 12:42:48</sys_updated_on>
+        <table display_value="Mapping Config" name="x_snc_mapping_cm_mapping_config">3c2d042fdbd50a108152d03cd39619cd</table>
+        <unique_index>false</unique_index>
+    </sys_index>
+</record_update>
