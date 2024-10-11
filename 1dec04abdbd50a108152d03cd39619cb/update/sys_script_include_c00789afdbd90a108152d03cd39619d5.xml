@@ -8,20 +8,31 @@
         <description>Apply mapped values to parent table fields</description>
         <mobile_callable>false</mobile_callable>
         <name>MappingConfigApply</name>
+        <sandbox_callable>false</sandbox_callable>
         <script><![CDATA[var MappingConfigApply = Class.create();
 MappingConfigApply.prototype = {
 	initialize: function () {
 		this.bLog = false;
+		this._mapCfgCommon = new MappingConfigCommon();
 		this._gt = new global.GlobalTools();
 		this._gtRecordRead = new global.GlobalToolsRecordRead();
 		this._gtTable = new global.GlobalToolsTable();
 	}, // function initialize
 
+	// BR MappingApplyConfigApproved
 	processBusinessRule: function (grMappingCfg, grMappingCfgOld) {
 		if (grMappingCfg.operation() == 'update') {
+			var sMappingCfgId = grMappingCfg.getUniqueValue();
 			var sSourceValue = grMappingCfg.getValue('source_value');
 			var sTargetValue = grMappingCfg.getValue('target_value');
+			var sTargetValueEmpty = (grMappingCfg.getValue('target_value_empty') == '1') ? true : false;
+			if (sTargetValueEmpty) {
+				sTargetValue = '';
+			} // if target is empty
 			var sChoiceField = grMappingCfg.getValue('choice_field');
+			var oDependentData = this._mapCfgCommon.getDependentData(grMappingCfg);
+			var sDependentField = oDependentData['sDependentField'];
+			var sDependentValue = oDependentData['sDependentValue'];
 			var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
 			aParentTables.forEach(function (sParentTableId) {
 				var sParentTable = this._gtTable.getTableName(sParentTableId);
@@ -37,7 +48,7 @@ MappingConfigApply.prototype = {
 				grAffectedTable.addEncodedQuery(sQuery);
 				grAffectedTable.query();
 				if (grAffectedTable.next()) {
-					this._gt.scheduleScript('x_snc_mapping_cm.MappingConfigApply', 'runJob', 1, [grAffectedTable.getUniqueValue(), sSourceValue, sTargetValue], [], 'MappingConfigApply_' + sParentTable + '_' + grMappingCfg.getValue('choice_table') + '_' + sChoiceField);
+					this._gt.scheduleScript('x_snc_mapping_cm.MappingConfigApply', 'runJob', 1, [sMappingCfgId, grAffectedTable.getUniqueValue(), sSourceValue, sTargetValue, sDependentField, sDependentValue], [], 'MappingConfigApply_' + sParentTable + '_' + grMappingCfg.getValue('choice_table') + '_' + sChoiceField);
 				} // if affected table
 			}, this); // each table
 			grMappingCfg.setValue('apply_job_status', 'running');
@@ -47,7 +58,7 @@ MappingConfigApply.prototype = {
 		} // if update
 	}, // function processBusinessRule
 
-	runJob: function (sAffectedTableId, sSourceValue, sTargetValue) {
+	runJob: function (sMappingCfgId, sAffectedTableId, sSourceValue, sTargetValue, sDependentField, sDependentValue) {
 		try {
 			var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
 			if (grAffectedTable.get(sAffectedTableId)) {
@@ -63,6 +74,7 @@ MappingConfigApply.prototype = {
 				var bAutoSysFields = grAffectedTable.getValue('apply_autosysfield');
 				var bUseEngines = grAffectedTable.getValue('apply_useengine');
 				var aQuery = [];
+				var sDependentQuery = '';
 				var aFields = [];
 				var grDict = new GlideRecord('sys_dictionary');
 				grDict.addEncodedQuery('sys_idIN' + grAffectedTable.getValue('affected_fields'));
@@ -71,21 +83,25 @@ MappingConfigApply.prototype = {
 					aFields.push(grDict.getValue('element'));
 					aQuery.push(grDict.getValue('element') + '=' + sSourceValue);
 				} // while fields
-				var grTable = this._gtRecordRead.getRecords(sParentTable, aQuery.join('^OR'), '', '', '', bWorkflow, bAutoSysFields, false, bUseEngines);
+				if ((sDependentField) && (sDependentValue)) {
+					sDependentQuery = sDependentField + '=' + sDependentValue + '^';
+				} // if dependent field and value
+				var grTable = this._gtRecordRead.getRecords(sParentTable, sDependentQuery + aQuery.join('^OR'), '', '', '', bWorkflow, bAutoSysFields, false, bUseEngines);
 				if (grTable) {
 					while (grTable._next()) {
 						var bChanged = false;
 						aFields.forEach(function (sField) {
 							var sCurrentValue = grTable.getValue(sField);
-							// check for glide list records
-							if (sCurrentValue == sSourceValue) {
-								grTable.setValue(sField, sTargetValue);
-								bChanged = true;
-							} else if (sCurrentValue.indexOf(sSourceValue) != -1) {
-								sCurrentValue = sCurrentValue.replace(sSourceValue, sTargetValue);
-								grTable.setValue(sField, sCurrentValue);
-								bChanged = true;
-							} // value is source value
+							if (sCurrentValue) {
+								if (sCurrentValue == sSourceValue) {
+									grTable.setValue(sField, sTargetValue);
+									bChanged = true;
+								} else if (sCurrentValue.indexOf(sSourceValue) != -1) {
+									sCurrentValue = sCurrentValue.replace(sSourceValue, sTargetValue);
+									grTable.setValue(sField, sCurrentValue);
+									bChanged = true;
+								} // value is source value or in list
+							} // if current value
 						}, this); // each field
 						if (bChanged) {
 							if (grTable.update()) {
@@ -112,15 +128,8 @@ MappingConfigApply.prototype = {
 				grAffectedTableRunning.addEncodedQuery(sQuery);
 				grAffectedTableRunning.query();
 				if (!grAffectedTableRunning.hasNext()) {
-					sQuery = 'choice_table=' + grAffectedTable.getValue('choice_table') + '^parent_tablesIN' + this._gtTable.getTableId(grAffectedTable.getValue('affected_table'));
-					sChoiceField = grAffectedTable.getValue('choice_field');
-					if (sChoiceField) {
-						sQuery += '^choice_field=' + sChoiceField;
-					} // if choice field
 					var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
-					grMappingCfg.addEncodedQuery(sQuery);
-					grMappingCfg.query();
-					if (grMappingCfg.next()) {
+					if (grMappingCfg.get(sMappingCfgId)) {
 						grMappingCfg.setValue('apply_job_status', 'completed');
 						grMappingCfg.setWorkflow(false);
 						grMappingCfg.autoSysFields(false);
@@ -134,7 +143,7 @@ MappingConfigApply.prototype = {
 	}, // function runJob
 
 	type: 'MappingConfigApply',
-	version: '1.0.0',
+	version: '1.0.2',
 	author: 'Tom Hauri',
 	email: 'tom@hauri.biz'
 };]]></script>
@@ -142,14 +151,14 @@ MappingConfigApply.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 09:56:51</sys_created_on>
         <sys_id>c00789afdbd90a108152d03cd39619d5</sys_id>
-        <sys_mod_count>27</sys_mod_count>
+        <sys_mod_count>37</sys_mod_count>
         <sys_name>MappingConfigApply</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_c00789afdbd90a108152d03cd39619d5</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-08-15 19:22:45</sys_updated_on>
+        <sys_updated_on>2024-10-11 05:39:05</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>c00789afdbd90a108152d03cd39619d5</id>

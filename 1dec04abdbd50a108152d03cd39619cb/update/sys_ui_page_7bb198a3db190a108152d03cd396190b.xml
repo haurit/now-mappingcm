@@ -3,14 +3,21 @@
         <category>general</category>
         <client_script><![CDATA[function handleSubmit() {
 	var sTargetRecordId = trim(gel('map_cfg_target_record').value);
-	g_form.setValue('target_value', sTargetRecordId);
+	var sTargetValueEmpty = trim(gel('map_cfg_target_record_empty').value);
+	if ((!sTargetRecordId) && (sTargetValueEmpty == 'true')) {
+		g_form.setValue('target_value', '');
+		g_form.setValue('target_value_empty', true);
+	} else {
+		g_form.setValue('target_value', sTargetRecordId);
+		g_form.setValue('target_value_empty', false);
+	} // if target value empty checked
     GlideModal.get().destroy();
 	gsftSubmit(null, g_form.getFormElement(), 'sysverb_update_and_stay');
-}
+} // function handleSubmit
 
 function handleCancel() {
     var modal = GlideModal.get().destroy();
-}]]></client_script>
+} // function handleCancel]]></client_script>
         <description/>
         <direct>false</direct>
         <endpoint>x_snc_mapping_cm_MappingCfgTargetRecord.do</endpoint>
@@ -25,6 +32,14 @@ function handleCancel() {
 		var sValue = RP.getParameterValue('sysparm_popupmessage');
 		sValue;
 	</g:evaluate>
+	<g:evaluate var="jvar_popupmessage_dependent">
+		var sValue = RP.getParameterValue('sysparm_popupmessage_dependent');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_popupmessage_empty">
+		var sValue = RP.getParameterValue('sysparm_popupmessage_empty');
+		sValue;
+	</g:evaluate>
 	<g:evaluate var="jvar_targettable">
 		var sValue = RP.getParameterValue('sysparm_targettable');
 		sValue;
@@ -33,6 +48,13 @@ function handleCancel() {
 		var sValue = RP.getParameterValue('sysparm_targetquery');
 		sValue;
 	</g:evaluate>
+	<g:evaluate var="jvar_targetvalueempty">
+		var sValue = RP.getParameterValue('sysparm_targetvalueempty');
+		sValue;
+	</g:evaluate>
+	<p>
+	<div>${jvar_popupmessage_dependent}</div>
+	</p>
 	<p>
 	<div>${jvar_popupmessage}</div>
 	</p>
@@ -41,6 +63,11 @@ function handleCancel() {
 		<g:ui_reference name="map_cfg_target_record" id="map_cfg_target_record" table="${jvar_targettable}"
 			completer="AJAXTableCompleter" query="${jvar_targetquery}" />
 	</div>
+	<p>
+	<div>${jvar_popupmessage_empty}</div><div>
+		<g:ui_checkbox name="map_cfg_target_record_empty" value="${jvar_targetvalueempty}" />
+	</div>
+	</p>
 	</p>
 	<p>
 	<div>
@@ -55,13 +82,24 @@ function handleCancel() {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 06:03:01</sys_created_on>
         <sys_id>7bb198a3db190a108152d03cd396190b</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>15</sys_mod_count>
         <sys_name>MappingCfgTargetRecord</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_ui_page_7bb198a3db190a108152d03cd396190b</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-09 08:05:05</sys_updated_on>
+        <sys_updated_on>2024-10-08 13:47:11</sys_updated_on>
     </sys_ui_page>
+    <sys_es_latest_script action="INSERT_OR_UPDATE">
+        <id>7bb198a3db190a108152d03cd396190b</id>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-10-08 09:53:36</sys_created_on>
+        <sys_id>cc3ba4f21b05d21030d6fdd49b4bcb23</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-10-08 09:53:36</sys_updated_on>
+        <table>sys_ui_page</table>
+        <use_es_latest>true</use_es_latest>
+    </sys_es_latest_script>
 </record_update>

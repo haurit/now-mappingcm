@@ -7,7 +7,7 @@
 
 }]]></client_script_v2>
         <comments/>
-        <condition>current.canWrite() &amp;&amp; current.getValue('read_only')=='0'</condition>
+        <condition>g_scratchpad.bShowMapAction == true</condition>
         <form_action>true</form_action>
         <form_button>true</form_button>
         <form_button_v2>false</form_button_v2>
@@ -26,20 +26,25 @@
         <list_link>false</list_link>
         <list_save_with_form_button>false</list_save_with_form_button>
         <list_style/>
-        <messages>map_select_target</messages>
+        <messages>map_select_target_message_popup,map_select_target_message_dependent_popup, map_select_target_message_empty</messages>
         <name>Map Value</name>
         <onclick>selectTargetRecord()</onclick>
         <order>-10000</order>
         <script><![CDATA[function selectTargetRecord() {
+	// && ((!g_scratchpad.sDependentId) || (g_scratchpad.sDependentValue))
 	var sSysId = g_form.getUniqueValue();
-	var sTable = g_form.getValue('choice_table');
+	var sTable = g_scratchpad.sTable;
 	var sQuery = '';
-	if (g_form.getValue('type') == 'choice') {
+	if (g_scratchpad.sType == 'choice') {
 		var sLangQuery = '';
 		if (typeof g_lang != undefined) {
 			sLangQuery = '^language=' + g_lang;
 		} // if g_lang 
-		sQuery = 'name=' + sTable + '^element=' + g_form.getValue('choice_field') + sLangQuery;
+		var sDependentQuery = '';
+		if ((g_scratchpad.sDependentId) && (g_scratchpad.sDependentValue)) {
+			sDependentQuery = '^dependent_value=' + g_scratchpad.sDependentValue;
+		}
+		sQuery = 'name=' + sTable + '^element=' + g_scratchpad.sField + sLangQuery + sDependentQuery;
 		sTable = 'sys_choice';
 	} else {
 		sQuery = '';
@@ -49,9 +54,14 @@
 	gModal.setPreference('sysparm_mappingid', sSysId);
 	gModal.setPreference('sysparm_targettable', sTable);
 	gModal.setPreference('sysparm_targetquery', sQuery);
+	gModal.setPreference('sysparm_targetvalueempty', g_scratchpad.sTargetValueEmpty);
 	var sSourceValue = g_form.getValue('source_display_value');
-	sSourceValue = (sSourceValue) ? sSourceValue + ' (' + g_form.getValue('source_value') + ')' : g_form.getValue('source_value');
-	gModal.setPreference('sysparm_popupmessage', getMessage('map_select_target_message') + ' ' + sSourceValue);
+	sSourceValue = (sSourceValue) ? sSourceValue + ' (' + g_scratchpad.sSourceValue + ')' : g_scratchpad.sSourceValue;
+	if (g_scratchpad.bHasDependentMappings) {
+		gModal.setPreference('sysparm_popupmessage_dependent', getMessage('map_select_target_message_dependent_popup'));
+	} // if dependent maps
+	gModal.setPreference('sysparm_popupmessage', getMessage('map_select_target_message_popup') + ' ' + sSourceValue);
+	gModal.setPreference('sysparm_popupmessage_empty', getMessage('map_select_target_message_empty'));
 	gModal.setTitle(getMessage('map_select_target_title'));
 	gModal.render();
 } // function selectTargetRecord]]></script>
@@ -65,7 +75,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>23f1dca3db190a108152d03cd3961913</sys_id>
-        <sys_mod_count>10</sys_mod_count>
+        <sys_mod_count>32</sys_mod_count>
         <sys_name>Map Value</sys_name>
         <sys_overrides/>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
@@ -73,7 +83,7 @@
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_ui_action_23f1dca3db190a108152d03cd3961913</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-08-15 20:10:39</sys_updated_on>
+        <sys_updated_on>2024-10-09 05:36:13</sys_updated_on>
         <table>x_snc_mapping_cm_mapping_config</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

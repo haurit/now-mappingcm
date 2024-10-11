@@ -14,6 +14,11 @@ MappingConfigManager.prototype = {
 	initialize: function () {
 		this.bLog = false;
 		this._gtTable = new global.GlobalToolsTable();
+		var sJSONId = gs.getProperty('x_snc_mapping_cm.json_cfg', '');
+		this._getCfg = '';
+		if ((sJSONId) && (gs.isValidScriptFromScope('getCfg', 'x_snc_json_cfg_mgr'))) {
+			var _getCfg = new x_snc_json_cfg_mgr.getCfg(sJSONId);
+		} // if valid mapping config mgr
 		this.sParentTable = '';
 		this.sParentTableId = '';
 		this.sSourceValue = '';
@@ -45,14 +50,18 @@ MappingConfigManager.prototype = {
 				} // if insert
 			} // if parent table not yet set
 			var sTargetValue = grMappingCfg.getValue('target_value');
-			if (grMappingCfg.getValue('type') == 'choice') {
-				var grChoice = new GlideRecord('sys_choice');
-				if ((sTargetValue) && (grChoice.get(sTargetValue))) {
-					sTargetValue = grChoice.getValue('value');
-				} else {
-					return sSourceValue;
-				} // if ho
-			} // if choice
+			if (grMappingCfg.getValue('target_value_empty') == '1') {
+				return '';
+			} else {
+				if (grMappingCfg.getValue('type') == 'choice') {
+					var grChoice = new GlideRecord('sys_choice');
+					if ((sTargetValue) && (grChoice.get(sTargetValue))) {
+						sTargetValue = grChoice.getValue('value');
+					} else {
+						return sSourceValue;
+					} // if target is valid choice
+				} // if choice
+			} // if map to empty value
 			return (sTargetValue) ? sTargetValue : sSourceValue;
 		} else {
 			if (this.sChoiceField) {
@@ -94,19 +103,23 @@ MappingConfigManager.prototype = {
 		this.sSourceValue = (sSourceValue) ? String(sSourceValue) : '';
 		this._setTableAndField(sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue);
 		var grMappingCfg = this._getMappingCfg();
-		if ((grMappingCfg) && (this.sSourceValue != grMappingCfg)) {
+		if ((grMappingCfg) && (this.sSourceValue != grMappingCfg.getValue('target_value'))) {
 			var sTargetValue = grMappingCfg.getValue('target_value');
-			if (sTargetValue) {
-				if (grMappingCfg.getValue('type') == 'choice') {
-					var grChoice = new GlideRecord('sys_choice');
-					if (grChoice.get(sTargetValue)) {
-						sTargetValue = grChoice.getValue('value');
-					} else {
-						return sSourceValue;
-					} // if ho
-				} // if choice
-				return sTargetValue;
-			} // if target value
+			if (grMappingCfg.getValue('target_value_empty') == '1') {
+				return '';
+			} else {
+				if (sTargetValue) {
+					if (grMappingCfg.getValue('type') == 'choice') {
+						var grChoice = new GlideRecord('sys_choice');
+						if (grChoice.get(sTargetValue)) {
+							sTargetValue = grChoice.getValue('value');
+						} else {
+							return sSourceValue;
+						} // if ho
+					} // if choice
+					return sTargetValue;
+				} // if target value
+			} // if map to empty value
 		} // if mapped cfg
 		return sSourceValue;
 	}, // function getMappedValue
@@ -123,7 +136,7 @@ MappingConfigManager.prototype = {
 				sDictChoiceTable = grDict.getValue('choice_table');
 				sDictChoiceField = grDict.getValue('choice_field');
 			} // if dict
-			if ((sDictChoiceTable) && (this.isValidTable(sDictChoiceTable)) && (sDictChoiceField)) {
+			if ((sDictChoiceTable) && (this._gtTable.isValidTable(sDictChoiceTable)) && (sDictChoiceField)) {
 				this.sRefOrChoiceTable = sDictChoiceTable;
 				this.sChoiceField = sDictChoiceField;
 			} // if inherited choice table
@@ -170,7 +183,6 @@ MappingConfigManager.prototype = {
 		grMappingCfg.setLimit(1);
 		grMappingCfg.query();
 		if (grMappingCfg.next()) {
-
 			return grMappingCfg;
 		} // if found
 	}, // function getMappingCfg
@@ -232,7 +244,8 @@ MappingConfigManager.prototype = {
 		} // if affected table
 	}, // function _saveAffectedTable
 
-	processBusinessRule: function (grMappingCfg, grMappingCfgOld) {
+	// BR DeleteRelatedAffectedTables
+	processBusinessRuleDelete: function (grMappingCfg, grMappingCfgOld) {
 		try {
 			if (grMappingCfg.operation() == 'delete') {
 				var sMappingId = grMappingCfg.getUniqueValue();
@@ -264,9 +277,28 @@ MappingConfigManager.prototype = {
 				}, this); // each table
 			} // delete operation
 		} catch (oEx) {
-			gs.error('MappingConfigManager.processBusinessRule failed with error: ' + String(oEx));
+			gs.error('MappingConfigManager.processBusinessRuleDelete failed with error: ' + String(oEx));
 		} // try
-	}, // function processBusinessRule
+	}, // function processBusinessRuleDelete
+
+	// BR MappingDependentUpdate
+	processBusinessRuleDependent: function (grMappingCfg, grMappingCfgOld) {
+		try {
+			var sMappingId = grMappingCfg.getUniqueValue();
+			var sQuery = 'dependent_mapping=' + sMappingId + '^target_valueISNOTEMPTY^ORtarget_value_empty=true';
+			var grMappingCfgDependent = new GlideRecord('x_snc_mapping_cm_mapping_config');
+			grMappingCfgDependent.addEncodedQuery(sQuery);
+			grMappingCfgDependent.query();
+			while (grMappingCfgDependent.next()) {
+				grMappingCfgDependent.setValue('target_value', '');
+				grMappingCfgDependent.setValue('target_value_empty', 'false');
+				grMappingCfgDependent.setValue('apply_job_status', 'not_started');
+				grMappingCfgDependent.update();
+			} // if dependent mappings
+		} catch (oEx) {
+			gs.error('MappingConfigManager.processBusinessRuleDependent failed with error: ' + String(oEx));
+		} // try
+	}, // function processBusinessRuleDependent
 
 	type: 'MappingConfigManager',
 	version: '1.0.2',
@@ -278,14 +310,14 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>68</sys_mod_count>
+        <sys_mod_count>78</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-10-07 08:30:55</sys_updated_on>
+        <sys_updated_on>2024-10-11 05:52:36</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>06901063db190a108152d03cd39619dc</id>
