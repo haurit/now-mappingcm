@@ -23,13 +23,20 @@ MappingConfigApply.prototype = {
 	processBusinessRule: function (grMappingCfg, grMappingCfgOld) {
 		if (grMappingCfg.operation() == 'update') {
 			var sMappingCfgId = grMappingCfg.getUniqueValue();
+			var sChoiceField = grMappingCfg.getValue('choice_field');
 			var sSourceValue = grMappingCfg.getValue('source_value');
 			var sTargetValue = grMappingCfg.getValue('target_value');
+			if (sChoiceField) {
+				var grChoice = new GlideRecord('sys_choice');
+				if (grChoice.get(sTargetValue)) {
+					sTargetValue = grChoice.getValue('value');
+				} // if choice
+			} // if choice field
 			var sTargetValueEmpty = (grMappingCfg.getValue('target_value_empty') == '1') ? true : false;
 			if (sTargetValueEmpty) {
 				sTargetValue = '';
 			} // if target is empty
-			var sChoiceField = grMappingCfg.getValue('choice_field');
+			var sTargetValue2 = grMappingCfg.getValue('target_value_2');
 			var oDependentData = this._mapCfgCommon.getDependentData(grMappingCfg);
 			var sDependentField = oDependentData['sDependentField'];
 			var sDependentValue = oDependentData['sDependentValue'];
@@ -39,16 +46,12 @@ MappingConfigApply.prototype = {
 				var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
 				var sQuery = 'active=true^affected_table=' + sParentTable + '^choice_table=' + grMappingCfg.getValue('choice_table');
 				if (sChoiceField) {
-					var grChoice = new GlideRecord('sys_choice');
-					if (grChoice.get(sTargetValue)) {
-						sTargetValue = grChoice.getValue('value');
-					} // if choice
 					sQuery += '^choice_field=' + sChoiceField;
 				} // if choice field
 				grAffectedTable.addEncodedQuery(sQuery);
 				grAffectedTable.query();
 				if (grAffectedTable.next()) {
-					this._gt.scheduleScript('x_snc_mapping_cm.MappingConfigApply', 'runJob', 1, [sMappingCfgId, grAffectedTable.getUniqueValue(), sSourceValue, sTargetValue, sDependentField, sDependentValue], [], 'MappingConfigApply_' + sParentTable + '_' + grMappingCfg.getValue('choice_table') + '_' + sChoiceField);
+					this._gt.scheduleScript('x_snc_mapping_cm.MappingConfigApply', 'runJob', 1, [sMappingCfgId, grAffectedTable.getUniqueValue(), sSourceValue, sTargetValue, sTargetValue2, sDependentField, sDependentValue], [], 'MappingConfigApply_' + sParentTable + '_' + grMappingCfg.getValue('choice_table') + '_' + sChoiceField);
 				} // if affected table
 			}, this); // each table
 			grMappingCfg.setValue('apply_job_status', 'running');
@@ -58,7 +61,7 @@ MappingConfigApply.prototype = {
 		} // if update
 	}, // function processBusinessRule
 
-	runJob: function (sMappingCfgId, sAffectedTableId, sSourceValue, sTargetValue, sDependentField, sDependentValue) {
+	runJob: function (sMappingCfgId, sAffectedTableId, sSourceValue, sTargetValue, sTargetValue2, sDependentField, sDependentValue) {
 		try {
 			var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
 			if (grAffectedTable.get(sAffectedTableId)) {
@@ -75,14 +78,11 @@ MappingConfigApply.prototype = {
 				var bUseEngines = grAffectedTable.getValue('apply_useengine');
 				var aQuery = [];
 				var sDependentQuery = '';
-				var aFields = [];
-				var grDict = new GlideRecord('sys_dictionary');
-				grDict.addEncodedQuery('sys_idIN' + grAffectedTable.getValue('affected_fields'));
-				grDict.query();
-				while (grDict.next()) {
-					aFields.push(grDict.getValue('element'));
-					aQuery.push(grDict.getValue('element') + '=' + sSourceValue);
-				} // while fields
+				var aFields = this._mapCfgCommon.getTargetFields(grAffectedTable.getValue('affected_fields'));
+				var aFields2 = this._mapCfgCommon.getTargetFields(grAffectedTable.getValue('affected_fields_2'));
+				aFields.forEach(function (sField) {
+					aQuery.push(sField + '=' + sSourceValue);
+				}, this); // each field
 				if ((sDependentField) && (sDependentValue)) {
 					sDependentQuery = sDependentField + '=' + sDependentValue + '^';
 				} // if dependent field and value
@@ -90,12 +90,14 @@ MappingConfigApply.prototype = {
 				if (grTable) {
 					while (grTable._next()) {
 						var bChanged = false;
+						var bChangedRefField = false;
 						aFields.forEach(function (sField) {
 							var sCurrentValue = grTable.getValue(sField);
 							if (sCurrentValue) {
 								if (sCurrentValue == sSourceValue) {
 									grTable.setValue(sField, sTargetValue);
 									bChanged = true;
+									bChangedRefField = true;
 								} else if (sCurrentValue.indexOf(sSourceValue) != -1) {
 									sCurrentValue = sCurrentValue.replace(sSourceValue, sTargetValue);
 									grTable.setValue(sField, sCurrentValue);
@@ -103,6 +105,11 @@ MappingConfigApply.prototype = {
 								} // value is source value or in list
 							} // if current value
 						}, this); // each field
+						if (bChangedRefField) {
+							aFields2.forEach(function (sField) {
+								grTable.setValue(sField, sTargetValue2);
+							}, this); // each field 2
+						} // if changed ref field
 						if (bChanged) {
 							if (grTable.update()) {
 								iUpdateCount++;
@@ -151,14 +158,14 @@ MappingConfigApply.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 09:56:51</sys_created_on>
         <sys_id>c00789afdbd90a108152d03cd39619d5</sys_id>
-        <sys_mod_count>37</sys_mod_count>
+        <sys_mod_count>50</sys_mod_count>
         <sys_name>MappingConfigApply</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_c00789afdbd90a108152d03cd39619d5</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-10-11 05:39:05</sys_updated_on>
+        <sys_updated_on>2024-10-18 05:59:49</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>c00789afdbd90a108152d03cd39619d5</id>

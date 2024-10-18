@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_snc_mapping_cm.MappingConfgMap</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description>Calculate the g_scratchpad for the mapping UI actions</description>
+        <mobile_callable>false</mobile_callable>
+        <name>MappingConfgMap</name>
+        <sandbox_callable>false</sandbox_callable>
+        <script><![CDATA[var MappingConfgMap = Class.create();
+MappingConfgMap.prototype = {
+	initialize: function () {
+		var sJSONId = gs.getProperty('x_snc_mapping_cm.json_cfg', '');
+		this.bJSONCfg = false;
+		var grScriptInclude = new GlideRecord('sys_script_include');
+		if ((sJSONId) && (grScriptInclude.get('api_name', 'x_snc_json_cfg_mgr.getCfg'))) {
+			var _getCfg = new x_snc_json_cfg_mgr.getCfg(sJSONId);
+			this.oConfig = _getCfg.getConfig();
+			this._getValue = _getCfg.getValue;
+			this.bJSONCfg = true;
+			//var sDefaultFilter = (this.bJSONCfg) ? this._getValue('sType/reference/' + sTable + '/sDefaultFilter') : '';
+		} // if valid mapping config mgr
+	}, // function initialize
+
+	populateScratchPad: function (g_scratchpad) {
+		var sTable = current.getValue('choice_table');
+		var sType = current.getValue('type');
+		g_scratchpad.sType = sType;
+		g_scratchpad.sTable = sTable;
+		g_scratchpad.sField = current.getValue('choice_field');
+		g_scratchpad.sSourceValue = current.getValue('source_value');
+		g_scratchpad.sTargetValue = current.getValue('target_value');
+		g_scratchpad.sTargetValueDisp = current.getDisplayValue('target_value');
+		var sDependentId = current.getValue('dependent_mapping');
+		sDependentId = ((sDependentId) && (sDependentId != 'null')) ? sDependentId : '';
+		var sDependentValue = '';
+		var sDependentApplyStatus = '';
+		if (sDependentId) {
+			sDependentValue = current.dependent_mapping.target_value;
+			sDependentApplyStatus = current.dependent_mapping.apply_job_status;
+			var grChoice = new GlideRecord('sys_choice');
+			if (grChoice.get(sDependentValue)) {
+				sDependentValue = grChoice.getValue('value');
+				if ((sDependentApplyStatus != 'completed') && (current.getValue('target_value'))) {
+					gs.addErrorMessage(gs.getMessage('map_select_target_message_dependent_apply'));
+				} // if not applied
+			} else {
+				sDependentValue = '';
+				gs.addErrorMessage(gs.getMessage('map_select_target_message_dependent_map'));
+			} // if valid choice
+		} // if depending on other mapping
+		g_scratchpad.sDependentId = sDependentId;
+		g_scratchpad.sDependentValue = sDependentValue;
+		g_scratchpad.bHasDependentMappings = false;
+		var grMappingCfgDependent = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		grMappingCfgDependent.addEncodedQuery('dependent_mapping=' + current.getUniqueValue() + '^target_valueISNOTEMPTY');
+		grMappingCfgDependent.setLimit(1);
+		grMappingCfgDependent.query();
+		if (grMappingCfgDependent.hasNext()) {
+			g_scratchpad.bHasDependentMappings = true;
+		} // if has at least one dependent mappings
+		var sTargetValueEmpty = (current.getValue('target_value_empty') == 1) ? 'true' : 'false';
+		g_scratchpad.sTargetValueEmpty = sTargetValueEmpty;
+		var bShowButtons = (current.canWrite() && current.getValue('read_only') == '0');
+		g_scratchpad.bShowMapAction = (bShowButtons) ? true : false;
+		g_scratchpad.bShowApplyAction = ((bShowButtons) && (['not_started', 'completed'].indexOf(current.getValue('apply_job_status')) != -1) && ((current.getValue('target_value')) || (sTargetValueEmpty == 'true'))) ? true : false;
+		if (sDependentId) {
+			if (!sDependentValue) {
+				g_scratchpad.bShowMapAction = false;
+			} // if dependent value is not mapped
+			if (sDependentApplyStatus != 'completed') {
+				g_scratchpad.bShowApplyAction = false;
+			} // if not completed
+		} // if dependent id
+		g_scratchpad.sFilter = '';
+		g_scratchpad.sTable2 = '';
+		g_scratchpad.sFilter2 = '';
+		g_scratchpad.sDynamicFilter2 = '';
+		g_scratchpad.sTargetValue2 = '';
+		g_scratchpad.sTargetValueDisp2 = '';
+		if (this.bJSONCfg) {
+			g_scratchpad.sFilter = this._getValue('sType/' + sType + '/' + sTable + '/sFilter', '');
+			var sSecondMappingTable = this._getValue('sType/' + sType + '/' + sTable + '/sSecondMappingTable', '');
+			if (sSecondMappingTable) {
+				g_scratchpad.sTable2 = sSecondMappingTable;
+				g_scratchpad.sFilter2 = this._getValue('sType/second_table/' + sSecondMappingTable + '/sFilter', '');
+				g_scratchpad.sDynamicFilter2 = this._getValue('sType/second_table/' + sSecondMappingTable + '/sDynamicFilter', '');
+				g_scratchpad.sTargetValue2 = current.getValue('target_value_2');
+				g_scratchpad.sTargetValueDisp2 = current.getDisplayValue('target_value_2');
+			} // if second table
+		} // if special config
+	}, // function populateScratchPad
+
+	type: 'MappingConfgMap',
+	version: '1.0.2',
+	author: 'Tom Hauri',
+	email: 'tom@hauri.biz'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-10-11 13:24:50</sys_created_on>
+        <sys_id>2a77f0bf1bc51a1030d6fdd49b4bcb27</sys_id>
+        <sys_mod_count>18</sys_mod_count>
+        <sys_name>MappingConfgMap</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_script_include_2a77f0bf1bc51a1030d6fdd49b4bcb27</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-10-16 06:53:03</sys_updated_on>
+    </sys_script_include>
+    <sys_es_latest_script action="INSERT_OR_UPDATE">
+        <id>2a77f0bf1bc51a1030d6fdd49b4bcb27</id>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-10-11 13:24:50</sys_created_on>
+        <sys_id>6b48b8ff1bc51a1030d6fdd49b4bcbe2</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-10-11 13:24:50</sys_updated_on>
+        <table>sys_script_include</table>
+        <use_es_latest>true</use_es_latest>
+    </sys_es_latest_script>
+</record_update>

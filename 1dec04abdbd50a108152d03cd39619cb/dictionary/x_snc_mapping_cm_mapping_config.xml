@@ -8,6 +8,7 @@
         </element>
         <element calculation="(function calculatedFieldValue(current) {&#10;&#10;&#9;var sSourceValue = current.getValue('source_display_value');&#10;&#9;sSourceValue = (sSourceValue) ? sSourceValue : current.getValue('source_value');&#10;&#9;if (current.choice_field.nil()) {&#10;&#9;&#9;return current.getDisplayValue('choice_table') + '-' + sSourceValue;&#10;&#9;} else {&#10;&#9;&#9;return current.choice_table.getDisplayValue() + '-' + current.getValue('choice_field') + '-' + sSourceValue;&#10;&#9;} // if choice field&#10;&#10;})(current);" display="true" label="Name" max_length="80" name="name" read_only="true" type="string" virtual="true"/>
         <element label="Map to empty value" max_length="40" name="target_value_empty" read_only="true" type="boolean"/>
+        <element dependent="target_table_2" dependent_on_field="target_table_2" label="Target Value 2" max_length="32" name="target_value_2" read_only="true" type="document_id" use_dependent_field="true"/>
         <element attributes="readonly_clickthrough=true" label="Dependent Mapping" max_length="32" name="dependent_mapping" read_only="true" reference="x_snc_mapping_cm_mapping_config" type="reference"/>
         <element label="Parent Tables" max_length="4000" name="parent_tables" read_only="true" reference="sys_db_object" type="glide_list"/>
         <element label="Source Value" max_length="255" name="source_value" read_only="true" type="string"/>
@@ -25,6 +26,7 @@
             </choice>
         </element>
         <element dependent="target_table" dependent_on_field="target_table" label="Target Value" max_length="32" name="target_value" read_only="true" type="document_id" use_dependent_field="true"/>
+        <element label="Target Table 2" max_length="80" name="target_table_2" read_only="true" type="table_name"/>
         <element label="Choice or Reference Table" max_length="80" name="choice_table" read_only="true" type="table_name"/>
         <index name="index">
             <element name="dependent_mapping"/>
@@ -33,6 +35,9 @@
             <element name="target_value"/>
         </index>
         <index name="index3">
+            <element name="target_value_2"/>
+        </index>
+        <index name="index4">
             <element name="type"/>
             <element name="choice_table"/>
             <element name="choice_field"/>

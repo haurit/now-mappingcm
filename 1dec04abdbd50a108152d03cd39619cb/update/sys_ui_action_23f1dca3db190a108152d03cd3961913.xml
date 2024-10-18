@@ -31,8 +31,6 @@
         <onclick>selectTargetRecord()</onclick>
         <order>-10000</order>
         <script><![CDATA[function selectTargetRecord() {
-	// && ((!g_scratchpad.sDependentId) || (g_scratchpad.sDependentValue))
-	var sSysId = g_form.getUniqueValue();
 	var sTable = g_scratchpad.sTable;
 	var sQuery = '';
 	if (g_scratchpad.sType == 'choice') {
@@ -46,14 +44,21 @@
 		}
 		sQuery = 'name=' + sTable + '^element=' + g_scratchpad.sField + sLangQuery + sDependentQuery;
 		sTable = 'sys_choice';
-	} else {
-		sQuery = '';
+	} else if (g_scratchpad.sFilter) {
+		sQuery = g_scratchpad.sFilter;
 	} // if choice
 	var gModal = new GlideModal('x_snc_mapping_cm_MappingCfgTargetRecord');
 	gModal.setWidth(600);
-	gModal.setPreference('sysparm_mappingid', sSysId);
+	gModal.setPreference('sysparm_mappingid', g_form.getUniqueValue());
 	gModal.setPreference('sysparm_targettable', sTable);
 	gModal.setPreference('sysparm_targetquery', sQuery);
+	gModal.setPreference('sysparm_targetvalue', g_scratchpad.sTargetValue);
+	gModal.setPreference('sysparm_targetvaluedisp',  g_scratchpad.sTargetValueDisp);
+	gModal.setPreference('sysparm_targettable_2', g_scratchpad.sTable2);
+	gModal.setPreference('sysparm_targetquery_2', g_scratchpad.sFilter2);
+	gModal.setPreference('sysparm_targetdynamicquery_2', g_scratchpad.sDynamicFilter2);
+	gModal.setPreference('sysparm_targetvalue_2', g_scratchpad.sTargetValue2);
+	gModal.setPreference('sysparm_targetvaluedisp_2', g_scratchpad.sTargetValueDisp2);
 	gModal.setPreference('sysparm_targetvalueempty', g_scratchpad.sTargetValueEmpty);
 	var sSourceValue = g_form.getValue('source_display_value');
 	sSourceValue = (sSourceValue) ? sSourceValue + ' (' + g_scratchpad.sSourceValue + ')' : g_scratchpad.sSourceValue;
@@ -75,7 +80,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>23f1dca3db190a108152d03cd3961913</sys_id>
-        <sys_mod_count>32</sys_mod_count>
+        <sys_mod_count>38</sys_mod_count>
         <sys_name>Map Value</sys_name>
         <sys_overrides/>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
@@ -83,7 +88,7 @@
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_ui_action_23f1dca3db190a108152d03cd3961913</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-10-09 05:36:13</sys_updated_on>
+        <sys_updated_on>2024-10-15 18:45:24</sys_updated_on>
         <table>x_snc_mapping_cm_mapping_config</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

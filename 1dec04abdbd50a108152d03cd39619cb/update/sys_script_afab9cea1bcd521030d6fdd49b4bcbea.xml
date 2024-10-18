@@ -29,53 +29,8 @@
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
 
-	g_scratchpad.sType = current.getValue('type');
-	g_scratchpad.sTable = current.getValue('choice_table');
-	g_scratchpad.sField = current.getValue('choice_field');
-	g_scratchpad.sSourceValue = current.getValue('source_value');
-	var sDependentId = current.getValue('dependent_mapping');
-	sDependentId = ((sDependentId) && (sDependentId != 'null')) ? sDependentId : '';
-	var sDependentValue = '';
-	var sDependentApplyStatus = '';
-	if (sDependentId) {
-		sDependentValue = current.dependent_mapping.target_value;
-		sDependentApplyStatus = current.dependent_mapping.apply_job_status;
-		var grChoice = new GlideRecord('sys_choice');
-		if (grChoice.get(sDependentValue)) {
-			sDependentValue = grChoice.getValue('value');
-			if ((sDependentApplyStatus != 'completed') && (current.getValue('target_value'))) {
-				gs.addErrorMessage(gs.getMessage('map_select_target_message_dependent_apply'));
-			} // if not applied
-		} else {
-			sDependentValue = '';
-			gs.addErrorMessage(gs.getMessage('map_select_target_message_dependent_map'));
-		} // if valid choice
-	} // if dependent id
-	g_scratchpad.sDependentId = sDependentId;
-	g_scratchpad.sDependentValue = sDependentValue;
-
-	g_scratchpad.bHasDependentMappings = false;
-	var grMappingCfgDependent = new GlideRecord('x_snc_mapping_cm_mapping_config');
-	grMappingCfgDependent.addEncodedQuery('dependent_mapping=' + current.getUniqueValue() + '^target_valueISNOTEMPTY');
-	grMappingCfgDependent.setLimit(1);
-	grMappingCfgDependent.query();
-	if (grMappingCfgDependent.hasNext()) {
-		g_scratchpad.bHasDependentMappings = true;
-	} // if has dependent
-	var sTargetValueEmpty = (current.getValue('target_value_empty') == 1) ? 'true' : 'false';
-	g_scratchpad.sTargetValueEmpty = sTargetValueEmpty;
-
-	var bShowButtons = (current.canWrite() && current.getValue('read_only') == '0');
-	g_scratchpad.bShowMapAction = (bShowButtons) ? true : false;
-	g_scratchpad.bShowApplyAction = ((bShowButtons) && (['not_started', 'completed'].indexOf(current.getValue('apply_job_status')) != -1) && ((current.getValue('target_value')) || (sTargetValueEmpty == 'true'))) ? true : false;
-	if (sDependentId) {
-		if (!sDependentValue) {
-			g_scratchpad.bShowMapAction = false;
-		} // if dependent value is not mapped
-		if (sDependentApplyStatus != 'completed') {
-			g_scratchpad.bShowApplyAction = false;
-		} // if not completed
-	} // if dependent id
+	var _MappingConfgMap = new MappingConfgMap();
+	_MappingConfgMap.populateScratchPad(g_scratchpad);
 
 })(current, previous);]]></script>
         <sys_class_name>sys_script</sys_class_name>
@@ -84,7 +39,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>afab9cea1bcd521030d6fdd49b4bcbea</sys_id>
-        <sys_mod_count>26</sys_mod_count>
+        <sys_mod_count>28</sys_mod_count>
         <sys_name>MappingScratchPad</sys_name>
         <sys_overrides/>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
@@ -92,7 +47,7 @@
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_afab9cea1bcd521030d6fdd49b4bcbea</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-10-09 06:17:03</sys_updated_on>
+        <sys_updated_on>2024-10-11 13:25:22</sys_updated_on>
         <template/>
         <when>before_display</when>
     </sys_script>

@@ -38,6 +38,17 @@ MappingConfigCommon.prototype = {
 		return { sDependentField: sDependentField, sDependentValue: sDependentValue };
 	}, // function getDependentData
 
+	getTargetFields: function (aAffectedFields) {
+		var aFields = [];
+		var grDict = new GlideRecord('sys_dictionary');
+		grDict.addEncodedQuery('sys_idIN' + aAffectedFields);
+		grDict.query();
+		while (grDict.next()) {
+			aFields.push(grDict.getValue('element'));
+		} // while fields
+		return aFields;
+	}, // function getTargetFields
+
 	type: 'MappingConfigCommon',
 	version: '1.0.2',
 	author: 'Tom Hauri',
@@ -47,14 +58,14 @@ MappingConfigCommon.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-10-08 18:54:46</sys_created_on>
         <sys_id>b4452e7a1bcdd21030d6fdd49b4bcbce</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>2</sys_mod_count>
         <sys_name>MappingConfigCommon</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_b4452e7a1bcdd21030d6fdd49b4bcbce</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-10-08 18:54:46</sys_updated_on>
+        <sys_updated_on>2024-10-16 06:49:33</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>b4452e7a1bcdd21030d6fdd49b4bcbce</id>
