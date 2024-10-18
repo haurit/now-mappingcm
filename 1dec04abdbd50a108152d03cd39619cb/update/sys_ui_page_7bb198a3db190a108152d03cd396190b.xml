@@ -1,28 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
     <sys_ui_page action="INSERT_OR_UPDATE">
         <category>general</category>
-        <client_script><![CDATA[function handleSubmit() {
+        <client_script><![CDATA[function onTargetValueChange(geElement) {
+	if (geElement) {
+		var sElementId = geElement.id;
+		if (sElementId == 'map_cfg_target_record') {
+			var gmModal = GlideModal.prototype.get('x_snc_mapping_cm_MappingCfgTargetRecord');
+			var sTargetTable2 = gmModal.getPreference('sysparm_targettable_2');
+			if (sTargetTable2) {
+				var sTargetRecordId = geElement.value;
+				if (sTargetRecordId) {
+					var sDynamicFilter = gmModal.getPreference('sysparm_targetdynamicquery_2');
+					if (sDynamicFilter) {
+						sDynamicFilter = sDynamicFilter.replace(/\[parent\]/gi, sTargetRecordId);
+					} // if dynamic filter
+					var elSecondValue = gel('sys_display.map_cfg_target_record_2');
+					elSecondValue.value = '';
+					var elButton2 = gel('lookup.map_cfg_target_record_2');
+					var elOnClick = elButton2.onclick;
+					sOnClick = String(elOnClick);
+					sOnClick = sOnClick.replace('function onclick(event) {', '');
+					sOnClick = sOnClick.replace('}', '');
+					var reQueryOld = /(?<=QUERY:)[^']+/;
+					var aQueryOldMatch = sOnClick.match(reQueryOld);
+					sQueryOld = aQueryOldMatch ? aQueryOldMatch[0] : '';
+					if ((sQueryOld) && (sDynamicFilter)) {
+						var reQuery2 = new RegExp(sQueryOld, 'gi');
+						sOnClick = sOnClick.replace(reQuery2, sDynamicFilter);
+					} // if old query
+					elButton2.writeAttribute('onclick', sOnClick);
+				} // if value record one
+			} // if second table
+		} // if first ref
+	} // if element
+} // function onTargetValueChange
+
+function handleSubmit() {
 	var sTargetRecordId = trim(gel('map_cfg_target_record').value);
-	g_form.setValue('target_value', sTargetRecordId);
-    GlideModal.get().destroy();
+	var sTargetValueEmpty = trim(gel('map_cfg_target_record_empty').value);
+	if ((!sTargetRecordId) && (sTargetValueEmpty == 'true')) {
+		g_form.setValue('target_value', '');
+		g_form.setValue('target_value_empty', true);
+	} else {
+		g_form.setValue('target_value', sTargetRecordId);
+		g_form.setValue('target_value_empty', false);
+	} // if target value empty checked
+	var geTargetRecord2 = gel('map_cfg_target_record_2');
+	if (geTargetRecord2) {
+		var sTargetRecordId2 = trim(geTargetRecord2.value);
+		if (sTargetRecordId2) {
+			g_form.setValue('target_value_2', sTargetRecordId2);
+		} // if target value 2
+	} // if element target value 2
+	GlideModal.get().destroy();
 	gsftSubmit(null, g_form.getFormElement(), 'sysverb_update_and_stay');
-}
+} // function handleSubmit
 
 function handleCancel() {
-    var modal = GlideModal.get().destroy();
-}]]></client_script>
-        <description/>
+	var modal = GlideModal.get().destroy();
+} // function handleCancel
+
+/*
+function onLoad() {
+	var aScratchPad = [];
+	var aItems = Object.keys(g_scratchpad);
+	aItems.sort();
+	var iItems = aItems.length;
+	for (var i = 0; i < iItems; i++) {
+		aScratchPad.push(aItems[i] + " = " + JSON.stringify(g_scratchpad[aItems[i]]));
+	} // each item
+	console.log('debug: ' + aScratchPad.join('\n'));
+}
+
+addLoadEvent(onLoad);
+*/]]></client_script>
+        <description>Dynamic query for second field is a bit of a hack in the function onTargetValueChange. Tried various other approaches, nothing worked reliably.</description>
         <direct>false</direct>
         <endpoint>x_snc_mapping_cm_MappingCfgTargetRecord.do</endpoint>
         <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
-
 	<g:evaluate var="jvar_mappingid">
 		var sValue = RP.getParameterValue('sysparm_mappingid');
 		sValue;
 	</g:evaluate>
 	<g:evaluate var="jvar_popupmessage">
 		var sValue = RP.getParameterValue('sysparm_popupmessage');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_popupmessage_dependent">
+		var sValue = RP.getParameterValue('sysparm_popupmessage_dependent');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_popupmessage_empty">
+		var sValue = RP.getParameterValue('sysparm_popupmessage_empty');
 		sValue;
 	</g:evaluate>
 	<g:evaluate var="jvar_targettable">
@@ -33,21 +103,73 @@ function handleCancel() {
 		var sValue = RP.getParameterValue('sysparm_targetquery');
 		sValue;
 	</g:evaluate>
-	<p>
-	<div>${jvar_popupmessage}</div>
-	</p>
-	<p>
-	<div>
-		<g:ui_reference name="map_cfg_target_record" id="map_cfg_target_record" table="${jvar_targettable}"
-			completer="AJAXTableCompleter" query="${jvar_targetquery}" />
-	</div>
-	</p>
-	<p>
-	<div>
-		<g:dialog_buttons_ok_cancel ok="handleSubmit();" ok_type="button" cancel="handleCancel()"
-			cancel_type="button" />
-	</div>
-	</p>
+	<g:evaluate var="jvar_targetvalue">
+		var sValue = RP.getParameterValue('sysparm_targetvalue');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_targetvaluedisp">
+		var sValue = RP.getParameterValue('sysparm_targetvaluedisp');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_targetvalueempty">
+		var sValue = RP.getParameterValue('sysparm_targetvalueempty');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_targettable2">
+		var sValue = RP.getParameterValue('sysparm_targettable_2');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_targetquery2">
+		var sValue = RP.getParameterValue('sysparm_targetquery_2');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_targetdynamicquery2">
+		var sValue = RP.getParameterValue('sysparm_targetdynamicquery_2');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_targetvalue2">
+		var sValue = RP.getParameterValue('sysparm_targetvalue_2');
+		sValue;
+	</g:evaluate>
+	<g:evaluate var="jvar_targetvaluedisp2">
+		var sValue = RP.getParameterValue('sysparm_targetvaluedisp_2');
+		sValue;
+	</g:evaluate>
+	<g:ui_form>
+		<p>
+		<div>${jvar_popupmessage_dependent}</div>
+		</p>
+		<p>
+		<div>${jvar_popupmessage}</div>
+		</p>
+		<p>
+		<div>
+			<g:ui_reference name="map_cfg_target_record" id="map_cfg_target_record" table="${jvar_targettable}"
+				completer="AJAXTableCompleter" query="${jvar_targetquery}" value="${jvar_targetvalue}"
+				displayValue="${jvar_targetvaluedisp}" onchange="onTargetValueChange(this)" />
+		</div>
+		<p>
+		<div>${jvar_popupmessage_empty}</div>
+		<div>
+			<g:ui_checkbox name="map_cfg_target_record_empty" value="${jvar_targetvalueempty}" />
+		</div>
+		</p>
+		</p>
+		<j2:if test="${jvar_targettable2 != ''}">
+			<p>
+			<div>
+				<g:ui_reference name="map_cfg_target_record_2" id="map_cfg_target_record_2" table="${jvar_targettable2}"
+					query="${jvar_targetquery2}" value="${jvar_targetvalue2}" displayValue="${jvar_targetvaluedisp2}" />
+			</div>
+			</p>
+		</j2:if>
+		<p>
+		<div>
+			<g:dialog_buttons_ok_cancel ok="handleSubmit();" ok_type="button" cancel="handleCancel()"
+				cancel_type="button" />
+		</div>
+		</p>
+	</g:ui_form>
 </j:jelly>]]></html>
         <name>MappingCfgTargetRecord</name>
         <processing_script/>
@@ -55,13 +177,24 @@ function handleCancel() {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 06:03:01</sys_created_on>
         <sys_id>7bb198a3db190a108152d03cd396190b</sys_id>
-        <sys_mod_count>1</sys_mod_count>
+        <sys_mod_count>86</sys_mod_count>
         <sys_name>MappingCfgTargetRecord</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_ui_page_7bb198a3db190a108152d03cd396190b</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-04-09 08:05:05</sys_updated_on>
+        <sys_updated_on>2024-10-17 06:44:38</sys_updated_on>
     </sys_ui_page>
+    <sys_es_latest_script action="INSERT_OR_UPDATE">
+        <id>7bb198a3db190a108152d03cd396190b</id>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-10-08 09:53:36</sys_created_on>
+        <sys_id>cc3ba4f21b05d21030d6fdd49b4bcb23</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-10-08 09:53:36</sys_updated_on>
+        <table>sys_ui_page</table>
+        <use_es_latest>true</use_es_latest>
+    </sys_es_latest_script>
 </record_update>
