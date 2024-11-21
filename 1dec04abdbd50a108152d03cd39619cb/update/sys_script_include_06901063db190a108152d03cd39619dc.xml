@@ -48,13 +48,22 @@ MappingConfigManager.prototype = {
 		} // if no source or table
 		var grMappingCfg = this._getMappingCfg();
 		if (grMappingCfg) {
+			var bReActivate = (grMappingCfg.getValue('active') == 1) ? false : true;
 			if ((this.sParentTableId) && (grMappingCfg.getValue('parent_tables').split(',').indexOf(this.sParentTableId) == -1)) {
+				if (bReActivate) {
+					grMappingCfg.setValue('active', true);
+				} // if re-activate
 				grMappingCfg.setValue('parent_tables', grMappingCfg.getValue('parent_tables') + ',' + this.sParentTableId);
 				if (grMappingCfg.update()) {
 					this._doAffectedTable();
 				} else {
-					gs.warn('MappingConfigManager.doMappingValue error updating parent table "' + this.sParentTable + '" in mapping record: ' + grMappingCfg.getLastErrorMessage());
-				} // if insert
+					gs.warn('MappingConfigManager.doMappingValue error updating parent table "' + this.sParentTable + '" in mapping record ' + grMappingCfg.getUniqueValue() + ' with error: ' + grMappingCfg.getLastErrorMessage());
+				} // if update
+			} else if (bReActivate) {
+				grMappingCfg.setValue('active', true);
+				if (!grMappingCfg.update()) {
+					gs.warn('MappingConfigManager.doMappingValue error updating re-activating in mapping record ' + grMappingCfg.getUniqueValue() + ' with error: ' + grMappingCfg.getLastErrorMessage());
+				} // if update 
 			} // if parent table not yet set
 			var sTargetValue = grMappingCfg.getValue('target_value');
 			var sTargetValue2 = grMappingCfg.getValue('target_value_2');
@@ -365,14 +374,14 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>94</sys_mod_count>
+        <sys_mod_count>95</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-10-17 06:32:28</sys_updated_on>
+        <sys_updated_on>2024-11-19 16:00:41</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>06901063db190a108152d03cd39619dc</id>

@@ -3,197 +3,212 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>name</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>0</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>e85015fa1bc5d21030d6fdd49b4bcb82</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>bc1add141b8e1a1030d6fdd49b4bcbff</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>type</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>1</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>e05015fa1bc5d21030d6fdd49b4bcb83</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>b41a11541b8e1a1030d6fdd49b4bcb00</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>choice_table</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>2</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>e45015fa1bc5d21030d6fdd49b4bcb83</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>b81a11541b8e1a1030d6fdd49b4bcb00</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>choice_field</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>3</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>e85015fa1bc5d21030d6fdd49b4bcb83</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>bc1a11541b8e1a1030d6fdd49b4bcb00</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>dependent_mapping</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>4</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>ec5015fa1bc5d21030d6fdd49b4bcb83</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>b01a11541b8e1a1030d6fdd49b4bcb01</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>source_value</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>5</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>e05015fa1bc5d21030d6fdd49b4bcb84</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>b41a11541b8e1a1030d6fdd49b4bcb01</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>source_display_value</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>6</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>2c5015fa1bc5d21030d6fdd49b4bcba9</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>b81a11541b8e1a1030d6fdd49b4bcb01</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>target_value</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>7</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>205015fa1bc5d21030d6fdd49b4bcbaa</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>bc1a11541b8e1a1030d6fdd49b4bcb01</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>target_value_empty</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>8</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>245015fa1bc5d21030d6fdd49b4bcbaa</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>b01a11541b8e1a1030d6fdd49b4bcb02</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>parent_tables</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>9</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>285015fa1bc5d21030d6fdd49b4bcbaa</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>b41a11541b8e1a1030d6fdd49b4bcb02</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>apply_job_status</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>10</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>2c5015fa1bc5d21030d6fdd49b4bcbaa</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>b81a11541b8e1a1030d6fdd49b4bcb02</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
-            <element>sys_updated_on</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <element>active</element>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>11</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>205015fa1bc5d21030d6fdd49b4bcbab</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>bc1a11541b8e1a1030d6fdd49b4bcb02</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
-            <element>sys_updated_by</element>
-            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">ec5015fa1bc5d21030d6fdd49b4bcb80</list_id>
+            <element>sys_updated_on</element>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>12</position>
             <sum>false</sum>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
-            <sys_id>245015fa1bc5d21030d6fdd49b4bcbab</sys_id>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>b01a11541b8e1a1030d6fdd49b4bcb03</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>sys_updated_by</element>
+            <list_id display_value="x_snc_mapping_cm_mapping_config" element="NULL" name="x_snc_mapping_cm_mapping_config" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">641add141b8e1a1030d6fdd49b4bcbfe</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>13</position>
+            <sum>false</sum>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
+            <sys_id>7c1a11541b8e1a1030d6fdd49b4bcb0f</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
@@ -207,10 +222,10 @@
             <sum>false</sum>
             <sys_class_name>sys_ui_list</sys_class_name>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-08 12:35:50</sys_created_on>
+            <sys_created_on>2024-11-19 11:56:26</sys_created_on>
             <sys_domain>global</sys_domain>
             <sys_domain_path>/</sys_domain_path>
-            <sys_id>ec5015fa1bc5d21030d6fdd49b4bcb80</sys_id>
+            <sys_id>641add141b8e1a1030d6fdd49b4bcbfe</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_name>x_snc_mapping_cm_mapping_config</sys_name>
             <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
@@ -218,7 +233,7 @@
             <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
             <sys_update_name>sys_ui_list_x_snc_mapping_cm_mapping_config_null</sys_update_name>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-08 12:35:50</sys_updated_on>
+            <sys_updated_on>2024-11-19 11:56:26</sys_updated_on>
             <sys_user/>
             <view display_value="Default view" name="NULL">Default view</view>
             <view_name/>
