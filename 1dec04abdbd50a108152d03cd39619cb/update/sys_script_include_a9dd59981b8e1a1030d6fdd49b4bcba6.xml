@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_snc_mapping_cm.MappingConfigScheduler</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description>Scheduler activites&#13;
+A scheduler runs daily to de-activate mapping configurations where the source value exists.</description>
+        <mobile_callable>false</mobile_callable>
+        <name>MappingConfigScheduler</name>
+        <sandbox_callable>false</sandbox_callable>
+        <script><![CDATA[var MappingConfigScheduler = Class.create();
+MappingConfigScheduler.prototype = {
+	initialize: function () {
+		this.bScheduledCleanup = gs.getProperty('x_snc_mapping_cm.scheduled.cleanup.enabled');
+		this._gtRecordRead = new global.GlobalToolsRecordRead();
+	}, // function initialize
+
+	startScheduler: function () {
+		if (this.bScheduledCleanup) {
+			this._scheduledCleanup();
+		} // if scheduled cleanup
+	}, // function startScheduler
+
+	_scheduledCleanup: function () {
+		var sQuery = 'active=true';
+		var aCountResults = this._gtRecordRead.countRecords('x_snc_mapping_cm_mapping_config', sQuery + '^type=choice', 'choice_table');
+		aCountResults.forEach(function (aCountResult) {
+			var sTableName = aCountResult[1];
+			var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+			grMappingCfg.setWorkflow(false);
+			grMappingCfg.addEncodedQuery(sQuery + '^type=choice^choice_table=' + sTableName);
+			grMappingCfg.query();
+			while (grMappingCfg.next()) {
+				var sChoiceField = grMappingCfg.getValue('choice_field');
+				var sSourceValue = grMappingCfg.getValue('source_value');
+				var sDependentMappingId = grMappingCfg.getValue('dependent_mapping');
+				var sDependentQuery = '';
+				if (sDependentMappingId) {
+					var grMappingCfgDependent = new GlideRecord('x_snc_mapping_cm_mapping_config');
+					if (grMappingCfgDependent.get(sDependentMappingId)) {
+						var grChoiceDependent = new GlideRecord('sys_choice');
+						grChoiceDependent.setLimit(1);
+						grChoiceDependent.addEncodedQuery('name=' + sTableName + '^element=' + grMappingCfgDependent.getValue('choice_field') + '^value=' + grMappingCfgDependent.getValue('source_value'));
+						grChoiceDependent.query();
+						if (grChoiceDependent.next()) {
+							sDependentQuery = '^dependent_value=' + grChoiceDependent.getValue('value');
+						} // if dependent choice
+					} // if dependent mapping
+				} // if dependent mapping
+				if ((!sDependentMappingId) || (sDependentQuery)) {
+					var grChoice = new GlideRecord('sys_choice');
+					grChoice.setLimit(1);
+					grChoice.addEncodedQuery('name=' + sTableName + '^element=' + sChoiceField + '^value=' + sSourceValue + sDependentQuery);
+					grChoice.query();
+					if (grChoice.hasNext()) {
+						grMappingCfg.setValue('active', false);
+						if (!grMappingCfg.update()) {
+							gs.error('MappingConfigScheduler._scheduledCleanup error deactivating mapping record ' + grMappingCfg.getUniqueValue() + ' with error: ' + grMappingCfg.getLastErrorMessage());
+						} // if update failed
+					} // if choice found
+				} // if dependent mapping
+			} // while mapping config
+		}, this); // field count
+		aCountResults = this._gtRecordRead.countRecords('x_snc_mapping_cm_mapping_config', sQuery + '^type=reference', 'choice_table');
+		aCountResults.forEach(function (aCountResult) {
+			var sTableName = aCountResult[1];
+			var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+			grMappingCfg.setWorkflow(false);
+			grMappingCfg.addEncodedQuery(sQuery + '^type=reference^choice_table=' + sTableName);
+			grMappingCfg.query();
+			var grTargetRecord = new GlideRecord(sTableName);
+			while (grMappingCfg.next()) {
+				var sSourceValue = grMappingCfg.getValue('source_value');
+				if (grTargetRecord.get('sys_id', sSourceValue)) {
+					grMappingCfg.setValue('active', false);
+					if (!grMappingCfg.update()) {
+						gs.error('MappingConfigScheduler._scheduledCleanup error deactivating mapping record ' + grMappingCfg.getUniqueValue() + ' with error: ' + grMappingCfg.getLastErrorMessage());
+					} // if update failed
+				} // if target record
+			} // while mapping config
+		}, this); // field count
+	}, // function _scheduledCleanup
+
+	type: 'MappingConfigScheduler',
+	version: '1.0.3',
+	author: 'Tom Hauri',
+	email: 'tom@hauri.biz'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-11-19 12:15:04</sys_created_on>
+        <sys_id>a9dd59981b8e1a1030d6fdd49b4bcba6</sys_id>
+        <sys_mod_count>23</sys_mod_count>
+        <sys_name>MappingConfigScheduler</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_script_include_a9dd59981b8e1a1030d6fdd49b4bcba6</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-11-21 06:45:32</sys_updated_on>
+    </sys_script_include>
+    <sys_es_latest_script action="INSERT_OR_UPDATE">
+        <id>a9dd59981b8e1a1030d6fdd49b4bcba6</id>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-11-19 12:15:04</sys_created_on>
+        <sys_id>e95ed5d81b8e1a1030d6fdd49b4bcb76</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-11-19 12:15:04</sys_updated_on>
+        <table>sys_script_include</table>
+        <use_es_latest>true</use_es_latest>
+    </sys_es_latest_script>
+</record_update>

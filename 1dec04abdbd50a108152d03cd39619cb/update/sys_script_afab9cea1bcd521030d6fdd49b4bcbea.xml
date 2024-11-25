@@ -29,8 +29,8 @@
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
 
-	var _MappingConfgMap = new MappingConfgMap();
-	_MappingConfgMap.populateScratchPad(g_scratchpad);
+	var _MappingConfigMap = new MappingConfgMap();
+	_MappingConfigMap.populateScratchPad(g_scratchpad);
 
 })(current, previous);]]></script>
         <sys_class_name>sys_script</sys_class_name>
@@ -39,7 +39,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>afab9cea1bcd521030d6fdd49b4bcbea</sys_id>
-        <sys_mod_count>28</sys_mod_count>
+        <sys_mod_count>29</sys_mod_count>
         <sys_name>MappingScratchPad</sys_name>
         <sys_overrides/>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
@@ -47,7 +47,7 @@
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_afab9cea1bcd521030d6fdd49b4bcbea</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-10-11 13:25:22</sys_updated_on>
+        <sys_updated_on>2024-11-19 12:17:33</sys_updated_on>
         <template/>
         <when>before_display</when>
     </sys_script>
