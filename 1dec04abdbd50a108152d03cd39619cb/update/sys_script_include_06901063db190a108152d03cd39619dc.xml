@@ -11,9 +11,27 @@
         <sandbox_callable>false</sandbox_callable>
         <script><![CDATA[var MappingConfigManager = Class.create();
 MappingConfigManager.prototype = {
-	initialize: function () {
+	initialize: function (gtCache, oTimer) {
 		this.bLog = false;
-		this._gtTable = new global.GlobalToolsTable();
+		if (gtCache instanceof global.GlobalToolsCache) {
+			this._gtCache = gtCache;
+		} else {
+			this._gtCache = new global.GlobalToolsCache();
+		} // if cache
+		this.bTimer = ((oTimer) && ((oTimer === true) || (oTimer instanceof global.GlobalToolsDateTime))) ? true : false;
+		if (this.bTimer) {
+			if (oTimer === true) {
+				this._gtDateTime = new global.GlobalToolsDateTime('gtt');
+				this._sTimerPrefix = '';
+			} else {
+				this._gtDateTime = oTimer;
+				this._sTimerPrefix = 'mcm/';
+			} // if true
+			if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'initialize'); }
+			this._gtTable = new global.GlobalToolsTable(this._gtCache, this._gtDateTime);
+		} else {
+			this._gtTable = new global.GlobalToolsTable(this._gtCache);
+		} // initialize timer
 		this._mapCfgCommon = new MappingConfigCommon();
 		var sJSONId = gs.getProperty('x_snc_mapping_cm.json_cfg', '');
 		this.bJSONCfg = false;
@@ -32,9 +50,12 @@ MappingConfigManager.prototype = {
 		this.sChoiceField = '';
 		this.sType = '';
 		this.sDependentMappingId = '';
+		this._gt = new global.GlobalTools();
+		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'initialize'); }
 	}, // function initialize
 
 	doMappingValue: function (sParentTable, sSourceValue, sSourceDisplayValue, sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue) {
+		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'doMappingValue'); }
 		sParentTable = (sParentTable) ? String(sParentTable) : '';
 		sParentTable = (sParentTable == 'cmdb') ? 'cmdb_ci' : sParentTable; // ensure cmdb
 		this.sParentTable = sParentTable;
@@ -44,8 +65,10 @@ MappingConfigManager.prototype = {
 		this._setTableAndField(sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue);
 		if ((!this.sSourceValue) || (!this.sRefOrChoiceTable) || (!new GlideRecord(String(this.sRefOrChoiceTable)).isValid())) {
 			gs.warn('MappingConfigManager.doMappingValue empty or invalid source value or table!');
+			if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
 			return sSourceValue;
 		} // if no source or table
+		var sTargetValue = '', sTargetValue2 = '';
 		var grMappingCfg = this._getMappingCfg();
 		if (grMappingCfg) {
 			var bReActivate = (grMappingCfg.getValue('active') == 1) ? false : true;
@@ -65,9 +88,10 @@ MappingConfigManager.prototype = {
 					gs.warn('MappingConfigManager.doMappingValue error updating re-activating in mapping record ' + grMappingCfg.getUniqueValue() + ' with error: ' + grMappingCfg.getLastErrorMessage());
 				} // if update 
 			} // if parent table not yet set
-			var sTargetValue = grMappingCfg.getValue('target_value');
-			var sTargetValue2 = grMappingCfg.getValue('target_value_2');
+			sTargetValue = grMappingCfg.getValue('target_value');
+			sTargetValue2 = grMappingCfg.getValue('target_value_2');
 			if (grMappingCfg.getValue('target_value_empty') == '1') {
+				if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
 				return '';
 			} else {
 				if (grMappingCfg.getValue('type') == 'choice') {
@@ -75,25 +99,39 @@ MappingConfigManager.prototype = {
 					if ((sTargetValue) && (grChoice.get(sTargetValue))) {
 						sTargetValue = grChoice.getValue('value');
 					} else {
+						if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
 						return sSourceValue;
 					} // if target is valid choice
-				} else if ((this.sSecondMappingTable) && (sTargetValue2)) {
-					sTargetValue = (sTargetValue) ? sTargetValue : sSourceValue;
-					var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
-					grAffectedTable.addEncodedQuery('affected_table=' + this.sParentTable + '^choice_table=' + this.sRefOrChoiceTable);
-					grAffectedTable.query();
-					if (grAffectedTable.next()) {
-						var aTargetFields2 = this._mapCfgCommon.getTargetFields(grAffectedTable.getValue('affected_fields_2'));
-						return { sTargetValue: sTargetValue, sTargetValue2: sTargetValue2, aTargetFields2: aTargetFields2 };
-					} // if affected table found
+				} else {
+					if ((!sTargetValue) && (this.bJSONCfg)) {
+						sTargetValue = this._doAutoMapping(grMappingCfg, true);
+						if (sTargetValue) {
+							if (!grMappingCfg.update()) {
+								gs.warn('MappingConfigManager.doMappingValue error updating auto-mapping in mapping record ' + grMappingCfg.getUniqueValue() + ' with error: ' + grMappingCfg.getLastErrorMessage());
+							} // if update 
+						} // if auto mapping target
+					} // if no target value and json cfg
+					if ((this.sSecondMappingTable) && (sTargetValue2)) {
+						sTargetValue = (sTargetValue) ? sTargetValue : sSourceValue;
+						var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
+						grAffectedTable.addEncodedQuery('affected_table=' + this.sParentTable + '^choice_table=' + this.sRefOrChoiceTable);
+						grAffectedTable.query();
+						if (grAffectedTable.next()) {
+							var aTargetFields2 = this._mapCfgCommon.getTargetFields(grAffectedTable.getValue('affected_fields_2'));
+							if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
+							return { sTargetValue: sTargetValue, sTargetValue2: sTargetValue2, aTargetFields2: aTargetFields2 };
+						} // if affected table found
+					} // if second mapping and target value
 				} // if choice
 			} // if map to empty value
+			if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
 			return (sTargetValue) ? sTargetValue : sSourceValue;
 		} else {
 			if (this.sChoiceField) {
 				if (!new GlideRecord(this.sRefOrChoiceTable).isValidField(this.sChoiceField)) {
 					if (!new GlideRecord(this.sParentTable).isValidField(this.sChoiceField)) {
 						gs.error('MappingConfigManager.doMappingValue invalid choice field "' + sChoiceField + '" in table "' + sRefOrChoiceTable + '"!');
+						if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
 						return sSourceValue;
 					} // if valid field
 				} // if valid field
@@ -119,22 +157,28 @@ MappingConfigManager.prototype = {
 			if (this.sSecondMappingTable) {
 				grMappingCfg.setValue('target_table_2', this.sSecondMappingTable);
 			} // if second mapping table
+			if (this.bJSONCfg) {
+				sTargetValue = this._doAutoMapping(grMappingCfg);
+			} // if json config
 			if (grMappingCfg.insert()) {
 				this._doAffectedTable();
 			} else {
 				gs.error('MappingConfigManager.doMappingValue error inserting mapping record: ' + grMappingCfg.getLastErrorMessage());
 			} // if insert
 		} // if mapping value found
-		return sSourceValue;
+		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
+		return (sTargetValue) ? sTargetValue : sSourceValue;
 	}, // function doMappingValue
 
 	getMappedValue: function (sSourceValue, sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue) {
+		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'getMappedValue'); }
 		this.sSourceValue = (sSourceValue) ? String(sSourceValue) : '';
 		this._setTableAndField(sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue);
 		var grMappingCfg = this._getMappingCfg();
 		if ((grMappingCfg) && (this.sSourceValue != grMappingCfg.getValue('target_value'))) {
 			var sTargetValue = grMappingCfg.getValue('target_value');
 			if (grMappingCfg.getValue('target_value_empty') == '1') {
+				if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'getMappedValue'); }
 				return '';
 			} else {
 				if (sTargetValue) {
@@ -143,17 +187,21 @@ MappingConfigManager.prototype = {
 						if (grChoice.get(sTargetValue)) {
 							sTargetValue = grChoice.getValue('value');
 						} else {
+							if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'getMappedValue'); }
 							return sSourceValue;
 						} // if ho
 					} // if choice
+					if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'getMappedValue'); }
 					return sTargetValue;
 				} // if target value
 			} // if map to empty value
 		} // if mapped cfg
+		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'getMappedValue'); }
 		return sSourceValue;
 	}, // function getMappedValue
 
 	_setTableAndField: function (sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue) {
+		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + '_setTableAndField'); }
 		this.sRefOrChoiceTable = (sRefOrChoiceTable) ? String(sRefOrChoiceTable) : '';
 		this.sChoiceField = (sChoiceField) ? String(sChoiceField) : '';
 		this.sDependentMappingId = '';
@@ -211,12 +259,15 @@ MappingConfigManager.prototype = {
 				} // if second mapping table
 			} // if advanced
 		} // if choice field
+		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + '_setTableAndField'); }
 	}, // function _setTableAndField
 
 	_getMappingCfg: function () {
+		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + '_getMappingCfg'); }
 		var aQuery = [];
 		if ((!this.sSourceValue) || (!this.sRefOrChoiceTable) || (!new GlideRecord(String(this.sRefOrChoiceTable)).isValid())) {
 			gs.warn('MappingConfigManager.getMappingCfg empty or invalid source value or table!');
+			if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + '_getMappingCfg'); }
 			return this.sSourceValue;
 		} // if no source or table
 		aQuery.push('type=' + this.sType);
@@ -235,11 +286,13 @@ MappingConfigManager.prototype = {
 		grMappingCfg.setLimit(1);
 		grMappingCfg.query();
 		if (grMappingCfg.next()) {
+			if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + '_getMappingCfg'); }
 			return grMappingCfg;
 		} // if found
-	}, // function getMappingCfg
+	}, // function _getMappingCfg
 
 	_doAffectedTable: function () {
+		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + '_doAffectedTable'); }
 		var aFields = [];
 		var aFields2 = [];
 		var sQuery = '';
@@ -271,9 +324,11 @@ MappingConfigManager.prototype = {
 			aFields.push(grDictionary.getUniqueValue());
 		} // if ref or choices
 		this._saveAffectedTable(aFields, aFields2);
+		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + '_doAffectedTable'); }
 	}, // function _doAffectedTable
 
 	_saveAffectedTable: function (aFields, aFields2) {
+		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + '_saveAffectedTable'); }
 		var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
 		if (this.sChoiceField) {
 			grAffectedTable.addEncodedQuery('affected_table=' + this.sParentTable + '^choice_table=' + this.sRefOrChoiceTable + '^choice_field=' + this.sChoiceField);
@@ -306,7 +361,34 @@ MappingConfigManager.prototype = {
 				gs.warn('MappingConfigManager._saveAffectedTable error inserting table "' + this.sParentTable + '" / "' + this.sRefOrChoiceTable + '" in affected table record: ' + grAffectedTable.getLastErrorMessage());
 			} // if insert
 		} // if affected table
+		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + '_saveAffectedTable'); }
 	}, // function _saveAffectedTable
+
+	_doAutoMapping: function (grMappingCfg, bUpdate) {
+		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + '_doAutoMapping'); }
+		var oAutoMapping = this._getValue('sType/reference/' + this.sRefOrChoiceTable + '/oAutoMapping', '');
+		if (oAutoMapping) {
+			if (((!bUpdate) && (this._getValue('bInsert', false, oAutoMapping))) || ((bUpdate) && (this._getValue('bUpdate', false, oAutoMapping)))) {
+				var sMappingCondition = this._getValue('sMappingCondition', '', oAutoMapping);
+				var gfQueryCondition = new GlideFilter(sMappingCondition, '');
+				gfQueryCondition.setCaseSensitive(false);
+				if ((!sMappingCondition) || (gfQueryCondition.match(grMappingCfg, true))) {
+					var grTarget = new GlideRecord(this.sRefOrChoiceTable);
+					var sTargetCondition = this._getValue('sTargetCondition', '', oAutoMapping);
+					sTargetCondition = this._gt.replacePlaceholders(sTargetCondition, grMappingCfg);
+					if (sTargetCondition) {
+						grTarget.addEncodedQuery(sTargetCondition);
+						grTarget.query();
+						if ((grTarget.next()) && (grTarget.getRowCount() == 1)) {
+							grMappingCfg.setValue('target_value', grTarget.getUniqueValue());
+							return grTarget.getUniqueValue();
+						} // if one target
+					} // if target condition
+				} // if mapping condition true
+			} // if triggered
+		} // if auto mapping
+		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + '_doAutoMapping'); }
+	}, // function _doAutoMapping
 
 	// BR DeleteRelatedAffectedTables
 	processBusinessRuleDelete: function (grMappingCfg, grMappingCfgOld) {
@@ -365,7 +447,7 @@ MappingConfigManager.prototype = {
 	}, // function processBusinessRuleDependent
 
 	type: 'MappingConfigManager',
-	version: '1.0.2',
+	version: '1.0.3',
 	author: 'Tom Hauri',
 	email: 'tom@hauri.biz'
 
@@ -374,14 +456,14 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>95</sys_mod_count>
+        <sys_mod_count>106</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-11-19 16:00:41</sys_updated_on>
+        <sys_updated_on>2025-01-10 08:01:45</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>06901063db190a108152d03cd39619dc</id>

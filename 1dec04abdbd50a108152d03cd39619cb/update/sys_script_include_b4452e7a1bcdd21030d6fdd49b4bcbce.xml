@@ -11,10 +11,26 @@
         <sandbox_callable>false</sandbox_callable>
         <script><![CDATA[var MappingConfigCommon = Class.create();
 MappingConfigCommon.prototype = {
-	initialize: function () {
+	initialize: function (gtCache, oTimer) {
+		if (gtCache instanceof global.GlobalToolsCache) {
+			this._gtCache = gtCache;
+		} else {
+			this._gtCache = new global.GlobalToolsCache();
+		} // if cache
+		this.bTimer = ((oTimer) && ((oTimer === true) || (oTimer instanceof global.GlobalToolsDateTime))) ? true : false;
+		if (this.bTimer) {
+			if (oTimer === true) {
+				this._gtDateTime = new global.GlobalToolsDateTime('gtt');
+				this._sTimerPrefix = '';
+			} else {
+				this._gtDateTime = oTimer;
+				this._sTimerPrefix = 'mcmc/';
+			} // if true
+		} // initialize timer
 	},
 
 	getDependentData: function (grMappingCfg, bSourceValue) {
+		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'getDependentData'); }
 		var sDependentField = '';
 		var sDependentValue = '';
 		var sDependentId = grMappingCfg.getValue('dependent_mapping');
@@ -35,10 +51,12 @@ MappingConfigCommon.prototype = {
 				} // if source value
 			} // if dependent mapping
 		} // if dependent id
+		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'getDependentData'); }
 		return { sDependentField: sDependentField, sDependentValue: sDependentValue };
 	}, // function getDependentData
 
 	getTargetFields: function (aAffectedFields) {
+		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'getTargetFields'); }
 		var aFields = [];
 		var grDict = new GlideRecord('sys_dictionary');
 		grDict.addEncodedQuery('sys_idIN' + aAffectedFields);
@@ -46,11 +64,12 @@ MappingConfigCommon.prototype = {
 		while (grDict.next()) {
 			aFields.push(grDict.getValue('element'));
 		} // while fields
+		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'getTargetFields'); }
 		return aFields;
 	}, // function getTargetFields
 
 	type: 'MappingConfigCommon',
-	version: '1.0.2',
+	version: '1.0.3',
 	author: 'Tom Hauri',
 	email: 'tom@hauri.biz'
 };]]></script>
@@ -58,14 +77,14 @@ MappingConfigCommon.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-10-08 18:54:46</sys_created_on>
         <sys_id>b4452e7a1bcdd21030d6fdd49b4bcbce</sys_id>
-        <sys_mod_count>2</sys_mod_count>
+        <sys_mod_count>3</sys_mod_count>
         <sys_name>MappingConfigCommon</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_b4452e7a1bcdd21030d6fdd49b4bcbce</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-10-16 06:49:33</sys_updated_on>
+        <sys_updated_on>2025-01-10 07:08:12</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>b4452e7a1bcdd21030d6fdd49b4bcbce</id>
