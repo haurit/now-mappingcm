@@ -41,6 +41,7 @@ MappingConfigApply.prototype = {
 			var sDependentField = oDependentData['sDependentField'];
 			var sDependentValue = oDependentData['sDependentValue'];
 			var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
+			var sScheduledName = '';
 			aParentTables.forEach(function (sParentTableId) {
 				var sParentTable = this._gtTable.getTableName(sParentTableId);
 				var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
@@ -51,12 +52,12 @@ MappingConfigApply.prototype = {
 				grAffectedTable.addEncodedQuery(sQuery);
 				grAffectedTable.query();
 				if (grAffectedTable.next()) {
-					this._gt.scheduleScript('x_snc_mapping_cm.MappingConfigApply', 'runJob', 1, [sMappingCfgId, grAffectedTable.getUniqueValue(), sSourceValue, sTargetValue, sTargetValue2, sDependentField, sDependentValue], [], 'MappingConfigApply_' + sParentTable + '_' + grMappingCfg.getValue('choice_table') + '_' + sChoiceField);
+					sScheduledName = 'MappingConfigApply_' +  sParentTable + '_' + grMappingCfg.getValue('choice_table');
+					sScheduledName = (sChoiceField) ? sScheduledName + '_' + sChoiceField : sScheduledName;
+					this._gt.scheduleScript('x_snc_mapping_cm.MappingConfigApply', 'runJob', 1, [sMappingCfgId, grAffectedTable.getUniqueValue(), sSourceValue, sTargetValue, sTargetValue2, sDependentField, sDependentValue], [], sScheduledName + '_' + sMappingCfgId);
 				} // if affected table
 			}, this); // each table
 			grMappingCfg.setValue('apply_job_status', 'running');
-			grMappingCfg.setWorkflow(false);
-			grMappingCfg.autoSysFields(false);
 			grMappingCfg.update();
 		} // if update
 	}, // function processBusinessRule
@@ -150,7 +151,7 @@ MappingConfigApply.prototype = {
 	}, // function runJob
 
 	type: 'MappingConfigApply',
-	version: '1.0.2',
+	version: '1.0.5',
 	author: 'Tom Hauri',
 	email: 'tom@hauri.biz'
 };]]></script>
@@ -158,14 +159,14 @@ MappingConfigApply.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 09:56:51</sys_created_on>
         <sys_id>c00789afdbd90a108152d03cd39619d5</sys_id>
-        <sys_mod_count>50</sys_mod_count>
+        <sys_mod_count>51</sys_mod_count>
         <sys_name>MappingConfigApply</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_c00789afdbd90a108152d03cd39619d5</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-10-18 05:59:49</sys_updated_on>
+        <sys_updated_on>2025-04-10 09:16:06</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>c00789afdbd90a108152d03cd39619d5</id>
