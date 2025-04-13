@@ -14,7 +14,6 @@ A scheduler runs daily to de-activate mapping configurations where the source va
 MappingConfigScheduler.prototype = {
 	initialize: function () {
 		this.bScheduledCleanup = gs.getProperty('x_snc_mapping_cm.scheduled.cleanup.enabled');
-		this._mapCfgCommon = new MappingConfigCommon();
 		this._gtRecordRead = new global.GlobalToolsRecordRead();
 	}, // function initialize
 
@@ -37,7 +36,19 @@ MappingConfigScheduler.prototype = {
 				var sChoiceField = grMappingCfg.getValue('choice_field');
 				var sSourceValue = grMappingCfg.getValue('source_value');
 				var sDependentMappingId = grMappingCfg.getValue('dependent_mapping');
-				var sDependentQuery = this._mapCfgCommon.getDependentQuery(grMappingCfg, true);
+				var sDependentQuery = '';
+				if (sDependentMappingId) {
+					var grMappingCfgDependent = new GlideRecord('x_snc_mapping_cm_mapping_config');
+					if (grMappingCfgDependent.get(sDependentMappingId)) {
+						var grChoiceDependent = new GlideRecord('sys_choice');
+						grChoiceDependent.setLimit(1);
+						grChoiceDependent.addEncodedQuery('name=' + sTableName + '^element=' + grMappingCfgDependent.getValue('choice_field') + '^value=' + grMappingCfgDependent.getValue('source_value'));
+						grChoiceDependent.query();
+						if (grChoiceDependent.next()) {
+							sDependentQuery = '^dependent_value=' + grChoiceDependent.getValue('value');
+						} // if dependent choice
+					} // if dependent mapping
+				} // if dependent mapping
 				if ((!sDependentMappingId) || (sDependentQuery)) {
 					var grChoice = new GlideRecord('sys_choice');
 					grChoice.setLimit(1);
@@ -81,14 +92,14 @@ MappingConfigScheduler.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-11-19 12:15:04</sys_created_on>
         <sys_id>a9dd59981b8e1a1030d6fdd49b4bcba6</sys_id>
-        <sys_mod_count>24</sys_mod_count>
+        <sys_mod_count>23</sys_mod_count>
         <sys_name>MappingConfigScheduler</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_a9dd59981b8e1a1030d6fdd49b4bcba6</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-13 10:42:22</sys_updated_on>
+        <sys_updated_on>2024-11-21 06:45:32</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>a9dd59981b8e1a1030d6fdd49b4bcba6</id>

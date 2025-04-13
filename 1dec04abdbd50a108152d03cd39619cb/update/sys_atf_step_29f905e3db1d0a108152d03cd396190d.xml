@@ -14,14 +14,14 @@
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 10:10:07</sys_created_on>
         <sys_id>29f905e3db1d0a108152d03cd396190d</sys_id>
-        <sys_mod_count>68</sys_mod_count>
+        <sys_mod_count>69</sys_mod_count>
         <sys_name>Run Server Side Script</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_atf_step_29f905e3db1d0a108152d03cd396190d</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-13 06:56:04</sys_updated_on>
+        <sys_updated_on>2025-04-13 15:22:14</sys_updated_on>
         <table/>
         <test display_value="Mapping CM ScriptInclude Test">f169c5a3db1d0a108152d03cd3961931</test>
         <timeout/>
@@ -36,9 +36,9 @@
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 10:10:07</sys_created_on>
         <sys_id>736a85e3db1d0a108152d03cd3961923</sys_id>
-        <sys_mod_count>68</sys_mod_count>
+        <sys_mod_count>69</sys_mod_count>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-13 06:56:04</sys_updated_on>
+        <sys_updated_on>2025-04-13 15:22:14</sys_updated_on>
         <value>(function (outputs, steps, params, stepResult, assertEqual) {&#13;
 &#13;
 	var bLog = false;&#13;
@@ -136,48 +136,8 @@
 		_gtATF.addError('_mappingCfgMgr', 'Generated choice subretired record not found!');&#13;
 	} // if map entry&#13;
 &#13;
-	/*&#13;
-		This tests require JSON configuration:&#13;
-		cmn_location: {&#13;
-			bUseDependencyField: true, // use the dependency field&#13;
-		}, // location table&#13;
-&#13;
-	_gtATF.runATF('doMappingValue', '29f905e3db1d0a108152d03cd396190d', 'incident', '29f905e3db1d0a108152d03cd396190d', 'SugusCompany', 'core_company');&#13;
-	grMapCfgEntry = _gtATF.getRecord('x_snc_mapping_cm_mapping_config', 'choice_table=core_company^choice_fieldISEMPTY^source_value=29f905e3db1d0a108152d03cd396190d');&#13;
-	var sDependentId = (grMapCfgEntry) ? grMapCfgEntry.getUniqueValue() : '-1';&#13;
-	if (!grMapCfgEntry) {&#13;
-		_gtATF.addError('_mappingCfgMgr', 'Generated company SugusCompany record not found!');&#13;
-	} // if no map entry for company&#13;
-	&#13;
-	_gtATF.runATF('doMappingValue', 'e9f905e3db1d0a108152d03cd396190e', 'incident', 'e9f905e3db1d0a108152d03cd396190e', 'SugusLocation', 'cmn_location', '', 'company', '29f905e3db1d0a108152d03cd396190d');&#13;
-	grMapCfgEntry = _gtATF.getRecord('x_snc_mapping_cm_mapping_config', 'choice_table=cmn_location^choice_fieldISEMPTY^source_value=e9f905e3db1d0a108152d03cd396190e^dependent_mapping=' + sDependentId);&#13;
-	sDependentId = (grMapCfgEntry) ? grMapCfgEntry.getUniqueValue() : '-1';&#13;
-	if (!grMapCfgEntry) {&#13;
-		_gtATF.addError('_mappingCfgMgr', 'Generated company SugusLocation record not found!');&#13;
-	} // if no map entry for location&#13;
-	&#13;
-	grMapCfgEntry = _gtATF.getRecord('core_company', '');&#13;
-	sDependentId = (grMapCfgEntry) ? grMapCfgEntry.getUniqueValue() : '-1';&#13;
-	if (!grMapCfgEntry) {&#13;
-		_gtATF.addError('_mappingCfgMgr', 'Existing company record not found!');&#13;
-	} // if no company&#13;
-&#13;
-	_gtATF.runATF('doMappingValue', 'f9f905e3db1d0a108152d03cd396190f', 'incident', 'f9f905e3db1d0a108152d03cd396190f', 'SugusLocation2', 'cmn_location', '', 'company', sDependentId);&#13;
-&#13;
-	grMapCfgEntry = _gtATF.getRecord('x_snc_mapping_cm_mapping_config', 'choice_table=core_company^choice_fieldISEMPTY^source_value=' + sDependentId);&#13;
-	sDependentId = (grMapCfgEntry) ? grMapCfgEntry.getUniqueValue() : '-1';&#13;
-&#13;
-	grMapCfgEntry = _gtATF.getRecord('x_snc_mapping_cm_mapping_config', 'choice_table=cmn_location^choice_fieldISEMPTY^source_value=f9f905e3db1d0a108152d03cd396190f^dependent_mapping=' + sDependentId);&#13;
-	if (!grMapCfgEntry) {&#13;
-		_gtATF.addError('_mappingCfgMgr', 'Generated company SugusLocation2 record not found!');&#13;
-	} // if no map entry for location&#13;
-&#13;
-	grMapCfgEntry = _gtATF.getRecord('core_company', 'sys_id!=' + sDependentId);&#13;
-	sDependentId = (grMapCfgEntry) ? grMapCfgEntry.getUniqueValue() : '-1';&#13;
-	if (!grMapCfgEntry) {&#13;
-		_gtATF.addError('_mappingCfgMgr', 'Existing company record not found!');&#13;
-	} // if no company&#13;
-	*/&#13;
+	var _gt = new global.GlobalTools();&#13;
+	_gt.sleep(120000);&#13;
 &#13;
 	return _gtATF.endATF();&#13;
 &#13;

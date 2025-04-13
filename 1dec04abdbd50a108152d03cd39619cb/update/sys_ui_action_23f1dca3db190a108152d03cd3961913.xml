@@ -31,15 +31,15 @@
         <onclick>selectTargetRecord()</onclick>
         <order>-10000</order>
         <script><![CDATA[function selectTargetRecord() {
-	var sQuery = g_scratchpad.sFilter;
+	var sFilter = g_scratchpad.sFilter;
 	if ((g_scratchpad.sType == 'choice') && (typeof g_lang != undefined)) {
-		sQuery = (sQuery) ? sQuery + '^language=' + g_lang : 'language=' + g_lang;
+		sFilter = (sFilter) ? sFilter + '^language=' + g_lang : 'language=' + g_lang;
 	} // if choice and g_lang 
 	var gModal = new GlideModal('x_snc_mapping_cm_MappingCfgTargetRecord');
 	gModal.setWidth(600);
 	gModal.setPreference('sysparm_mappingid', g_form.getUniqueValue());
 	gModal.setPreference('sysparm_targettable', g_scratchpad.sTable);
-	gModal.setPreference('sysparm_targetquery', sQuery);
+	gModal.setPreference('sysparm_targetquery', sFilter);
 	gModal.setPreference('sysparm_targetvalue', g_scratchpad.sTargetValue);
 	gModal.setPreference('sysparm_targetvaluedisp', g_scratchpad.sTargetValueDisp);
 	gModal.setPreference('sysparm_targettable_2', g_scratchpad.sTable2);
@@ -52,11 +52,11 @@
 	if (g_scratchpad.bHasDependentMappings) {
 		gModal.setPreference('sysparm_popupmessage_dependent', getMessage('map_select_target_message_dependent_popup'));
 	} // if dependent maps
-	if (sQuery) {
-		gModal.setPreference('sysparm_popupmessage_query', getMessage('map_select_target_message_popup_query'));
-	} // if query
 	gModal.setPreference('sysparm_popupmessage', getMessage('map_select_target_message_popup'));
 	gModal.setPreference('sysparm_popupmessage_empty', getMessage('map_select_target_message_empty'));
+	if (g_scratchpad.bShowQuery) {
+		gModal.setPreference('sysparm_popupmessage_query', getMessage('map_select_target_message_popup_query') + ' ' + sFilter);
+	} // if ref and query
 	gModal.setTitle(getMessage('map_select_target_title'));
 	gModal.render();
 } // function selectTargetRecord]]></script>
@@ -70,7 +70,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>23f1dca3db190a108152d03cd3961913</sys_id>
-        <sys_mod_count>49</sys_mod_count>
+        <sys_mod_count>53</sys_mod_count>
         <sys_name>Map Value</sys_name>
         <sys_overrides/>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
@@ -78,7 +78,7 @@
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_ui_action_23f1dca3db190a108152d03cd3961913</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-12 14:22:33</sys_updated_on>
+        <sys_updated_on>2025-04-13 15:34:24</sys_updated_on>
         <table>x_snc_mapping_cm_mapping_config</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>
