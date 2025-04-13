@@ -54,7 +54,7 @@ MappingConfigManager.prototype = {
 		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'initialize'); }
 	}, // function initialize
 
-	doMappingValue: function (sParentTable, sSourceValue, sSourceDisplayValue, sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue, bReturnId, bReadOnly, bActive) {
+	doMappingValue: function (sParentTable, sSourceValue, sSourceDisplayValue, sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue, bReturnId, bReadOnly, bActive, sTargetValue) {
 		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'doMappingValue'); }
 		sParentTable = (sParentTable) ? String(sParentTable) : '';
 		sParentTable = (sParentTable == 'cmdb') ? 'cmdb_ci' : sParentTable; // ensure cmdb
@@ -71,7 +71,8 @@ MappingConfigManager.prototype = {
 			if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
 			return (bReturnId) ? '' : sSourceValue;
 		} // if no source or table
-		var sTargetValue = '', sTargetValue2 = '';
+		sTargetValue = (sTargetValue) ? sTargetValue : '';
+		var sTargetValue2 = '';
 		var grMappingCfg = this._getMappingCfg();
 		if ((grMappingCfg) && (bReturnId)) {
 			if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
@@ -164,7 +165,9 @@ MappingConfigManager.prototype = {
 			if (this.sSecondMappingTable) {
 				grMappingCfg.setValue('target_table_2', this.sSecondMappingTable);
 			} // if second mapping table
-			if (this.bJSONCfg) {
+			if (sTargetValue) {
+				grMappingCfg.setValue('target_value', sTargetValue);
+			} else if (this.bJSONCfg) {
 				sTargetValue = this._doAutoMapping(grMappingCfg);
 			} // if json config
 			if (bReadOnly) {
@@ -225,6 +228,8 @@ MappingConfigManager.prototype = {
 		this.sDependentMappingId = '';
 		this.sType = 'reference';
 		this.sSecondMappingTable = '';
+		var _DependentMapCfgMgr;
+		var sDependentDisplayValue = '';
 		if (this.sChoiceField) {
 			var sDictChoiceTable = '', sDictChoiceField = '';
 			var grDict = this._gtTable.getDictOrOverrideValue(this.sRefOrChoiceTable, this.sChoiceField, '', true);
@@ -269,12 +274,11 @@ MappingConfigManager.prototype = {
 					} // if found
 				} // if dependent map cfg
 				if (!this.sDependentMappingId) {
-					var sDependentDisplayValue = '';
+					var sDependentChoiceValue = '';
 					if (sDictDependentChoiceField) {
 						var grChoiceDependent = new GlideRecord('sys_choice');
-						grChoiceDependent.addEncodedQuery('name=' + sDictDependentChoiceTable + '^element=' + sDictDependentChoiceField + '^inactive=false^language=en^value=' + sDependentValue);
-						grChoiceDependent.query();
-						if (grChoiceDependent.next()) {
+						if (grChoiceDependent.get(sDependentValue)) {
+							sDependentChoiceValue = grChoiceDependent.getValue('value');
 							sDependentDisplayValue = grChoiceDependent.getValue('label');
 						} // if dependent choice
 					} else {
@@ -283,8 +287,9 @@ MappingConfigManager.prototype = {
 							sDependentDisplayValue = grDependentRecord.getDisplayValue();
 						} // if dependent record
 					} // if choice
-					var _DependentMapCfgMgr = new MappingConfigManager(this._gtCache, this._gtDateTime);
-					this.sDependentMappingId = _DependentMapCfgMgr.doMappingValue(this.sParentTable, sDependentValue, sDependentDisplayValue, sDictDependentChoiceTable, sDictDependentChoiceField, '', '', true, true, false);
+					sDependentChoiceValue = (sDependentChoiceValue) ? sDependentChoiceValue : sDependentValue;
+					_DependentMapCfgMgr = new MappingConfigManager(this._gtCache, this._gtDateTime);
+					this.sDependentMappingId = _DependentMapCfgMgr.doMappingValue(this.sParentTable, sDependentChoiceValue, sDependentDisplayValue, sDictDependentChoiceTable, sDictDependentChoiceField, '', '', true, true, false, sDependentValue);
 				} // if no mapping found
 			} // if dependent field and value
 		} else {
@@ -293,6 +298,18 @@ MappingConfigManager.prototype = {
 				if (sSecondMappingTable) {
 					this.sSecondMappingTable = sSecondMappingTable;
 				} // if second mapping table
+				var bUseDependencyField = this._getValue('sType/reference/' + this.sRefOrChoiceTable + '/bUseDependencyField', false);
+				if ((bUseDependencyField) && (sDependentField) && (sDependentValue)) {
+					var sDependentTable = this._gtTable.getRefTable(this.sParentTable, sDependentField);
+					if (sDependentTable) {
+						var grRefRecord = new GlideRecord(sDependentTable);
+						if (grRefRecord.get(sDependentValue)) {
+							sDependentDisplayValue = grRefRecord.getDisplayValue();
+						} // if dependent record
+					} // if dependent table
+					_DependentMapCfgMgr = new MappingConfigManager(this._gtCache, this._gtDateTime);
+					this.sDependentMappingId = _DependentMapCfgMgr.doMappingValue(this.sParentTable, sDependentValue, sDependentDisplayValue, sDependentTable, '', '', '', true, true, false, sDependentValue);
+				} // if dependency field for reference
 			} // if advanced
 		} // if choice field
 		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + '_setTableAndField'); }
@@ -304,7 +321,7 @@ MappingConfigManager.prototype = {
 		if ((!this.sSourceValue) || (!this.sRefOrChoiceTable) || (!new GlideRecord(String(this.sRefOrChoiceTable)).isValid())) {
 			gs.warn('MappingConfigManager.getMappingCfg empty or invalid source value or table!');
 			if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + '_getMappingCfg'); }
-			return ;
+			return;
 		} // if no source or table
 		aQuery.push('type=' + this.sType);
 		aQuery.push('choice_table=' + this.sRefOrChoiceTable);
@@ -315,6 +332,8 @@ MappingConfigManager.prototype = {
 		} // if choice
 		if (this.sDependentMappingId) {
 			aQuery.push('dependent_mapping=' + this.sDependentMappingId);
+		} else {
+			aQuery.push('dependent_mappingISEMPTY');
 		} // if dependent mapping
 		aQuery.push('source_value=' + this.sSourceValue);
 		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
@@ -492,14 +511,14 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>114</sys_mod_count>
+        <sys_mod_count>123</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-11 05:25:53</sys_updated_on>
+        <sys_updated_on>2025-04-13 06:46:50</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>06901063db190a108152d03cd39619dc</id>

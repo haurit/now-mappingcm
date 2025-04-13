@@ -5,18 +5,18 @@
         <commented_message/>
         <key>map_select_target_message_dependent_apply</key>
         <language>en</language>
-        <message>This choice list field is dependending on another field that has not been applied yet.</message>
+        <message>This field is depending on another field that has not been applied yet.</message>
         <sys_class_name>sys_ui_message</sys_class_name>
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-10-08 06:44:35</sys_created_on>
         <sys_id>93ef776a1b01d21030d6fdd49b4bcb59</sys_id>
-        <sys_mod_count>0</sys_mod_count>
+        <sys_mod_count>1</sys_mod_count>
         <sys_name>map_select_target_message_dependent_apply</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_ui_message_93ef776a1b01d21030d6fdd49b4bcb59</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-10-08 06:44:35</sys_updated_on>
+        <sys_updated_on>2025-04-11 15:08:26</sys_updated_on>
     </sys_ui_message>
 </record_update>

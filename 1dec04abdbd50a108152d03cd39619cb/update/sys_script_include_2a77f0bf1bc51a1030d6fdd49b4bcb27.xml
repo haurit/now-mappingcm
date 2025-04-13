@@ -22,34 +22,51 @@ MappingConfigMap.prototype = {
 			this.bJSONCfg = true;
 			//var sDefaultFilter = (this.bJSONCfg) ? this._getValue('sType/reference/' + sTable + '/sDefaultFilter') : '';
 		} // if valid mapping config mgr
+		this._gtRecordRead = new global.GlobalToolsRecordRead();
+		this._gtTable = new global.GlobalToolsTable();
 	}, // function initialize
 
 	populateScratchPad: function (g_scratchpad) {
 		var sTable = current.getValue('choice_table');
+		var sField = current.getValue('choice_field');
 		var sType = current.getValue('type');
 		g_scratchpad.sType = sType;
-		g_scratchpad.sTable = sTable;
-		g_scratchpad.sField = current.getValue('choice_field');
-		g_scratchpad.sSourceValue = current.getValue('source_value');
+		g_scratchpad.sTable = (sType == 'choice') ? 'sys_choice' : sTable;
+		g_scratchpad.sField = sField;
+		var sSourceValue = current.getValue('source_value');
+		var sSourceDisplayValue = current.getValue('source_display_value');
+		sSourceValue = (sSourceDisplayValue) ? sSourceDisplayValue + ' [' + sSourceValue + ']' : sSourceValue;
+		g_scratchpad.sSourceValue = sSourceValue;
 		g_scratchpad.sTargetValue = current.getValue('target_value');
 		g_scratchpad.sTargetValueDisp = current.getDisplayValue('target_value');
 		var sDependentId = current.getValue('dependent_mapping');
 		sDependentId = ((sDependentId) && (sDependentId != 'null')) ? sDependentId : '';
-		var sDependentValue = '';
-		var sDependentApplyStatus = '';
-		if (sDependentId) {
-			sDependentValue = current.dependent_mapping.target_value;
-			sDependentApplyStatus = current.dependent_mapping.apply_job_status;
-			var grChoice = new GlideRecord('sys_choice');
-			if (grChoice.get(sDependentValue)) {
-				sDependentValue = grChoice.getValue('value');
+		var grDependent = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		var sDependentValue = '', sDependentApplyStatus = '', sDependentTable = '';
+		if ((sDependentId) && (grDependent.get(sDependentId))) {
+			sDependentValue = grDependent.getValue('target_value');
+			sDependentApplyStatus = grDependent.getValue('apply_job_status');
+			sDependentTable = grDependent.getValue('choice_table');
+			if (sField) {
+				var grChoice = new GlideRecord('sys_choice');
+				if (grChoice.get(sDependentValue)) {
+					sDependentValue = grChoice.getValue('value');
+					if ((sDependentApplyStatus != 'completed') && (current.getValue('target_value'))) {
+						gs.addErrorMessage(gs.getMessage('map_select_target_message_dependent_apply'));
+					} // if not applied
+				} else {
+					sDependentValue = '';
+					gs.addErrorMessage(gs.getMessage('map_select_target_message_dependent_map'));
+				} // if valid choice
+			} else {
 				if ((sDependentApplyStatus != 'completed') && (current.getValue('target_value'))) {
 					gs.addErrorMessage(gs.getMessage('map_select_target_message_dependent_apply'));
-				} // if not applied
-			} else {
-				sDependentValue = '';
-				gs.addErrorMessage(gs.getMessage('map_select_target_message_dependent_map'));
-			} // if valid choice
+				} else if (!sDependentValue) {
+					gs.addErrorMessage(gs.getMessage('map_select_target_message_dependent_map'));
+				} // if valid choice
+			} // if choice
+		} else if (sDependentId) {
+			gs.addErrorMessage(gs.getMessage('map_select_target_message_dependent_missing'));
 		} // if depending on other mapping
 		g_scratchpad.sDependentId = sDependentId;
 		g_scratchpad.sDependentValue = sDependentValue;
@@ -74,6 +91,7 @@ MappingConfigMap.prototype = {
 				g_scratchpad.bShowApplyAction = false;
 			} // if not completed
 		} // if dependent id
+		var sQuery = '';
 		g_scratchpad.sFilter = '';
 		g_scratchpad.sTable2 = '';
 		g_scratchpad.sFilter2 = '';
@@ -81,7 +99,7 @@ MappingConfigMap.prototype = {
 		g_scratchpad.sTargetValue2 = '';
 		g_scratchpad.sTargetValueDisp2 = '';
 		if (this.bJSONCfg) {
-			g_scratchpad.sFilter = this._getValue('sType/' + sType + '/' + sTable + '/sFilter', '');
+			sQuery = this._getValue('sType/' + sType + '/' + sTable + '/sFilter', '');
 			var sSecondMappingTable = this._getValue('sType/' + sType + '/' + sTable + '/sSecondMappingTable', '');
 			if (sSecondMappingTable) {
 				g_scratchpad.sTable2 = sSecondMappingTable;
@@ -91,10 +109,25 @@ MappingConfigMap.prototype = {
 				g_scratchpad.sTargetValueDisp2 = current.getDisplayValue('target_value_2');
 			} // if second table
 		} // if special config
+		if (sType == 'choice') {
+			sQuery = this._gtRecordRead.combineQueries(sQuery, 'name=' + sTable + '^element=' + sField);
+			if ((sDependentId) && (sDependentValue)) {
+				sQuery = this._gtRecordRead.combineQueries(sQuery, 'dependent_value=' + sDependentValue);
+			} // if dependent id and value
+		} else if ((sDependentId) && (sDependentValue) && (sDependentTable)) {
+			var grDict = new GlideRecord('sys_dictionary');
+			grDict.addEncodedQuery('name=' + sTable + '^internal_type=reference^reference=' + sDependentTable);
+			grDict.setLimit(1);
+			grDict.query();
+			if (grDict.next()) {
+				sQuery = this._gtRecordRead.combineQueries(sQuery, grDict.getValue('element') + '=' + sDependentValue);
+			} // if ref field
+		} // if choice
+		g_scratchpad.sFilter = sQuery;
 	}, // function populateScratchPad
 
 	type: 'MappingConfigMap',
-	version: '1.0.3',
+	version: '1.0.5',
 	author: 'Tom Hauri',
 	email: 'tom@hauri.biz'
 };]]></script>
@@ -102,14 +135,14 @@ MappingConfigMap.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-10-11 13:24:50</sys_created_on>
         <sys_id>2a77f0bf1bc51a1030d6fdd49b4bcb27</sys_id>
-        <sys_mod_count>20</sys_mod_count>
+        <sys_mod_count>33</sys_mod_count>
         <sys_name>MappingConfigMap</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_2a77f0bf1bc51a1030d6fdd49b4bcb27</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-11-19 12:18:42</sys_updated_on>
+        <sys_updated_on>2025-04-13 06:18:37</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>2a77f0bf1bc51a1030d6fdd49b4bcb27</id>

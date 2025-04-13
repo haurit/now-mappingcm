@@ -27,64 +27,96 @@ MappingConfigCommon.prototype = {
 				this._sTimerPrefix = 'mcmc/';
 			} // if true
 		} // initialize timer
-	},
+		var sJSONId = gs.getProperty('x_snc_mapping_cm.json_cfg', '');
+		this.bJSONCfg = false;
+		var grScriptInclude = new GlideRecord('sys_script_include');
+		if ((sJSONId) && (grScriptInclude.get('api_name', 'x_snc_json_cfg_mgr.getCfg'))) {
+			var _getCfg = new x_snc_json_cfg_mgr.getCfg(sJSONId);
+			this.oConfig = _getCfg.getConfig();
+			this._getValue = _getCfg.getValue;
+			this.bJSONCfg = true;
+		} // if valid mapping config mgr
+	}, // function initialize
 
-	getDependentData: function (grMappingCfg, bSourceValue) {
-		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'getDependentData'); }
-		var sDependentField = '';
-		var sDependentValue = '';
-		var sDependentId = grMappingCfg.getValue('dependent_mapping');
-		if (sDependentId) {
-			var grDependentMapping = new GlideRecord('x_snc_mapping_cm_mapping_config');
-			if (grDependentMapping.get(sDependentId)) {
-				sDependentField = grDependentMapping.getValue('choice_field');
+	/* scheduler
+	if(sDependentMappingId) {
+		
+		
+			
+			grChoiceDependent.setLimit(1);
+			grChoiceDependent.addEncodedQuery('name=' + sTableName + '^element=' + grMappingCfgDependent.getValue('choice_field') + '^value=' + grMappingCfgDependent.getValue('source_value'));
+			grChoiceDependent.query();
+			if (grChoiceDependent.next()) {
+				sDependentQuery = '^dependent_value=' + grChoiceDependent.getValue('value');
+			} // if dependent choice
+		} // if dependent mapping
+	} // if dependent mapping
+	*/
+
+
+	getDependentQuery: function (grMappingCfg, bSourceValue) {
+		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'getDependentQuery'); }
+		var sTable = grMappingCfg.getValue('choice_table');
+		var sDependentMappingId = grMappingCfg.getValue('dependent_mapping');
+		var sType = '', sDependentField = '', sDependentValue = '', sDependentTable = '', sDependentQuery = '';
+		if (sDependentMappingId) {
+			var grMappingCfgDependent = new GlideRecord('x_snc_mapping_cm_mapping_config');
+			if (grMappingCfgDependent.get(sDependentMappingId)) {
+				sType = grMappingCfgDependent.getValue('type');
+				sDependentField = grMappingCfgDependent.getValue('choice_field');
+				sDependentTable = grMappingCfgDependent.getValue('choice_table');
 				if (bSourceValue) {
-					sDependentValue = grDependentMapping.getValue('source_value');
+					sDependentValue = grMappingCfgDependent.getValue('source_value');
 				} else {
-					sDependentValue = grDependentMapping.getValue('target_value');
-					if (grDependentMapping.getValue('type') == 'choice') {
+					sDependentValue = grMappingCfgDependent.getValue('target_value');
+					if (sType == 'choice') {
 						var grChoice = new GlideRecord('sys_choice');
 						if ((sDependentValue) && (grChoice.get(sDependentValue))) {
 							sDependentValue = grChoice.getValue('value');
 						} // if target is valid choice
 					} // if choice
 				} // if source value
+				if (sType == 'choice') {
+					sDependentQuery = '';
+				} else {
+					//
+				} // if 
 			} // if dependent mapping
 		} // if dependent id
-		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'getDependentData'); }
-		return { sDependentField: sDependentField, sDependentValue: sDependentValue };
-	}, // function getDependentData
+		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'getDependentQuery'); }
+		return sDependentQuery;
+	}, // function getDependentQuery
 
-	getTargetFields: function (aAffectedFields) {
-		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'getTargetFields'); }
-		var aFields = [];
-		var grDict = new GlideRecord('sys_dictionary');
-		grDict.addEncodedQuery('sys_idIN' + aAffectedFields);
-		grDict.query();
-		while (grDict.next()) {
-			aFields.push(grDict.getValue('element'));
-		} // while fields
-		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'getTargetFields'); }
-		return aFields;
-	}, // function getTargetFields
+getTargetFields: function (aAffectedFields) {
+	if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'getTargetFields'); }
+	var aFields = [];
+	var grDict = new GlideRecord('sys_dictionary');
+	grDict.addEncodedQuery('sys_idIN' + aAffectedFields);
+	grDict.query();
+	while (grDict.next()) {
+		aFields.push(grDict.getValue('element'));
+	} // while fields
+	if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'getTargetFields'); }
+	return aFields;
+}, // function getTargetFields
 
-	type: 'MappingConfigCommon',
-	version: '1.0.3',
-	author: 'Tom Hauri',
-	email: 'tom@hauri.biz'
+type: 'MappingConfigCommon',
+	version: '1.0.5',
+		author: 'Tom Hauri',
+			email: 'tom@hauri.biz'
 };]]></script>
         <sys_class_name>sys_script_include</sys_class_name>
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-10-08 18:54:46</sys_created_on>
         <sys_id>b4452e7a1bcdd21030d6fdd49b4bcbce</sys_id>
-        <sys_mod_count>3</sys_mod_count>
+        <sys_mod_count>12</sys_mod_count>
         <sys_name>MappingConfigCommon</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_b4452e7a1bcdd21030d6fdd49b4bcbce</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-01-10 07:08:12</sys_updated_on>
+        <sys_updated_on>2025-04-13 14:13:10</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>b4452e7a1bcdd21030d6fdd49b4bcbce</id>
