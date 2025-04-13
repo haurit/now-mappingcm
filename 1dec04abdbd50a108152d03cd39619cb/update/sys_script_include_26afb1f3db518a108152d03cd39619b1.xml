@@ -40,11 +40,9 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
 					} // if choice field
 				} // if target record
 			} // if target value
-			var oDependentData = this._mapCfgCommon.getDependentData(grMappingCfg);
-			var sDependentField = oDependentData['sDependentField'];
-			var sDependentValue = oDependentData['sDependentValue'];
+			var sDependentQuery = this._mapCfgCommon.getDependentQuery(grMappingCfg);
 			var sMessage = (bAutoApproval) ? 'map_apply_target_description_autoapprove' : 'map_apply_target_description';
-			var sDescription = this._getParentTableInformation(sMessage, sSourceValue, sSourceDisplayValue, sTargetValue, sDependentField, sDependentValue, grMappingCfg);
+			var sDescription = this._getParentTableInformation(sMessage, sSourceValue, sSourceDisplayValue, sTargetValue, sDependentQuery, grMappingCfg);
 			var oReturn = {
 				'sTitle': sTitle,
 				'sDescription': encodeURIComponent(sDescription),
@@ -83,7 +81,7 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
 		} // if map id
 	}, // function applyMapping
 
-	_getParentTableInformation: function (sMessage, sSourceValue, sSourceDisplayValue, sTargetValue, sDependentField, sDependentValue, grMappingCfg) {
+	_getParentTableInformation: function (sMessage, sSourceValue, sSourceDisplayValue, sTargetValue, sDependentQuery, grMappingCfg) {
 		var aHTML = [];
 		aHTML.push('<style>td {border-left:1px solid black; border-top:1px solid black; padding: 5px;} tr:nth-child(even) {background-color: Gainsboro;} table {border-right:1px solid black; border-bottom:1px solid black;} thead {background-color: Gainsboro;} </style>');
 		aHTML.push('<div><p>' + gs.getMessage(sMessage) + '</p></div>');
@@ -108,7 +106,7 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
 			grAffectedTable.addEncodedQuery(sQuery);
 			grAffectedTable.query();
 			if (grAffectedTable.next()) {
-				iRecordCount = this._getAffectedRecordCount(sSourceValue, sDependentField, sDependentValue, grAffectedTable);
+				iRecordCount = this._getAffectedRecordCount(sSourceValue, sDependentQuery, grAffectedTable);
 				aHTML.push('<tr><td>' + sParentTableInfo + '</td><td>' + grAffectedTable.getDisplayValue('affected_fields') + '</td><td>' + String(iRecordCount) + '</td></tr>');
 			} // if affected table
 		}, this); // each table
@@ -117,18 +115,16 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
 		return aHTML.join('\n');
 	}, // function _getParentTableInformation
 
-	_getAffectedRecordCount: function (sSourceValue, sDependentField, sDependentValue, grAffectedTable) {
+	_getAffectedRecordCount: function (sSourceValue, sDependentQuery, grAffectedTable) {
 		try {
-			var aQuery = [], sDependentQuery = '';
+			var aQuery = [];
 			var grDict = new GlideRecord('sys_dictionary');
 			grDict.addEncodedQuery('sys_idIN' + grAffectedTable.getValue('affected_fields'));
 			grDict.query();
 			while (grDict.next()) {
 				aQuery.push(grDict.getValue('element') + '=' + sSourceValue);
 			} // while fields
-			if ((sDependentField) && (sDependentValue)) {
-				sDependentQuery = sDependentField + '=' + sDependentValue + '^';
-			} // if dependent field and value
+			sDependentQuery = (sDependentQuery) ? sDependentQuery + '^' : '';
 			var iCountAffectedRecords = this._gtRecordRead.countRecords(grAffectedTable.getValue('affected_table'), sDependentQuery + aQuery.join('^OR'));
 			if ((iCountAffectedRecords) || (iCountAffectedRecords === 0)) {
 				return iCountAffectedRecords;
@@ -142,7 +138,7 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
 	}, // function _getAffectedRecordCount
 
 	type: 'MappingConfigApplyAJAX',
-	version: '1.0.2',
+	version: '1.0.5',
 	author: 'Tom Hauri',
 	email: 'tom@hauri.biz'
 });]]></script>
@@ -150,14 +146,14 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-08 08:41:28</sys_created_on>
         <sys_id>26afb1f3db518a108152d03cd39619b1</sys_id>
-        <sys_mod_count>99</sys_mod_count>
+        <sys_mod_count>103</sys_mod_count>
         <sys_name>MappingConfigApplyAJAX</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_26afb1f3db518a108152d03cd39619b1</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2024-10-09 06:55:41</sys_updated_on>
+        <sys_updated_on>2025-04-13 10:16:47</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>26afb1f3db518a108152d03cd39619b1</id>
