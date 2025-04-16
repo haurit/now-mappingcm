@@ -12,6 +12,7 @@
         <script><![CDATA[var MappingConfigMap = Class.create();
 MappingConfigMap.prototype = {
 	initialize: function () {
+		this.sLang = gs.getProperty('glide.sys.language', 'en');
 		var sJSONId = gs.getProperty('x_snc_mapping_cm.json_cfg', '');
 		this.bJSONCfg = false;
 		var grScriptInclude = new GlideRecord('sys_script_include');
@@ -108,6 +109,7 @@ MappingConfigMap.prototype = {
 			if (sDependentValue) {
 				sFilter = this._gtRecordRead.combineQueries(sFilter, 'dependent_value=' + sDependentValue);
 			} // if dependent id and value
+			sFilter = this._gtRecordRead.combineQueries(sFilter, 'language=' + this.sLang);
 		} // if choice
 		g_scratchpad.sFilter = sFilter;
 	}, // function populateScratchPad
@@ -121,14 +123,14 @@ MappingConfigMap.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-10-11 13:24:50</sys_created_on>
         <sys_id>2a77f0bf1bc51a1030d6fdd49b4bcb27</sys_id>
-        <sys_mod_count>39</sys_mod_count>
+        <sys_mod_count>40</sys_mod_count>
         <sys_name>MappingConfigMap</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_2a77f0bf1bc51a1030d6fdd49b4bcb27</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-13 15:35:22</sys_updated_on>
+        <sys_updated_on>2025-04-16 08:51:33</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>2a77f0bf1bc51a1030d6fdd49b4bcb27</id>

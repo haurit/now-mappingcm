@@ -5,13 +5,6 @@
         <element default="true" label="Apply Data Dictionary" max_length="40" name="apply_useengine" type="boolean"/>
         <element default="true" label="Active" max_length="40" name="active" type="boolean"/>
         <element label="Run Business Rules" max_length="40" name="apply_workflow" type="boolean"/>
-        <element choice="1" default="not_started" label="Apply Job Status" max_length="40" name="apply_job_status" read_only="true" type="choice">
-            <choice>
-                <element inactive_on_update="false" label="Running" sequence="200" value="running"/>
-                <element inactive_on_update="false" label="Completed" sequence="300" value="completed"/>
-                <element inactive_on_update="false" label="Not started" sequence="100" value="not_started"/>
-            </choice>
-        </element>
         <element label="Affected Fields 2" max_length="4000" name="affected_fields_2" read_only="true" reference="sys_dictionary" type="glide_list"/>
         <element label="Affected Fields" max_length="4000" name="affected_fields" read_only="true" reference="sys_dictionary" type="glide_list"/>
         <element label="Choice Field" max_length="80" name="choice_field" read_only="true" type="string"/>
