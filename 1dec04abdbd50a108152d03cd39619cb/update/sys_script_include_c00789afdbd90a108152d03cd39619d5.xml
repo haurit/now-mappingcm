@@ -12,7 +12,7 @@
         <script><![CDATA[var MappingConfigApply = Class.create();
 MappingConfigApply.prototype = {
 	initialize: function () {
-		this.bLog = false;
+		this.bLog = true;
 		this._mapCfgCommon = new MappingConfigCommon();
 		this._gt = new global.GlobalTools();
 		this._gtRecordRead = new global.GlobalToolsRecordRead();
@@ -36,6 +36,7 @@ MappingConfigApply.prototype = {
 		try {
 			grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
 			if ((sMappingCfgId) && (grMappingCfg.get(sMappingCfgId))) {
+				var sType = grMappingCfg.getValue('type');
 				var sChoiceTable = grMappingCfg.getValue('choice_table');
 				var sChoiceField = grMappingCfg.getValue('choice_field');
 				var sSourceValue = grMappingCfg.getValue('source_value');
@@ -54,6 +55,7 @@ MappingConfigApply.prototype = {
 				var sDependentQuery = this._mapCfgCommon.getDependentQuery(grMappingCfg);
 				sDependentQuery = (sDependentQuery) ? sDependentQuery + '^' : '';
 				var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
+				var grDict = new GlideRecord('sys_dictionary');
 				aParentTables.forEach(function (sParentTableId) {
 					var sParentTable = this._gtTable.getTableName(sParentTableId);
 					var grAffectedTable = new GlideRecord('x_snc_mapping_cm_affected_table');
@@ -71,7 +73,9 @@ MappingConfigApply.prototype = {
 						var bUseEngines = grAffectedTable.getValue('apply_useengine');
 						var aQuery = [];
 						var aFields = this._mapCfgCommon.getTargetFields(grAffectedTable.getValue('affected_fields'));
+						var aFieldIds = String(grAffectedTable.getValue('affected_fields')).split(',');
 						var aFields2 = this._mapCfgCommon.getTargetFields(grAffectedTable.getValue('affected_fields_2'));
+						var aFieldIds2 = String(grAffectedTable.getValue('affected_fields_2')).split(',');
 						aFields.forEach(function (sField) {
 							aQuery.push(sField + '=' + sSourceValue);
 						}, this); // each field
@@ -80,17 +84,24 @@ MappingConfigApply.prototype = {
 							while (grTable._next()) {
 								var bChanged = false;
 								var bChangedRefField = false;
-								aFields.forEach(function (sField) {
+								aFields.forEach(function (sField, i) {
 									var sCurrentValue = grTable.getValue(sField);
 									if (sCurrentValue) {
 										if (sCurrentValue == sSourceValue) {
 											grTable.setValue(sField, sTargetValue);
 											bChanged = true;
 											bChangedRefField = true;
-										} else if (sCurrentValue.indexOf(sSourceValue) != -1) {
-											sCurrentValue = sCurrentValue.replace(sSourceValue, sTargetValue);
-											grTable.setValue(sField, sCurrentValue);
-											bChanged = true;
+										} else if ((sType == 'reference') && (sCurrentValue.indexOf(sSourceValue) != -1)) {
+											grDict = new GlideRecord('sys_dictionary');
+											if ((grDict.get(aFieldIds[i])) && (grDict.getValue('internal_type') == 'glide_list')) {
+												if (sCurrentValue.indexOf(sTargetValue) == -1) {
+													sCurrentValue = sCurrentValue.replace(sSourceValue, sTargetValue);
+												} else {
+													sCurrentValue = sCurrentValue.replace(sSourceValue, '');
+												} // if target not exist
+												grTable.setValue(sField, sCurrentValue);
+												bChanged = true;
+											} // if field id
 										} // value is source value or in list
 									} // if current value
 								}, this); // each field
@@ -110,7 +121,7 @@ MappingConfigApply.prototype = {
 								} // if changed
 							} // while records found
 						} // if records found
-						if (this.bLog) { gs.error('MappingConfigApply.runJob finished iUpdateCount: ' + String(iUpdateCount) + ' iErrorCount: ' + String(iErrorCount)); }
+						if (this.bLog) { gs.error('MappingConfigApply.runJob finished: ' + String(sMappingCfgId) + ' iUpdateCount: ' + String(iUpdateCount) + ' iErrorCount: ' + String(iErrorCount)); }
 					} // if affected table
 				}, this); // each table
 				grMappingCfg.setValue('apply_job_status', 'completed');
@@ -134,14 +145,14 @@ MappingConfigApply.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 09:56:51</sys_created_on>
         <sys_id>c00789afdbd90a108152d03cd39619d5</sys_id>
-        <sys_mod_count>55</sys_mod_count>
+        <sys_mod_count>61</sys_mod_count>
         <sys_name>MappingConfigApply</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_c00789afdbd90a108152d03cd39619d5</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-16 09:17:54</sys_updated_on>
+        <sys_updated_on>2025-04-17 14:41:58</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>c00789afdbd90a108152d03cd39619d5</id>
