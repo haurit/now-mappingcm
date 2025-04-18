@@ -4,13 +4,13 @@
             <element>.begin_split</element>
             <position>0</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>70b7d5191bd55610e50ddc61ab4bcbe9</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>2769e5e0c385a6109ebe8d8dc0013131</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type>.begin_split</type>
         </sys_ui_element>
@@ -18,13 +18,13 @@
             <element>name</element>
             <position>1</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>3cb7d5191bd55610e50ddc61ab4bcbe9</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>2369e5e0c385a6109ebe8d8dc0013132</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
@@ -32,13 +32,13 @@
             <element>affected_table</element>
             <position>2</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>b0b7d5191bd55610e50ddc61ab4bcbea</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>a769e5e0c385a6109ebe8d8dc0013132</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
@@ -46,13 +46,13 @@
             <element>affected_fields</element>
             <position>3</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>38b7d5191bd55610e50ddc61ab4bcbea</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>2f69e5e0c385a6109ebe8d8dc0013132</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
@@ -60,13 +60,13 @@
             <element>affected_fields_2</element>
             <position>4</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>bcb7d5191bd55610e50ddc61ab4bcbea</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>a369e5e0c385a6109ebe8d8dc0013133</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
@@ -74,13 +74,13 @@
             <element>choice_table</element>
             <position>5</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>34b7d5191bd55610e50ddc61ab4bcbeb</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>2b69e5e0c385a6109ebe8d8dc0013133</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
@@ -88,13 +88,13 @@
             <element>choice_field</element>
             <position>6</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>b8b7d5191bd55610e50ddc61ab4bcbeb</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>af69e5e0c385a6109ebe8d8dc0013133</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
@@ -102,13 +102,13 @@
             <element>.split</element>
             <position>7</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>30b7d5191bd55610e50ddc61ab4bcbec</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>2769e5e0c385a6109ebe8d8dc0013134</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type>.split</type>
         </sys_ui_element>
@@ -116,83 +116,69 @@
             <element>active</element>
             <position>8</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>b4b7d5191bd55610e50ddc61ab4bcbec</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>ab69e5e0c385a6109ebe8d8dc0013134</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
-            <sys_user/>
-            <type/>
-        </sys_ui_element>
-        <sys_ui_element action="INSERT_OR_UPDATE">
-            <element>apply_job_status</element>
-            <position>9</position>
-            <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>3cb7d5191bd55610e50ddc61ab4bcbec</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_ui_formatter/>
-            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
-            <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>apply_workflow</element>
-            <position>10</position>
+            <position>9</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>b0b7d5191bd55610e50ddc61ab4bcbed</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>2369e5e0c385a6109ebe8d8dc0013135</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>apply_autosysfield</element>
-            <position>11</position>
+            <position>10</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>38b7d5191bd55610e50ddc61ab4bcbed</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>a769e5e0c385a6109ebe8d8dc0013135</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>apply_useengine</element>
-            <position>12</position>
+            <position>11</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>bcb7d5191bd55610e50ddc61ab4bcbed</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>2f69e5e0c385a6109ebe8d8dc0013135</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type/>
         </sys_ui_element>
         <sys_ui_element action="INSERT_OR_UPDATE">
             <element>.end_split</element>
-            <position>13</position>
+            <position>12</position>
             <sys_created_by>tom.hauri</sys_created_by>
-            <sys_created_on>2024-10-16 07:32:53</sys_created_on>
-            <sys_id>34b7d5191bd55610e50ddc61ab4bcbee</sys_id>
+            <sys_created_on>2025-04-18 10:50:22</sys_created_on>
+            <sys_id>a369e5e0c385a6109ebe8d8dc0013136</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_ui_formatter/>
             <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_affected_table" sys_domain="global" view="Default view">1d61b684dba5ca108152d03cd39619e9</sys_ui_section>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-10-16 07:32:53</sys_updated_on>
+            <sys_updated_on>2025-04-18 10:50:22</sys_updated_on>
             <sys_user/>
             <type>.end_split</type>
         </sys_ui_element>
