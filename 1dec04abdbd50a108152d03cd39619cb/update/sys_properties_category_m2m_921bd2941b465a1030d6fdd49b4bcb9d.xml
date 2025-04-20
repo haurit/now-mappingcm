@@ -2,7 +2,7 @@
     <sys_properties_category_m2m action="INSERT_OR_UPDATE">
         <category display_value="Mapping Config Manager">a225096fdbd90a108152d03cd3961910</category>
         <order>100</order>
-        <property display_value="x_snc_mapping_cm.scheduled.cleanup.enabled" name="x_snc_mapping_cm.scheduled.cleanup.enabled">4b3d19581b8e1a1030d6fdd49b4bcbe7</property>
+        <property display_value="">4b3d19581b8e1a1030d6fdd49b4bcbe7</property>
         <sys_class_name>sys_properties_category_m2m</sys_class_name>
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-11-19 16:40:31</sys_created_on>

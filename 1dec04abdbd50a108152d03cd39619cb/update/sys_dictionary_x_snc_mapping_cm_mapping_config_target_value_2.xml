@@ -2,7 +2,7 @@
     <sys_dictionary action="INSERT_OR_UPDATE" element="target_value_2" table="x_snc_mapping_cm_mapping_config">
         <active>true</active>
         <array>false</array>
-        <attributes/>
+        <attributes>edge_encryption_enabled=true</attributes>
         <audit>false</audit>
         <calculation><![CDATA[(function calculatedFieldValue(current) {
 
