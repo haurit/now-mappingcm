@@ -14,14 +14,14 @@
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 10:10:07</sys_created_on>
         <sys_id>29f905e3db1d0a108152d03cd396190d</sys_id>
-        <sys_mod_count>129</sys_mod_count>
+        <sys_mod_count>140</sys_mod_count>
         <sys_name>Run Server Side Script</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_atf_step_29f905e3db1d0a108152d03cd396190d</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-18 10:03:54</sys_updated_on>
+        <sys_updated_on>2025-04-20 06:36:25</sys_updated_on>
         <table/>
         <test display_value="Mapping CM ScriptInclude Test">f169c5a3db1d0a108152d03cd3961931</test>
         <timeout/>
@@ -36,9 +36,9 @@
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 10:10:07</sys_created_on>
         <sys_id>736a85e3db1d0a108152d03cd3961923</sys_id>
-        <sys_mod_count>129</sys_mod_count>
+        <sys_mod_count>140</sys_mod_count>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-18 10:03:54</sys_updated_on>
+        <sys_updated_on>2025-04-20 06:36:25</sys_updated_on>
         <value>(function (outputs, steps, params, stepResult, assertEqual) {&#13;
 &#13;
 	var bLog = false;&#13;
@@ -140,16 +140,44 @@
 			},&#13;
 			{&#13;
 				asset_tag: 'atf_asset_3',&#13;
+				company: '10000000000000000000000000000091',&#13;
+				vendor: '10000000000000000000000000000092',&#13;
+				install_status: '44',&#13;
+				substatus: '33',&#13;
+			},&#13;
+			{&#13;
+				asset_tag: 'atf_asset_4',&#13;
+				company: '10000000000000000000000000000091',&#13;
+				vendor: '10000000000000000000000000000092',&#13;
+				install_status: '44',&#13;
+				substatus: '33',&#13;
+			},&#13;
+			{&#13;
+				asset_tag: 'atf_asset_5',&#13;
 				company: '10000000000000000000000000000001',&#13;
 				vendor: '10000000000000000000000000000092',&#13;
 				install_status: '7',&#13;
 				substatus: '55',&#13;
 			},&#13;
 			{&#13;
-				asset_tag: 'atf_asset_4',&#13;
+				asset_tag: 'atf_asset_6',&#13;
 				company: '10000000000000000000000000000001',&#13;
 				vendor: '10000000000000000000000000000092',&#13;
 				install_status: '7',&#13;
+				substatus: '55',&#13;
+			},&#13;
+			{&#13;
+				asset_tag: 'atf_asset_7',&#13;
+				company: '10000000000000000000000000000091',&#13;
+				vendor: '10000000000000000000000000000092',&#13;
+				install_status: '1',&#13;
+				substatus: '55',&#13;
+			},&#13;
+			{&#13;
+				asset_tag: 'atf_asset_8',&#13;
+				company: '10000000000000000000000000000091',&#13;
+				vendor: '10000000000000000000000000000092',&#13;
+				install_status: '1',&#13;
 				substatus: '55',&#13;
 			},&#13;
 		], // windows servers&#13;
@@ -169,9 +197,9 @@
 &#13;
 	_gtATF.generateTestData(oTestDataConfig, true);&#13;
 &#13;
-	/*&#13;
-	Test invalid input and fields&#13;
-	*/&#13;
+	///&#13;
+	/// Test invalid input and fields&#13;
+	/// &#13;
 	_gtATF.runATF('doMappingValue', undefined);&#13;
 	_gtATF.runATF('doMappingValue', undefined, '');&#13;
 	_gtATF.runATF('doMappingValue', undefined, 'cmdb_ci', '');&#13;
@@ -183,9 +211,9 @@
 		_gtATF.addError('getMappedValue', 'Generated choice record with invalid field found!');&#13;
 	} // if invalid entry&#13;
 &#13;
-	/*&#13;
-	Field type: Reference&#13;
-	*/&#13;
+	/// &#13;
+	/// Field type: Reference&#13;
+	/// &#13;
 	// Test insert mapping&#13;
 	_gtATF.runATF('doMappingValue', '10000000000000000000000000000091', 'cmdb_ci_win_server', '10000000000000000000000000000091', 'Company_1', 'core_company');&#13;
 	_gtATF.runATF('doMappingValue', '10000000000000000000000000000091', 'alm_hardware', '10000000000000000000000000000091', 'Company_1', 'core_company');&#13;
@@ -259,9 +287,9 @@
 		_gtATF.addError('_mappingCfgMgr', 'Apply mapping on "cmdb_ci_win_server" failed. Expected: No records with unmapped manufacturer exist in this table (10000000000000000000000000000092)');&#13;
 	} // if un-mapped company&#13;
 &#13;
-	/*&#13;
-	Field type: Glide List&#13;
-	*/&#13;
+	/// &#13;
+	/// Field type: Glide List&#13;
+	/// &#13;
 	// Test insert mapping&#13;
 	_gtATF.runATF('doMappingValue', '30000000000000000000000000000091', 'cmdb_ci_service', '30000000000000000000000000000091', 'User_91', 'sys_user');&#13;
 	_gtATF.runATF('doMappingValue', '30000000000000000000000000000092', 'cmdb_ci_service', '30000000000000000000000000000092', 'User_92', 'sys_user');&#13;
@@ -291,9 +319,9 @@
 		_gtATF.addError('_mappingCfgMgr', 'Apply mapping on "cmdb_ci_service" failed. Expected: No records with unmapped user in field stakeholders exist in this table (30000000000000000000000000000092)');&#13;
 	} // if un-mapped user&#13;
 &#13;
-	/*&#13;
-	Field type: Choice List&#13;
-	*/&#13;
+	/// &#13;
+	/// Field type: Choice List&#13;
+	/// &#13;
 	// Test insert mapping&#13;
 	_gtATF.runATF('doMappingValue', 'Windows11', 'cmdb_ci_computer', 'Windows11', 'Windows 11', 'cmdb_ci_computer', 'os');&#13;
 	_gtATF.runATF('doMappingValue', '55', 'cmdb_ci', '55', 'New Status', 'cmdb_ci', 'install_status');&#13;
@@ -348,66 +376,88 @@
 		_gtATF.addError('_mappingCfgMgr', 'Apply mapping on "cmdb_ci_win_server" failed. Expected: No records with unmapped value "55" in field install_status exist in this table');&#13;
 	} // if un-mapped choice&#13;
 &#13;
-	/*&#13;
-	Field type: Choice List with Dependent Not Exist&#13;
-	*/&#13;
+	/// &#13;
+	/// Field type: Choice List with Dependent Not Exist&#13;
+	/// &#13;
 	// Test insert mapping&#13;
 	_gtATF.runATF('doMappingValue', '55', 'alm_asset', '55', 'New Status', 'alm_asset', 'install_status');&#13;
 	_gtATF.runATF('doMappingValue', '33', 'alm_asset', '33', 'New SubStatus', 'alm_asset', 'substatus', 'install_status', '55');&#13;
+	_gtATF.runATF('doMappingValue', '33', 'alm_asset', '33', 'New SubStatus 2', 'alm_asset', 'substatus', 'install_status', '44');&#13;
 	_gt.sleep(500);&#13;
 	// Test get un-mapped value&#13;
 	_gtATF.runATF('getMappedValue', '55', '55', 'alm_asset', 'install_status');&#13;
 	_gtATF.runATF('getMappedValue', '33', '33', 'alm_asset', 'substatus', 'install_status', '55');&#13;
+	_gtATF.runATF('getMappedValue', '44', '44', 'alm_asset', 'install_status');&#13;
+	_gtATF.runATF('getMappedValue', '33', '33', 'alm_asset', 'substatus', 'install_status', '44');&#13;
 	// Test redo un-mapped value&#13;
 	_gtATF.runATF('doMappingValue', '55', 'alm_asset', '55', 'New Status', 'alm_asset', 'install_status');&#13;
 	_gtATF.runATF('doMappingValue', '33', 'alm_asset', '33', 'New SubStatus', 'alm_asset', 'substatus', 'install_status', '55');&#13;
+	_gtATF.runATF('doMappingValue', '33', 'alm_asset', '33', 'New SubStatus 2', 'alm_asset', 'substatus', 'install_status', '44');&#13;
 	// Update mapping&#13;
 	grChoice = _gtATF.getRecord('sys_choice', 'name=alm_asset^element=install_status^language=en^value=6');&#13;
 	updateMapping(_mappingCfgMgr.getMappedValue('55', 'alm_asset', 'install_status', '', '', true), grChoice.getUniqueValue());&#13;
 	grChoice = _gtATF.getRecord('sys_choice', 'name=alm_asset^element=substatus^language=en^dependent_value=6^value=pending_disposal');&#13;
 	updateMapping(_mappingCfgMgr.getMappedValue('33', 'alm_asset', 'substatus', 'install_status', '55', true), grChoice.getUniqueValue());&#13;
+	grChoice = _gtATF.getRecord('sys_choice', 'name=alm_asset^element=install_status^language=en^value=7');&#13;
+	updateMapping(_mappingCfgMgr.getMappedValue('44', 'alm_asset', 'install_status', '', '', true), grChoice.getUniqueValue());&#13;
+	grChoice = _gtATF.getRecord('sys_choice', 'name=alm_asset^element=substatus^language=en^dependent_value=7^value=obsolete');&#13;
+	updateMapping(_mappingCfgMgr.getMappedValue('33', 'alm_asset', 'substatus', 'install_status', '44', true), grChoice.getUniqueValue());&#13;
 	// Test get mapped value	&#13;
 	_gtATF.runATF('getMappedValue', '6', '55', 'alm_asset', 'install_status');&#13;
 	_gtATF.runATF('getMappedValue', 'pending_disposal', '33', 'alm_asset', 'substatus', 'install_status', '55');&#13;
+	_gtATF.runATF('getMappedValue', '7', '44', 'alm_asset', 'install_status');&#13;
+	_gtATF.runATF('getMappedValue', 'obsolete', '33', 'alm_asset', 'substatus', 'install_status', '44');&#13;
 	// Test redo mapped value&#13;
 	_gtATF.runATF('doMappingValue', '6', 'alm_asset', '55', 'New Status', 'alm_asset', 'install_status');&#13;
 	_gtATF.runATF('doMappingValue', 'pending_disposal', 'alm_asset', '33', 'New SubStatus', 'alm_asset', 'substatus', 'install_status', '55');&#13;
+	_gtATF.runATF('doMappingValue', 'obsolete', 'alm_asset', '33', 'New SubStatus 2', 'alm_asset', 'substatus', 'install_status', '44');&#13;
 	// Test apply mapping&#13;
 	grRecord = _gtATF.getRecord('alm_hardware', 'install_status=55');&#13;
 	if (grRecord) {&#13;
 		_gtATF.addError('_mappingCfgMgr', 'Apply mapping on "alm_hardware" failed. Expected: No records with unmapped value "55" in field install_status exist in this table');&#13;
+	} // if un-mapped choice&#13;
+	grRecord = _gtATF.getRecord('alm_hardware', 'install_status=44');&#13;
+	if (grRecord) {&#13;
+		_gtATF.addError('_mappingCfgMgr', 'Apply mapping on "alm_hardware" failed. Expected: No records with unmapped value "44" in field install_status exist in this table');&#13;
 	} // if un-mapped choice&#13;
 	grRecord = _gtATF.getRecord('alm_hardware', 'substatus=33');&#13;
 	if (grRecord) {&#13;
 		_gtATF.addError('_mappingCfgMgr', 'Apply mapping on "alm_hardware" failed. Expected: No records with unmapped value "33" in field substatus exist in this table');&#13;
 	} // if un-mapped choice&#13;
 &#13;
-	/*&#13;
-	Field type: Choice List with Dependent Exist&#13;
-	*/&#13;
+	/// &#13;
+	/// Field type: Choice List with Dependent Exist&#13;
+	/// &#13;
 	// Test insert mapping&#13;
 	_gtATF.runATF('doMappingValue', '55', 'alm_asset', '55', 'New SubStatus', 'alm_asset', 'substatus', 'install_status', '7');&#13;
+	_gtATF.runATF('doMappingValue', '55', 'alm_asset', '55', 'New SubStatus', 'alm_asset', 'substatus', 'install_status', '1');&#13;
 	_gt.sleep(500);&#13;
 	// Test get un-mapped value&#13;
 	_gtATF.runATF('getMappedValue', '55', '55', 'alm_asset', 'substatus', 'install_status', '7');&#13;
+	_gtATF.runATF('getMappedValue', '55', '55', 'alm_asset', 'substatus', 'install_status', '1');&#13;
 	// Test redo un-mapped value&#13;
 	_gtATF.runATF('doMappingValue', '55', 'alm_asset', '55', 'New SubStatus', 'alm_asset', 'substatus', 'install_status', '7');&#13;
+	_gtATF.runATF('doMappingValue', '55', 'alm_asset', '55', 'New SubStatus', 'alm_asset', 'substatus', 'install_status', '1');&#13;
 	// Update mapping&#13;
 	grChoice = _gtATF.getRecord('sys_choice', 'name=alm_asset^element=substatus^language=en^dependent_value=7^value=obsolete');&#13;
 	updateMapping(_mappingCfgMgr.getMappedValue('55', 'alm_asset', 'substatus', 'install_status', '7', true), grChoice.getUniqueValue());&#13;
+	grChoice = _gtATF.getRecord('sys_choice', 'name=alm_asset^element=substatus^language=en^dependent_value=1^value=end_of_support');&#13;
+	updateMapping(_mappingCfgMgr.getMappedValue('55', 'alm_asset', 'substatus', 'install_status', '1', true), grChoice.getUniqueValue());&#13;
 	// Test get mapped value	&#13;
 	_gtATF.runATF('getMappedValue', 'obsolete', '55', 'alm_asset', 'substatus', 'install_status', '7');&#13;
+	_gtATF.runATF('getMappedValue', 'end_of_support', '55', 'alm_asset', 'substatus', 'install_status', '1');&#13;
 	// Test redo mapped value&#13;
 	_gtATF.runATF('doMappingValue', 'obsolete', 'alm_asset', '55', 'New SubStatus', 'alm_asset', 'substatus', 'install_status', '7');&#13;
+	_gtATF.runATF('doMappingValue', 'end_of_support', 'alm_asset', '55', 'New SubStatus', 'alm_asset', 'substatus', 'install_status', '1');&#13;
 	// Test apply mapping&#13;
 	grRecord = _gtATF.getRecord('alm_hardware', 'substatus=55');&#13;
 	if (grRecord) {&#13;
 		_gtATF.addError('_mappingCfgMgr', 'Apply mapping on "alm_hardware" failed. Expected: No records with unmapped value "55" in field substatus exist in this table');&#13;
 	} // if un-mapped choice&#13;
 &#13;
-	/*&#13;
-	Test scheduled cleanup (de-activation of added values that no longer need to be mapped)&#13;
-	*/&#13;
+	///&#13;
+	/// Test scheduled cleanup (de-activation of added values that no longer need to be mapped)&#13;
+	///&#13;
 	// Test insert mapping&#13;
 	_gtATF.runATF('doMappingValue', '10000000000000000000000000000093', 'cmdb_ci_win_server', '10000000000000000000000000000093', 'Company_3', 'core_company');&#13;
 	_gtATF.runATF('doMappingValue', 'Windows99', 'cmdb_ci_computer', 'Windows99', 'Windows 99', 'cmdb_ci_computer', 'os');&#13;
@@ -453,7 +503,7 @@
 	if (grCompany.get('10000000000000000000000000000093')) {&#13;
 		grCompany.deleteRecord();&#13;
 	} // if delete company&#13;
-	var grChoice = new GlideRecord('sys_choice');&#13;
+	grChoice = new GlideRecord('sys_choice');&#13;
 	if (grChoice.get('99000000000000000000000000000091')) {&#13;
 		grChoice.deleteRecord();&#13;
 	} // if delete choice&#13;
