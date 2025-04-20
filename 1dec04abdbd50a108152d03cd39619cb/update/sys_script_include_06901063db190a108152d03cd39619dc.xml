@@ -57,6 +57,7 @@ MappingConfigManager.prototype = {
 
 	doMappingValue: function (sParentTable, sSourceValue, sSourceDisplayValue, sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue, sTargetValue, sApplyJobStatus, bReadOnly, bActive, bReturnId) {
 		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'doMappingValue'); }
+		if (this.bLog) { gs.error('MappingConfigManager.doMappingValue sParentTable: ' + sParentTable + ' sSourceValue: ' + sSourceValue + ' sSourceDisplayValue: ' + sSourceDisplayValue + ' sRefOrChoiceTable: ' + sRefOrChoiceTable + ' sChoiceField: ' + sChoiceField + ' sDependentField: ' + sDependentField + ' sDependentValue: ' + sDependentValue + ' sTargetValue: ' + sTargetValue + ' sApplyJobStatus: ' + sApplyJobStatus + ' bReadOnly: ' + bReadOnly + ' bActive:' + bActive + ' bReturnId: ' + bReturnId); }
 		sParentTable = (sParentTable) ? String(sParentTable) : '';
 		sParentTable = (sParentTable == 'cmdb') ? 'cmdb_ci' : sParentTable; // ensure cmdb
 		this.sParentTable = sParentTable;
@@ -292,7 +293,11 @@ MappingConfigManager.prototype = {
 					} // if has choice
 					sDependentChoiceValue = (sDependentChoiceValue) ? sDependentChoiceValue : sDependentValue;
 					var _DependentMapCfgMgr = new MappingConfigManager(this._gtCache, this._gtDateTime);
-					this.sDependentMappingId = _DependentMapCfgMgr.doMappingValue(this.sParentTable, sDependentChoiceValue, sDependentDisplayValue, sDictDependentChoiceTable, sDictDependentChoiceField, '', '', sDependentValueId, 'completed', true, false, true);
+					if (sDependentValue != sDependentValueId) {
+						this.sDependentMappingId = _DependentMapCfgMgr.doMappingValue(this.sParentTable, sDependentChoiceValue, sDependentDisplayValue, sDictDependentChoiceTable, sDictDependentChoiceField, '', '', sDependentValueId, 'completed', true, false, true);
+					} else {
+						this.sDependentMappingId = _DependentMapCfgMgr.doMappingValue(this.sParentTable, sDependentChoiceValue, sDependentDisplayValue, sDictDependentChoiceTable, sDictDependentChoiceField, '', '', sDependentValueId, '', '', '', true);
+					} // if choice value exist
 				} // if no mapping found
 			} // if dependent field and value
 		} else {
@@ -502,14 +507,14 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>133</sys_mod_count>
+        <sys_mod_count>136</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-17 06:43:55</sys_updated_on>
+        <sys_updated_on>2025-04-20 06:11:09</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>06901063db190a108152d03cd39619dc</id>
