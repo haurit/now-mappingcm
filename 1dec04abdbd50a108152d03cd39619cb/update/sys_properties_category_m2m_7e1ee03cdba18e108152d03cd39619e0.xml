@@ -2,7 +2,7 @@
     <sys_properties_category_m2m action="INSERT_OR_UPDATE">
         <category display_value="Mapping Config Manager">a225096fdbd90a108152d03cd3961910</category>
         <order>300</order>
-        <property display_value="x_snc_mapping_cm.apply_autosysfield" name="x_snc_mapping_cm.apply_autosysfield">dc1ea03cdba18e108152d03cd39619fd</property>
+        <property display_value="">dc1ea03cdba18e108152d03cd39619fd</property>
         <sys_class_name>sys_properties_category_m2m</sys_class_name>
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-11 05:18:45</sys_created_on>

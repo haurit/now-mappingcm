@@ -2,7 +2,7 @@
     <sys_dictionary action="INSERT_OR_UPDATE" element="affected_fields_2" table="x_snc_mapping_cm_affected_table">
         <active>true</active>
         <array>false</array>
-        <attributes/>
+        <attributes>edge_encryption_enabled=true,no_sort=true,slushbucket_ref_no_expand=true</attributes>
         <audit>false</audit>
         <calculation><![CDATA[(function calculatedFieldValue(current) {
 

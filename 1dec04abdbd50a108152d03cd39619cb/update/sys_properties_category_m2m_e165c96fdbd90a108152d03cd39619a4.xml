@@ -2,7 +2,7 @@
     <sys_properties_category_m2m action="INSERT_OR_UPDATE">
         <category display_value="Mapping Config Manager">a225096fdbd90a108152d03cd3961910</category>
         <order>100</order>
-        <property display_value="x_snc_mapping_cm.logging.verbosity" name="x_snc_mapping_cm.logging.verbosity">90e4816fdbd90a108152d03cd3961956</property>
+        <property display_value="">90e4816fdbd90a108152d03cd3961956</property>
         <sys_class_name>sys_properties_category_m2m</sys_class_name>
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 09:48:07</sys_created_on>
