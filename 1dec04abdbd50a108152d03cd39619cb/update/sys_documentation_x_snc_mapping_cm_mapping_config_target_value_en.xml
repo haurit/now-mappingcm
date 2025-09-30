@@ -3,7 +3,7 @@
         <sys_documentation action="INSERT_OR_UPDATE">
             <element>target_value</element>
             <help/>
-            <hint/>
+            <hint>Target Value</hint>
             <label>Target Value</label>
             <language>en</language>
             <name>x_snc_mapping_cm_mapping_config</name>
@@ -11,14 +11,14 @@
             <sys_class_name>sys_documentation</sys_class_name>
             <sys_created_by>tom.hauri</sys_created_by>
             <sys_created_on>2024-04-07 05:50:05</sys_created_on>
-            <sys_mod_count>0</sys_mod_count>
+            <sys_mod_count>1</sys_mod_count>
             <sys_name>Target Value</sys_name>
             <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
             <sys_policy/>
             <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
             <sys_update_name>sys_documentation_x_snc_mapping_cm_mapping_config_target_value_en</sys_update_name>
             <sys_updated_by>tom.hauri</sys_updated_by>
-            <sys_updated_on>2024-04-07 05:50:05</sys_updated_on>
+            <sys_updated_on>2025-09-30 17:40:57</sys_updated_on>
             <url/>
             <url_target/>
         </sys_documentation>
