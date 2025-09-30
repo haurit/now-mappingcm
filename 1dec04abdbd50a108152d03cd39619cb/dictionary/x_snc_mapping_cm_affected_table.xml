@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?><database>
     <element db_object_id="29832e44db65ca108152d03cd39619be" label="Affected Table" max_length="40" name="x_snc_mapping_cm_affected_table" type="collection">
-        <element attributes="base_start=true,edge_encryption_enabled=true" label="Choice Table" max_length="80" name="choice_table" read_only="true" type="table_name"/>
-        <element attributes="edge_encryption_enabled=true" default="true" label="Apply Data Dictionary" max_length="40" name="apply_useengine" type="boolean"/>
-        <element attributes="edge_encryption_enabled=true" default="true" label="Update User and Timestamp" max_length="40" name="apply_autosysfield" type="boolean"/>
-        <element attributes="edge_encryption_enabled=true" label="Run Business Rules" max_length="40" name="apply_workflow" type="boolean"/>
-        <element attributes="base_start=true,edge_encryption_enabled=true" label="Affected Table" max_length="80" name="affected_table" read_only="true" type="table_name"/>
         <element attributes="edge_encryption_enabled=true,no_sort=true,slushbucket_ref_no_expand=true" label="Affected Fields" max_length="4000" name="affected_fields" read_only="true" reference="sys_dictionary" type="glide_list"/>
+        <element attributes="edge_encryption_enabled=true" default="true" label="Apply Data Dictionary" max_length="40" name="apply_useengine" type="boolean"/>
         <element attributes="edge_encryption_enabled=true,no_sort=true,slushbucket_ref_no_expand=true" label="Affected Fields 2" max_length="4000" name="affected_fields_2" read_only="true" reference="sys_dictionary" type="glide_list"/>
-        <element calculation="(function calculatedFieldValue(current) {&#10;&#10;&#9;return current.affected_table.getDisplayValue() + ' - ' + current.choice_table.getDisplayValue();&#10;&#10;})(current);" display="true" label="Name" max_length="255" name="name" read_only="true" type="string" virtual="true"/>
+        <element attributes="base_start=true,edge_encryption_enabled=true" label="Affected Table" max_length="80" name="affected_table" read_only="true" type="table_name"/>
+        <element attributes="edge_encryption_enabled=true" label="Run Business Rules" max_length="40" name="apply_workflow" type="boolean"/>
         <element label="Choice Field" max_length="80" name="choice_field" read_only="true" type="string"/>
+        <element calculation="(function calculatedFieldValue(current) {&#10;&#10;&#9;return current.affected_table.getDisplayValue() + ' - ' + current.choice_table.getDisplayValue();&#10;&#10;})(current);" display="true" label="Name" max_length="255" name="name" read_only="true" type="string" virtual="true"/>
+        <element attributes="edge_encryption_enabled=true" default="true" label="Update User and Timestamp" max_length="40" name="apply_autosysfield" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" default="not_started" label="Apply Job Status" max_length="40" name="apply_job_status" read_only="true" type="choice">
+            <choice/>
+        </element>
+        <element attributes="base_start=true,edge_encryption_enabled=true" label="Choice Table" max_length="80" name="choice_table" read_only="true" type="table_name"/>
         <element attributes="edge_encryption_enabled=true" default="true" label="Active" max_length="40" name="active" type="boolean"/>
     </element>
 </database>

@@ -3,7 +3,7 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>name</element>
-            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">40c9e924c385a6109ebe8d8dc001314b</list_id>
+            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">8a60be20dba94e108152d03cd3961932</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>0</position>
@@ -18,7 +18,7 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>affected_table</element>
-            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">40c9e924c385a6109ebe8d8dc001314b</list_id>
+            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">8a60be20dba94e108152d03cd3961932</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>1</position>
@@ -33,7 +33,7 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>affected_fields</element>
-            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">40c9e924c385a6109ebe8d8dc001314b</list_id>
+            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">8a60be20dba94e108152d03cd3961932</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>2</position>
@@ -48,7 +48,7 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>affected_fields_2</element>
-            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">40c9e924c385a6109ebe8d8dc001314b</list_id>
+            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">8a60be20dba94e108152d03cd3961932</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>3</position>
@@ -63,7 +63,7 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>apply_workflow</element>
-            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">40c9e924c385a6109ebe8d8dc001314b</list_id>
+            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">8a60be20dba94e108152d03cd3961932</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>4</position>
@@ -78,7 +78,7 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>apply_autosysfield</element>
-            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">40c9e924c385a6109ebe8d8dc001314b</list_id>
+            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">8a60be20dba94e108152d03cd3961932</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>5</position>
@@ -93,7 +93,7 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>apply_useengine</element>
-            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">40c9e924c385a6109ebe8d8dc001314b</list_id>
+            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">8a60be20dba94e108152d03cd3961932</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>6</position>
@@ -108,7 +108,7 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>active</element>
-            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">40c9e924c385a6109ebe8d8dc001314b</list_id>
+            <list_id display_value="x_snc_mapping_cm_affected_table" element="NULL" name="x_snc_mapping_cm_affected_table" parent="x_snc_mapping_cm_mapping_config" relationship="e4e48088dba98a108152d03cd39619e1" sys_domain="global" view="Default view">8a60be20dba94e108152d03cd3961932</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>7</position>
@@ -135,7 +135,7 @@
             <sys_created_on>2025-04-18 10:51:46</sys_created_on>
             <sys_domain>global</sys_domain>
             <sys_domain_path>/</sys_domain_path>
-            <sys_id>40c9e924c385a6109ebe8d8dc001314b</sys_id>
+            <sys_id>8a60be20dba94e108152d03cd3961932</sys_id>
             <sys_mod_count>0</sys_mod_count>
             <sys_name>x_snc_mapping_cm_affected_table</sys_name>
             <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>

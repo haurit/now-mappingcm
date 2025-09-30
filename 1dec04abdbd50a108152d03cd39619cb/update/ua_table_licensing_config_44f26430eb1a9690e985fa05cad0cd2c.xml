@@ -12,13 +12,13 @@
         <sys_class_name>ua_table_licensing_config</sys_class_name>
         <sys_created_by>system</sys_created_by>
         <sys_created_on>2025-04-20 07:09:28</sys_created_on>
-        <sys_id>0b8d1b412b4d6e107428feb0de91bfcf</sys_id>
+        <sys_id>44f26430eb1a9690e985fa05cad0cd2c</sys_id>
         <sys_mod_count>0</sys_mod_count>
         <sys_name>x_snc_mapping_cm_affected_table</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
-        <sys_update_name>ua_table_licensing_config_0b8d1b412b4d6e107428feb0de91bfcf</sys_update_name>
+        <sys_update_name>ua_table_licensing_config_44f26430eb1a9690e985fa05cad0cd2c</sys_update_name>
         <sys_updated_by>system</sys_updated_by>
         <sys_updated_on>2025-04-20 07:09:28</sys_updated_on>
     </ua_table_licensing_config>
