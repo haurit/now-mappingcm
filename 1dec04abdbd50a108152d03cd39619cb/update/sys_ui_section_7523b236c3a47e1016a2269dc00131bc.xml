@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_section caption="" section_id="7523b236c3a47e1016a2269dc00131bc" sys_domain="global" table="x_snc_mapping_cm_import" version="3" view="">
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.begin_split</element>
+            <position>0</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>13047e36c3a47e1016a2269dc0013153</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type>.begin_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_table</element>
+            <position>1</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>97047e36c3a47e1016a2269dc0013153</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_field</element>
+            <position>2</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>17043676c3a47e1016a2269dc00131b6</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_ref_or_choice_table</element>
+            <position>3</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>9b043676c3a47e1016a2269dc00131b6</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_choice_field</element>
+            <position>4</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>13043676c3a47e1016a2269dc00131b7</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_source_value</element>
+            <position>5</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>97043676c3a47e1016a2269dc00131b7</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_source_display_value</element>
+            <position>6</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>1f043676c3a47e1016a2269dc00131b7</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.split</element>
+            <position>7</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>93043676c3a47e1016a2269dc00131b8</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type>.split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_apply_job_status</element>
+            <position>8</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>1b043676c3a47e1016a2269dc00131b8</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_read_only</element>
+            <position>9</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>9f043676c3a47e1016a2269dc00131b8</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_dependent_value</element>
+            <position>10</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>17043676c3a47e1016a2269dc00131b9</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_dependend_field</element>
+            <position>11</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>9b043676c3a47e1016a2269dc00131b9</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>u_target_value</element>
+            <position>12</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>13043676c3a47e1016a2269dc00131ba</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.end_split</element>
+            <position>13</position>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:42:29</sys_created_on>
+            <sys_id>97043676c3a47e1016a2269dc00131ba</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="NULL" display_value="" name="x_snc_mapping_cm_import" sys_domain="global" view="Default view">7523b236c3a47e1016a2269dc00131bc</sys_ui_section>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:42:29</sys_updated_on>
+            <sys_user/>
+            <type>.end_split</type>
+        </sys_ui_element>
+        <sys_ui_section action="INSERT_OR_UPDATE">
+            <caption/>
+            <header>false</header>
+            <name>x_snc_mapping_cm_import</name>
+            <roles/>
+            <sys_class_name>sys_ui_section</sys_class_name>
+            <sys_created_by>tom.hauri</sys_created_by>
+            <sys_created_on>2025-10-16 15:38:34</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>7523b236c3a47e1016a2269dc00131bc</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_snc_mapping_cm_import</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+            <sys_update_name>sys_ui_section_7523b236c3a47e1016a2269dc00131bc</sys_update_name>
+            <sys_updated_by>tom.hauri</sys_updated_by>
+            <sys_updated_on>2025-10-16 15:38:34</sys_updated_on>
+            <sys_user/>
+            <title>true</title>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_section>
+    </sys_ui_section>
+</record_update>

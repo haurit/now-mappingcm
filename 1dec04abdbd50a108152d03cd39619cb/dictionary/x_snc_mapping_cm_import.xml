@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="36d0fa72c3a47e1016a2269dc0013160" extends="sys_import_set_row" label="Mapping Configuration Import" max_length="40" name="x_snc_mapping_cm_import" type="collection">
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Source Value" hint="Source Value" label="Source Value" max_length="40" name="u_source_value" type="string"/>
+        <element attributes="import_attribute_name=Dependent Value" hint="Dependent Value" label="Dependent Value" max_length="40" name="u_dependent_value" type="integer"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Read-Only" hint="Read-Only" label="Read-Only" max_length="40" name="u_read_only" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Field" hint="Field" label="Field" max_length="40" name="u_field" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Source Display Value" hint="Source Display Value" label="Source Display Value" max_length="40" name="u_source_display_value" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Ref or Choice Table" hint="Ref or Choice Table" label="Ref or Choice Table" max_length="40" name="u_ref_or_choice_table" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Apply Job Status" hint="Apply Job Status" label="Apply Job Status" max_length="40" name="u_apply_job_status" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Table" hint="Table" label="Table" max_length="40" name="u_table" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Choice Field" hint="Choice Field" label="Choice Field" max_length="40" name="u_choice_field" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Dependend Field" hint="Dependend Field" label="Dependend Field" max_length="40" name="u_dependend_field" type="string"/>
+        <element attributes="edge_encryption_enabled=true,import_attribute_name=Target Value" hint="Target Value" label="Target Value" max_length="40" name="u_target_value" type="string"/>
+    </element>
+</database>
