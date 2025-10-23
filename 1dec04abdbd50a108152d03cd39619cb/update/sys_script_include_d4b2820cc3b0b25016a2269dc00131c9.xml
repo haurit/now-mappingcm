@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_snc_mapping_cm.MappingConfigImport</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description>Handles Excel Import functions</description>
+        <mobile_callable>false</mobile_callable>
+        <name>MappingConfigImport</name>
+        <sandbox_callable>false</sandbox_callable>
+        <script><![CDATA[var MappingConfigImport = Class.create();
+MappingConfigImport.prototype = {
+	initialize: function () {
+		this._gtArray = new global.GlobalToolsArray();
+		this._mcMgr = new MappingConfigManager();
+	}, // function initialize
+
+	runOnBeforeScript: function (grSource, oMap, oLog, grTarget) {
+		var bIgnore = true;
+		var bError = false;
+		var aErrorMessages = [];
+		var sImportRowId = grSource.getUniqueValue();
+		var sImportSet = grSource.getDisplayValue('sys_import_set');
+		var sTable = grSource.getValue('u_table');
+		var sField = grSource.getValue('u_field');
+		var sTableRefOrChoice = grSource.getValue('u_ref_or_choice_table');
+		var sFieldChoice = grSource.getValue('u_choice_field');
+		var sSourceValue = grSource.getValue('u_source_value');
+		var sSourceValueDisp = grSource.getValue('u_source_display_value');
+		var sApplyJobStatus = grSource.getValue('u_apply_job_status');
+		var sReadOnly = grSource.getValue('u_read_only');
+		var sDependentValue = grSource.getValue('u_dependent_value');
+		var sDependentField = grSource.getValue('u_dependend_field');
+		var sTargetValue = grSource.getValue('u_target_value');
+		var sIdOrErrorMessage = this._mcMgr.doMappingValue(sTable, sSourceValue, sSourceValueDisp, sTableRefOrChoice, sFieldChoice, sDependentField, sDependentValue, sTargetValue, sApplyJobStatus, sReadOnly, true, true, true);
+		if (sIdOrErrorMessage) {
+			var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+			if (grMappingCfg.get(sIdOrErrorMessage)) {
+				grSource.setValue('sys_target_sys_id', sIdOrErrorMessage);
+			} else {
+				oLog.error('MappingConfigImport set "' + sImportSet + '" id "' + sImportRowId + '" error: ' + sIdOrErrorMessage);
+				//bError = true;
+			} // if mapping
+		} else {
+			oLog.error('MappingConfigImport set "' + sImportSet + '" error: could not generate mapping entry, please search system log for warnings!');
+			//bError = true;
+		} // if return value
+		return { ignore: bIgnore, error: bError };
+	}, // function runOnBeforeScript
+
+	type: 'MappingConfigImport',
+	version: '1.0.6',
+	author: 'Tom Hauri',
+	email: 'tom@hauri.biz'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2025-10-20 09:20:59</sys_created_on>
+        <sys_id>d4b2820cc3b0b25016a2269dc00131c9</sys_id>
+        <sys_mod_count>16</sys_mod_count>
+        <sys_name>MappingConfigImport</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_script_include_d4b2820cc3b0b25016a2269dc00131c9</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2025-10-23 04:31:25</sys_updated_on>
+    </sys_script_include>
+</record_update>

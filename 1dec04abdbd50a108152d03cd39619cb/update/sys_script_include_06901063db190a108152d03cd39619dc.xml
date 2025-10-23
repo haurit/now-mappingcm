@@ -52,27 +52,76 @@ MappingConfigManager.prototype = {
 		this.sType = '';
 		this.sDependentMappingId = '';
 		this._gt = new global.GlobalTools();
+		this._gtArray = new global.GlobalToolsArray();
 		if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'initialize'); }
 	}, // function initialize
 
-	doMappingValue: function (sParentTable, sSourceValue, sSourceDisplayValue, sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue, sTargetValue, sApplyJobStatus, bReadOnly, bActive, bReturnId) {
+	doMappingValue: function (sParentTable, sSourceValue, sSourceDisplayValue, sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue, sTargetValue, sApplyJobStatus, bReadOnly, bActive, bReturnId, bReturnError) {
 		if (this.bTimer) { this._gtDateTime.startTimer(this._sTimerPrefix + 'doMappingValue'); }
-		if (this.bLog) { gs.error('MappingConfigManager.doMappingValue sParentTable: ' + sParentTable + ' sSourceValue: ' + sSourceValue + ' sSourceDisplayValue: ' + sSourceDisplayValue + ' sRefOrChoiceTable: ' + sRefOrChoiceTable + ' sChoiceField: ' + sChoiceField + ' sDependentField: ' + sDependentField + ' sDependentValue: ' + sDependentValue + ' sTargetValue: ' + sTargetValue + ' sApplyJobStatus: ' + sApplyJobStatus + ' bReadOnly: ' + bReadOnly + ' bActive:' + bActive + ' bReturnId: ' + bReturnId); }
+		if (this.bLog) {
+			gs.error('MappingConfigManager.doMappingValue sParentTable: ' + sParentTable + ' sSourceValue: ' + sSourceValue + ' sSourceDisplayValue: ' + sSourceDisplayValue + ' sRefOrChoiceTable: ' +
+				sRefOrChoiceTable + ' sChoiceField: ' + sChoiceField + ' sDependentField: ' + sDependentField + ' sDependentValue: ' + sDependentValue + ' sTargetValue: ' + sTargetValue + ' sApplyJobStatus: ' + sApplyJobStatus + ' bReadOnly: ' + bReadOnly + ' bActive:' + bActive + ' bReturnId: ' + bReturnId);
+		}
+		this.aErrors = [];
+		bReturnId = (bReturnId === true) ? true : false;
+		bReturnError = (bReturnError === true) ? true : false;
+		bReadOnly = ((bReadOnly === true) || (String(bReadOnly).toLowerCase().trim() == 'true')) ? true : false;
+		bActive = (bActive === false) ? false : true;
 		sParentTable = (sParentTable) ? String(sParentTable) : '';
 		sParentTable = (sParentTable == 'cmdb') ? 'cmdb_ci' : sParentTable; // ensure cmdb
-		this.sParentTable = sParentTable;
-		this.sParentTableId = (sParentTable) ? this._gtTable.getTableId(sParentTable) : '';
-		this.sSourceValue = (sSourceValue) ? String(sSourceValue) : '';
-		this.sSourceDisplayValue = (sSourceDisplayValue) ? String(sSourceDisplayValue) : '';
-		bReturnId = (bReturnId === true) ? true : false;
-		bReadOnly = (bReadOnly === true) ? true : false;
-		bActive = (bActive === false) ? false : true;
-		this._setTableAndField(sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue);
-		if ((!this.sSourceValue) || (!this.sRefOrChoiceTable) || (!new GlideRecord(String(this.sRefOrChoiceTable)).isValid())) {
-			gs.warn('MappingConfigManager.doMappingValue empty or invalid source value or table!');
+		if ((sParentTable) && (this._gtTable.isValidTable(sParentTable))) {
+			this.sParentTable = String(sParentTable);
+			this.sParentTableId = this._gtTable.getTableId(sParentTable);
+		} else {
+			this.aErrors.push('Invalid parent table "' + sParentTable + '"!');
+			this.sParentTable = '';
+			this.sParentTableId = '';
+		} // if parent table
+		if (!gs.nil(sSourceValue)) {
+			this.sSourceValue = String(sSourceValue);
+			this.sSourceDisplayValue = (sSourceDisplayValue) ? String(sSourceDisplayValue) : '';
+		} else {
+			this.aErrors.push('Empty source value!');
+			this.sSourceValue = '';
+			this.sSourceDisplayValue = '';
+		} // if source value
+		if ((!sRefOrChoiceTable) || (!this._gtTable.isValidTable(sRefOrChoiceTable))) {
+			this.aErrors.push('Invalid choice or ref table "' + sRefOrChoiceTable + '"!');
+			this.sRefOrChoiceTable = '';
+		} else {
+			this.sRefOrChoiceTable = String(sRefOrChoiceTable);
+		} // if not choice or ref table
+		if (sChoiceField) {
+			if (!new GlideRecord(this.sRefOrChoiceTable).isValidField(sChoiceField)) {
+				if (!new GlideRecord(this.sParentTable).isValidField(sChoiceField)) {
+					this.aErrors.push('Invalid choice field "' + sChoiceField + '"!');
+				} // if not valid choice field on parent
+			} // if not valid choice field on ref table
+		} else if ((this.sParentTable) && (this.sRefOrChoiceTable)) {
+			var sQueryRefField = 'name=' + this.sParentTable + '^internal_typeINglide_list,reference^reference=' + this.sRefOrChoiceTable;
+			var grDictionary = new GlideRecord('sys_dictionary');
+			grDictionary.setLimit(1);
+			grDictionary.addEncodedQuery(sQueryRefField);
+			grDictionary.query();
+			if (!grDictionary.next()) {
+				this.aErrors.push('No reference field found on "' + this.sParentTable + '" for reference table "' + this.sRefOrChoiceTable + '"!');
+			} // invalid parent table
+		} // if choice field
+		if ((this.sParentTable) && (sDependentField) && (!new GlideRecord(this.sParentTable).isValidField(sDependentField))) {
+			this.aErrors.push('Invalid dependent field "' + sDependentField + '"!');
+		} // if invalid dependent field
+		if ((sDependentField) && (gs.nil(sDependentValue))) {
+			this.aErrors.push('Empty dependent value!');
+		} // if source value
+		if (this._gtArray.isValidArray(this.aErrors)) {
 			if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
+			if (bReturnError) {
+				return this.aErrors.join(' || ');
+			} // if return error
+			gs.warn('MappingConfigManager.doMappingValue one or more errors occurred: ' + this.aErrors.join(' || '));
 			return (bReturnId) ? '' : sSourceValue;
-		} // if no source or table
+		} // if errors occured
+		this._setTableAndField(sRefOrChoiceTable, sChoiceField, sDependentField, sDependentValue);
 		sTargetValue = (sTargetValue) ? sTargetValue : '';
 		var sTargetValue2 = '';
 		var grMappingCfg = this._getMappingCfg();
@@ -136,15 +185,6 @@ MappingConfigManager.prototype = {
 			if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
 			return (sTargetValue) ? sTargetValue : sSourceValue;
 		} else {
-			if (this.sChoiceField) {
-				if (!new GlideRecord(this.sRefOrChoiceTable).isValidField(this.sChoiceField)) {
-					if (!new GlideRecord(this.sParentTable).isValidField(this.sChoiceField)) {
-						gs.error('MappingConfigManager.doMappingValue invalid choice field "' + sChoiceField + '" in table "' + sRefOrChoiceTable + '"!');
-						if (this.bTimer) { this._gtDateTime.stopTimer(this._sTimerPrefix + 'doMappingValue'); }
-						return (bReturnId) ? '' : sSourceValue;
-					} // if valid field
-				} // if valid field
-			} // if choice field
 			var sMappingId = '';
 			grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
 			grMappingCfg.setValue('type', this.sType);
@@ -507,14 +547,14 @@ MappingConfigManager.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 05:59:17</sys_created_on>
         <sys_id>06901063db190a108152d03cd39619dc</sys_id>
-        <sys_mod_count>136</sys_mod_count>
+        <sys_mod_count>151</sys_mod_count>
         <sys_name>MappingConfigManager</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_06901063db190a108152d03cd39619dc</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-20 06:11:09</sys_updated_on>
+        <sys_updated_on>2025-10-23 09:17:33</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>06901063db190a108152d03cd39619dc</id>
