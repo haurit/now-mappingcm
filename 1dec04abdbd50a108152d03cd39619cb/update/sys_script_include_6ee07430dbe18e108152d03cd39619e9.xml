@@ -44,7 +44,7 @@ MappingConfigLookup.prototype = {
 				} // if choice
 				var oResponse = this._gtRESTAPI.doNOWRESTQuery(sTargetTable, sQuery, '', '1');
 				if ((oResponse) && (this._gtArray.isValidArray(oResponse)) && ((oResponse[0].hasOwnProperty(sDisplayField)) || (oResponse[0].hasOwnProperty('name')) || (oResponse[0].hasOwnProperty('number')))) {
-					sDisplayValue = oResponse[0][sDisplayField];
+					var sDisplayValue = oResponse[0][sDisplayField];
 					sDisplayValue = ((!sDisplayValue) && (oResponse[0].hasOwnProperty('name'))) ? oResponse[0]['name'] : sDisplayValue;
 					sDisplayValue = ((!sDisplayValue) && (oResponse[0].hasOwnProperty('number'))) ? oResponse[0]['number'] : sDisplayValue;
 					if ((sDisplayValue) && (sSourceValue != sDisplayValue)) {
@@ -56,7 +56,7 @@ MappingConfigLookup.prototype = {
 						if (grMappingCfgUpdate.next()) {
 							grMappingCfgUpdate.setValue('source_display_value', sDisplayValue);
 							if (!grMappingCfgUpdate.update()) {
-								gs.error('MappingConfigManager.doMappingValue error updating mapping record: ' + grMappingCfg.getLastErrorMessage());
+								gs.error('MappingConfigManager.processBusinessRule error updating mapping record: ' + grMappingCfgUpdate.getLastErrorMessage());
 							} // if update failed
 						} // if mapping found
 					} else {
@@ -74,7 +74,7 @@ MappingConfigLookup.prototype = {
 	}, // function processBusinessRule
 
 	type: 'MappingConfigLookup',
-	version: '1.0.5',
+	version: '1.0.8',
 	author: 'Tom Hauri',
 	email: 'tom@hauri.biz'
 };]]></script>
@@ -82,14 +82,14 @@ MappingConfigLookup.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-11 05:32:52</sys_created_on>
         <sys_id>6ee07430dbe18e108152d03cd39619e9</sys_id>
-        <sys_mod_count>23</sys_mod_count>
+        <sys_mod_count>26</sys_mod_count>
         <sys_name>MappingConfigLookup</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_6ee07430dbe18e108152d03cd39619e9</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-04-16 07:41:36</sys_updated_on>
+        <sys_updated_on>2026-02-15 14:41:37</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>6ee07430dbe18e108152d03cd39619e9</id>
