@@ -31,9 +31,9 @@ MappingConfigApply.prototype = {
 	}, // function processBusinessRule
 
 	runJob: function (sMappingCfgId) {
-		try {
-			grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
-			if ((sMappingCfgId) && (grMappingCfg.get(sMappingCfgId))) {
+		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		if ((sMappingCfgId) && (grMappingCfg.get(sMappingCfgId))) {
+			try {
 				var sType = grMappingCfg.getValue('type');
 				var sChoiceTable = grMappingCfg.getValue('choice_table');
 				var sChoiceField = grMappingCfg.getValue('choice_field');
@@ -52,7 +52,8 @@ MappingConfigApply.prototype = {
 				var sTargetValue2 = grMappingCfg.getValue('target_value_2');
 				var sDependentQuery = this._mapCfgCommon.getDependentQuery(grMappingCfg);
 				sDependentQuery = (sDependentQuery) ? sDependentQuery + '^' : '';
-				var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
+				var sParentTables = grMappingCfg.getValue('parent_tables');
+				var aParentTables = (sParentTables) ? String(sParentTables).split(',') : [];
 				var grDict = new GlideRecord('sys_dictionary');
 				aParentTables.forEach(function (sParentTableId) {
 					var sParentTable = this._gtTable.getTableName(sParentTableId);
@@ -71,7 +72,8 @@ MappingConfigApply.prototype = {
 						var bUseEngines = grAffectedTable.getValue('apply_useengine');
 						var aQuery = [];
 						var aFields = this._mapCfgCommon.getTargetFields(grAffectedTable.getValue('affected_fields'));
-						var aFieldIds = String(grAffectedTable.getValue('affected_fields')).split(',');
+						var sAffectedFields = grAffectedTable.getValue('affected_fields');
+						var aFieldIds = (sAffectedFields) ? String(sAffectedFields).split(',') : [];
 						var aFields2 = this._mapCfgCommon.getTargetFields(grAffectedTable.getValue('affected_fields_2'));
 						var aFieldIds2 = String(grAffectedTable.getValue('affected_fields_2')).split(',');
 						aFields.forEach(function (sField) {
@@ -123,19 +125,20 @@ MappingConfigApply.prototype = {
 					} // if affected table
 				}, this); // each table
 				grMappingCfg.setValue('apply_job_status', 'completed');
-				grMappingCfg.setWorkflow(false);
-				grMappingCfg.autoSysFields(false);
-				grMappingCfg.update();
-			} else {
-				gs.error('MappingConfigApply.runJob failed with error mapping id not found: ' + String(sMappingCfgId));
-			} // if mapping id
-		} catch (oEx) {
-			gs.error('MappingConfigApply.runJob failed with error: ' + String(oEx));
-		} // try
+			} catch (oEx) {
+				gs.error('MappingConfigApply.runJob failed with error: ' + String(oEx));
+				grMappingCfg.setValue('apply_job_status', 'error');
+			} // try
+			grMappingCfg.setWorkflow(false);
+			grMappingCfg.autoSysFields(false);
+			grMappingCfg.update();
+		} else {
+			gs.error('MappingConfigApply.runJob failed with error mapping id not found: ' + String(sMappingCfgId));
+		} // if mapping id
 	}, // function runJob
 
 	type: 'MappingConfigApply',
-	version: '1.0.7',
+	version: '1.0.8',
 	author: 'Tom Hauri',
 	email: 'tom@hauri.biz'
 };]]></script>
@@ -143,14 +146,14 @@ MappingConfigApply.prototype = {
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-07 09:56:51</sys_created_on>
         <sys_id>c00789afdbd90a108152d03cd39619d5</sys_id>
-        <sys_mod_count>68</sys_mod_count>
+        <sys_mod_count>72</sys_mod_count>
         <sys_name>MappingConfigApply</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_c00789afdbd90a108152d03cd39619d5</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-10-23 04:40:28</sys_updated_on>
+        <sys_updated_on>2026-02-15 14:39:29</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>c00789afdbd90a108152d03cd39619d5</id>

@@ -83,6 +83,9 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
 
 	_getParentTableInformation: function (sMessage, sSourceValue, sSourceDisplayValue, sTargetValue, sDependentQuery, grMappingCfg) {
 		var aHTML = [];
+		sSourceValue = (sSourceValue) ? GlideStringUtil.escapeHTML(sSourceValue) : '';
+		sSourceDisplayValue = (sSourceDisplayValue) ? GlideStringUtil.escapeHTML(sSourceDisplayValue) : '';
+		sTargetValue = (sTargetValue) ? GlideStringUtil.escapeHTML(sTargetValue) : '';
 		aHTML.push('<style>td {border-left:1px solid black; border-top:1px solid black; padding: 5px;} tr:nth-child(even) {background-color: Gainsboro;} table {border-right:1px solid black; border-bottom:1px solid black;} thead {background-color: Gainsboro;} </style>');
 		aHTML.push('<div><p>' + gs.getMessage(sMessage) + '</p></div>');
 		aHTML.push('<table width="100%">');
@@ -93,7 +96,8 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
 		aHTML.push('<table width="100%">');
 		aHTML.push('<thead><tr><td><strong>' + gs.getMessage('map_apply_target_message_table') + '</strong></td><td><strong>' + gs.getMessage('map_apply_target_message_fields') + '</strong></td><td><strong>' + gs.getMessage('map_apply_target_message_count') + '</strong></td></tr></thead>');
 		var sChoiceField = grMappingCfg.getValue('choice_field');
-		var aParentTables = String(grMappingCfg.getValue('parent_tables')).split(',');
+		var sParentTables = grMappingCfg.getValue('parent_tables');
+		var aParentTables = (sParentTables) ? String(sParentTables).split(',') : [];
 		aParentTables.forEach(function (sParentTableId) {
 			var sParentTable = this._gtTable.getTableName(sParentTableId);
 			var grTable = new GlideRecord(sParentTable);
@@ -106,7 +110,7 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
 			grAffectedTable.addEncodedQuery(sQuery);
 			grAffectedTable.query();
 			if (grAffectedTable.next()) {
-				iRecordCount = this._getAffectedRecordCount(sSourceValue, sDependentQuery, grAffectedTable);
+				var iRecordCount = this._getAffectedRecordCount(sSourceValue, sDependentQuery, grAffectedTable);
 				aHTML.push('<tr><td>' + sParentTableInfo + '</td><td>' + grAffectedTable.getDisplayValue('affected_fields') + '</td><td>' + String(iRecordCount) + '</td></tr>');
 			} // if affected table
 		}, this); // each table
@@ -144,7 +148,7 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
 	}, // function _getAffectedRecordCount
 
 	type: 'MappingConfigApplyAJAX',
-	version: '1.0.5',
+	version: '1.0.8',
 	author: 'Tom Hauri',
 	email: 'tom@hauri.biz'
 });]]></script>
@@ -152,14 +156,14 @@ MappingConfigApplyAJAX.prototype = Object.extendsObject(global.AbstractAjaxProce
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-04-08 08:41:28</sys_created_on>
         <sys_id>26afb1f3db518a108152d03cd39619b1</sys_id>
-        <sys_mod_count>106</sys_mod_count>
+        <sys_mod_count>110</sys_mod_count>
         <sys_name>MappingConfigApplyAJAX</sys_name>
         <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
         <sys_update_name>sys_script_include_26afb1f3db518a108152d03cd39619b1</sys_update_name>
         <sys_updated_by>tom.hauri</sys_updated_by>
-        <sys_updated_on>2025-10-22 05:53:34</sys_updated_on>
+        <sys_updated_on>2026-02-15 14:37:06</sys_updated_on>
     </sys_script_include>
     <sys_es_latest_script action="INSERT_OR_UPDATE">
         <id>26afb1f3db518a108152d03cd39619b1</id>
