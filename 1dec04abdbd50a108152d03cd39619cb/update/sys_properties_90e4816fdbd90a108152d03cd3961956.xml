@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_properties">
+    <sys_properties action="INSERT_OR_UPDATE">
+        <choices>debug,info,warn,error</choices>
+        <description>Control logging verbosity as described in KB0714743</description>
+        <ignore_cache>true</ignore_cache>
+        <is_private>true</is_private>
+        <name>x_snc_mapping_cm.logging.verbosity</name>
+        <read_roles/>
+        <suffix>logging.verbosity</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2024-04-07 09:46:38</sys_created_on>
+        <sys_id>90e4816fdbd90a108152d03cd3961956</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_snc_mapping_cm.logging.verbosity</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_properties_90e4816fdbd90a108152d03cd3961956</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2024-04-07 09:46:38</sys_updated_on>
+        <type>choicelist</type>
+        <value>error</value>
+        <write_roles/>
+    </sys_properties>
+    <sys_translated_text action="delete_multiple" query="documentkey=90e4816fdbd90a108152d03cd3961956"/>
+</record_update>

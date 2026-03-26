@@ -2,7 +2,7 @@
     <sys_properties_category_m2m action="INSERT_OR_UPDATE">
         <category display_value="Mapping Config Manager">a225096fdbd90a108152d03cd3961910</category>
         <order>500</order>
-        <property display_value="">39df8f6b1b4dd61030d6fdd49b4bcb55</property>
+        <property display_value="x_snc_mapping_cm.json_cfg" name="x_snc_mapping_cm.json_cfg">39df8f6b1b4dd61030d6fdd49b4bcb55</property>
         <sys_class_name>sys_properties_category_m2m</sys_class_name>
         <sys_created_by>tom.hauri</sys_created_by>
         <sys_created_on>2024-10-11 05:52:04</sys_created_on>

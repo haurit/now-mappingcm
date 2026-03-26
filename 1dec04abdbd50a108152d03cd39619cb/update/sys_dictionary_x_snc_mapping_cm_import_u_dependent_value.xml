@@ -2,7 +2,7 @@
     <sys_dictionary action="INSERT_OR_UPDATE" element="u_dependent_value" table="x_snc_mapping_cm_import">
         <active>true</active>
         <array>false</array>
-        <attributes>import_attribute_name=Dependent Value</attributes>
+        <attributes>edge_encryption_enabled=true,import_attribute_name=Dependent Value</attributes>
         <audit>false</audit>
         <calculation/>
         <choice>0</choice>
