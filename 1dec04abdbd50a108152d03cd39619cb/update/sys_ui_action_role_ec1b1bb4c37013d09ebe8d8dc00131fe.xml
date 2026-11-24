@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_action_role">
+    <sys_ui_action_role action="INSERT_OR_UPDATE">
+        <sys_class_name>sys_ui_action_role</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 16:03:18</sys_created_on>
+        <sys_id>ec1b1bb4c37013d09ebe8d8dc00131fe</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Approve apply.x_snc_mapping_cm.mapping_approver</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_ui_action display_value="Approve apply">8f35b1eeaa6c49e4afdaa45f05589df5</sys_ui_action>
+        <sys_update_name>sys_ui_action_role_ec1b1bb4c37013d09ebe8d8dc00131fe</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 16:03:18</sys_updated_on>
+        <sys_user_role display_value="x_snc_mapping_cm.mapping_approver" name="x_snc_mapping_cm.mapping_approver">ad962c67887d4acd9a3a2200851fafa9</sys_user_role>
+    </sys_ui_action_role>
+</record_update>

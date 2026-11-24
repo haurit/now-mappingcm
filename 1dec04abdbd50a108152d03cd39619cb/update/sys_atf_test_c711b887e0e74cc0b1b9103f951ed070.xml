@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_atf_test">
+    <sys_atf_test action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <copied_from/>
+        <description>Impersonates a mapping_manager on a read_only=true mapping and asserts the record is not writable (so Map Value and Apply are hidden) and that a direct MappingConfigApplyAJAX.applyMapping call is refused and leaves apply_job_status at not_started.</description>
+        <enable_parameterized_testing>false</enable_parameterized_testing>
+        <fail_on_server_error>false</fail_on_server_error>
+        <name>Mapping CM Role T3 Manager cannot change or apply a read only mapping</name>
+        <parameters/>
+        <remember/>
+        <sn_atf_tg_generated>false</sn_atf_tg_generated>
+        <sys_class_name>sys_atf_test</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 12:35:51</sys_created_on>
+        <sys_id>c711b887e0e74cc0b1b9103f951ed070</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Mapping CM Role T3 Manager cannot change or apply a read only mapping</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_atf_test_c711b887e0e74cc0b1b9103f951ed070</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 12:35:51</sys_updated_on>
+        <test_origin>manual</test_origin>
+    </sys_atf_test>
+    <sys_variable_value action="delete_multiple" query="document_key=c711b887e0e74cc0b1b9103f951ed070"/>
+</record_update>

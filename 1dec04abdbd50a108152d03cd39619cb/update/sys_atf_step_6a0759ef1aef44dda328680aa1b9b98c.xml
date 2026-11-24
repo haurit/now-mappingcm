@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_atf_step">
+    <sys_atf_step action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <callable_outputs/>
+        <copied_from/>
+        <description>Run the role checks as the impersonated user</description>
+        <display_name>Run Server Side Script</display_name>
+        <inputs/>
+        <mugshots_cache_json/>
+        <notes/>
+        <order>3</order>
+        <step_config display_value="Run Server Side Script">41de4a935332120028bc29cac2dc349a</step_config>
+        <sys_class_name>sys_atf_step</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 12:35:50</sys_created_on>
+        <sys_id>6a0759ef1aef44dda328680aa1b9b98c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Run Server Side Script</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_atf_step_6a0759ef1aef44dda328680aa1b9b98c</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 12:35:50</sys_updated_on>
+        <table/>
+        <test display_value="Mapping CM Role T4 Manager target record picker">6f70fad598154c6a8674557f360f30d1</test>
+        <timeout/>
+        <warning_message/>
+    </sys_atf_step>
+    <sys_variable_value action="delete_multiple" query="document_key=6a0759ef1aef44dda328680aa1b9b98c"/>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>sys_atf_step</document>
+        <document_key>6a0759ef1aef44dda328680aa1b9b98c</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 13:34:39</sys_created_on>
+        <sys_id>04eca74eea0d4414a57a7c81205685ac</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 13:34:39</sys_updated_on>
+        <value>3.1</value>
+        <variable display_value="Jasmine version">42f2564b73031300440211d8faf6a777</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>sys_atf_step</document>
+        <document_key>6a0759ef1aef44dda328680aa1b9b98c</document_key>
+        <order>200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 13:34:39</sys_created_on>
+        <sys_id>527c8b262a4b44e39669a7087d05ced6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 13:34:39</sys_updated_on>
+        <value>(function (outputs, steps, params, stepResult, assertEqual) {
+	var aErrors = [];
+	var aPassed = [];
+	var _GlobalTools = new global.GlobalTools();
+	function fnCheck(bCondition, sMessage) {
+		if (bCondition === true) {
+			aPassed.push(sMessage);
+		} else {
+			aErrors.push(sMessage);
+		} // if condition
+	} // function fnCheck
+	function fnGetMapping(sSourceValue) {
+		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		grMappingCfg.addQuery('source_value', sSourceValue);
+		grMappingCfg.query();
+		return (grMappingCfg.next()) ? grMappingCfg : null;
+	} // function fnGetMapping
+	function fnGetValue(sSourceValue, sField) {
+		var grMappingCfg = fnGetMapping(sSourceValue);
+		var sValue = (grMappingCfg) ? grMappingCfg.getValue(sField) : '';
+		return ((sValue === null) || (sValue === undefined)) ? '' : String(sValue);
+	} // function fnGetValue
+	function fnSecureUpdate(sSourceValue, oValues) {
+		var grMappingCfgSecure = new GlideRecordSecure('x_snc_mapping_cm_mapping_config');
+		grMappingCfgSecure.addQuery('source_value', sSourceValue);
+		grMappingCfgSecure.query();
+		if (grMappingCfgSecure.next()) {
+			for (var sField in oValues) {
+				grMappingCfgSecure.setValue(sField, oValues[sField]);
+			} // each field
+			return grMappingCfgSecure.update();
+		} // if mapping readable
+		return null;
+	} // function fnSecureUpdate
+	function fnFormSave(sSourceValue, oValues) {
+		var grMappingCfg = fnGetMapping(sSourceValue);
+		for (var sField in oValues) {
+			grMappingCfg.setValue(sField, oValues[sField]);
+		} // each field
+		return grMappingCfg.update();
+	} // function fnFormSave
+	function fnCanRead(sSourceValue) {
+		var grMappingCfgSecure = new GlideRecordSecure('x_snc_mapping_cm_mapping_config');
+		grMappingCfgSecure.addQuery('source_value', sSourceValue);
+		grMappingCfgSecure.query();
+		return grMappingCfgSecure.hasNext();
+	} // function fnCanRead
+	function fnCallAjax(sMethod, sSourceValue) {
+		var grMappingCfg = fnGetMapping(sSourceValue);
+		var sMapId = (grMappingCfg) ? grMappingCfg.getUniqueValue() : '';
+		var oRequest = {
+			'getParameter': function (sName) {
+				return (sName === 'sysparm_mapid') ? sMapId : '';
+			} // function getParameter
+		};
+		var _MappingConfigApplyAJAX = new x_snc_mapping_cm.MappingConfigApplyAJAX(oRequest);
+		return String(_MappingConfigApplyAJAX[sMethod]());
+	} // function fnCallAjax
+	function fnRunUiAction(sActionName, sField, sSourceValue) {
+		var grUiAction = new GlideRecord('sys_ui_action');
+		grUiAction.addQuery('action_name', sActionName);
+		grUiAction.addQuery('table', 'x_snc_mapping_cm_mapping_config');
+		grUiAction.query();
+		if (!grUiAction.next()) {
+			return 'ui action not found';
+		} // if ui action
+		var _GlideScopedEvaluator = new GlideScopedEvaluator();
+		_GlideScopedEvaluator.putVariable('current', fnGetMapping(sSourceValue));
+		_GlideScopedEvaluator.putVariable('action', {
+			'setRedirectURL': function () {
+				return true;
+			} // function setRedirectURL
+		});
+		return _GlideScopedEvaluator.evaluateScript(grUiAction, sField);
+	} // function fnRunUiAction
+	function fnWaitForValue(sSourceValue, sField, aValues, iSeconds) {
+		var sValue = fnGetValue(sSourceValue, sField);
+		for (var i = 0; ((i &lt; iSeconds) &amp;&amp; (aValues.indexOf(sValue) === -1)); i++) {
+			_GlobalTools.sleep(1000);
+			sValue = fnGetValue(sSourceValue, sField);
+		} // wait for value
+		return sValue;
+	} // function fnWaitForValue
+	function fnModuleVisible(sModuleId) {
+		var grModule = new GlideRecord('sys_app_module');
+		if (!grModule.get(sModuleId)) {
+			return false;
+		} // if module
+		var sRoles = grModule.getValue('roles');
+		if (!sRoles) {
+			var grMenu = new GlideRecord('sys_app_application');
+			sRoles = (grMenu.get(grModule.getValue('application'))) ? grMenu.getValue('roles') : '';
+		} // if module without roles inherits menu
+		if (!sRoles) {
+			return true;
+		} // if no roles at all
+		return String(sRoles).split(',').some(function (sRole) {
+			return gs.hasRole(String(sRole).trim());
+		}); // some role
+	} // function fnModuleVisible
+	function fnFinish() {
+		stepResult.setOutputMessage('User: ' + gs.getUserName() + ' | FAILED: ' + aErrors.join(' ; ') + ' | PASSED: ' + aPassed.join(' ; '));
+		return (aErrors.length === 0);
+	} // function fnFinish
+	try {
+		fnCheck(gs.hasRole('x_snc_mapping_cm.mapping_manager') &amp;&amp; !gs.hasRole('admin'), 'impersonated user is manager and not admin');
+		var sChoiceFilter = 'name=alm_asset^element=install_status^language=' + gs.getProperty('glide.sys.language', 'en');
+		var grChoiceSecure = new GlideRecordSecure('sys_choice');
+		grChoiceSecure.addEncodedQuery(sChoiceFilter);
+		grChoiceSecure.query();
+		var aLabels = [];
+		while (grChoiceSecure.next()) {
+			aLabels.push(String(grChoiceSecure.getValue('label')));
+		} // each choice
+		fnCheck(aLabels.length &gt; 0, 'sys_choice picker returns records for the choice filter: ' + aLabels.join(','));
+		fnCheck(aLabels.indexOf('In stock') !== -1, 'sys_choice picker shows the label In stock');
+		var grLocationSecure = new GlideRecordSecure('cmn_location');
+		grLocationSecure.setLimit(5);
+		grLocationSecure.query();
+		fnCheck(grLocationSecure.hasNext(), 'cmn_location picker returns records');
+		var grUserSecure = new GlideRecordSecure('sys_user');
+		grUserSecure.setLimit(1);
+		grUserSecure.query();
+		fnCheck(grUserSecure.hasNext(), 'sys_user picker returns records');
+	} catch (oEx) {
+		fnCheck(false, 'Exception: ' + String(oEx));
+	} // try
+	return fnFinish();
+})(outputs, steps, params, stepResult, assertEqual);</value>
+        <variable display_value="Test script">989d9e235324220002c6435723dc3484</variable>
+    </sys_variable_value>
+</record_update>

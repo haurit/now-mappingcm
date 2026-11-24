@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_atf_step">
+    <sys_atf_step action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <callable_outputs/>
+        <copied_from/>
+        <description>Create test mappings as admin and switch auto-approval off</description>
+        <display_name>Run Server Side Script</display_name>
+        <inputs/>
+        <mugshots_cache_json/>
+        <notes/>
+        <order>1</order>
+        <step_config display_value="Run Server Side Script">41de4a935332120028bc29cac2dc349a</step_config>
+        <sys_class_name>sys_atf_step</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 12:35:51</sys_created_on>
+        <sys_id>b941f7dae7074542b03c70c84fc7cd3d</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Run Server Side Script</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_atf_step_b941f7dae7074542b03c70c84fc7cd3d</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 12:35:51</sys_updated_on>
+        <table/>
+        <test display_value="Mapping CM Role T9 Manager and approver approves own request">544e7e33b12947778ac3c05a05075414</test>
+        <timeout/>
+        <warning_message/>
+    </sys_atf_step>
+    <sys_variable_value action="delete_multiple" query="document_key=b941f7dae7074542b03c70c84fc7cd3d"/>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>sys_atf_step</document>
+        <document_key>b941f7dae7074542b03c70c84fc7cd3d</document_key>
+        <order>200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 13:34:40</sys_created_on>
+        <sys_id>03d2bb520bb945509b7d14c28ac26c5b</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 13:34:40</sys_updated_on>
+        <value>(function (outputs, steps, params, stepResult, assertEqual) {
+	var grProperty = new GlideRecord('sys_properties');
+	if (grProperty.get('name', 'x_snc_mapping_cm_autoapproval')) {
+		grProperty.setValue('value', 'false');
+		grProperty.update();
+	} // if property
+	function fnGetChoiceId(sTable, sField, sValue) {
+		var grChoice = new GlideRecord('sys_choice');
+		grChoice.addEncodedQuery('name=' + sTable + '^element=' + sField + '^value=' + sValue + '^language=' + gs.getProperty('glide.sys.language', 'en'));
+		grChoice.setLimit(1);
+		grChoice.query();
+		return (grChoice.next()) ? grChoice.getUniqueValue() : '';
+	} // function fnGetChoiceId
+	function fnGetLocationId() {
+		var grLocation = new GlideRecord('cmn_location');
+		grLocation.setLimit(1);
+		grLocation.query();
+		return (grLocation.next()) ? grLocation.getUniqueValue() : '';
+	} // function fnGetLocationId
+	function fnInsertMapping(oValues) {
+		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		grMappingCfg.initialize();
+		for (var sField in oValues) {
+			grMappingCfg.setValue(sField, oValues[sField]);
+		} // each field
+		return grMappingCfg.insert();
+	} // function fnInsertMapping
+	function fnReferenceMapping(sSourceValue, bReadOnly, sStatus, sTargetValue) {
+		return fnInsertMapping({
+			'type': 'reference',
+			'choice_table': 'cmn_location',
+			'target_table': 'cmn_location',
+			'source_value': sSourceValue,
+			'source_display_value': 'ATF ' + sSourceValue,
+			'target_value': sTargetValue,
+			'read_only': String(bReadOnly),
+			'active': 'true',
+			'apply_job_status': sStatus
+		});
+	} // function fnReferenceMapping
+	var sLocationId = fnGetLocationId();
+	fnReferenceMapping('atf_role_writable', false, 'not_started', '');
+	fnReferenceMapping('atf_role_readonly', true, 'not_started', sLocationId);
+	fnReferenceMapping('atf_role_approval', false, 'approval', sLocationId);
+	fnReferenceMapping('atf_role_approval_2', false, 'approval', sLocationId);
+	var sParentId = fnInsertMapping({
+		'type': 'choice',
+		'choice_table': 'alm_asset',
+		'choice_field': 'install_status',
+		'target_table': 'sys_choice',
+		'source_value': 'atf_role_55',
+		'source_display_value': 'ATF atf_role_55',
+		'target_value': fnGetChoiceId('alm_asset', 'install_status', '6'),
+		'read_only': 'false',
+		'active': 'true',
+		'apply_job_status': 'completed'
+	});
+	fnInsertMapping({
+		'type': 'choice',
+		'choice_table': 'alm_asset',
+		'choice_field': 'substatus',
+		'target_table': 'sys_choice',
+		'source_value': 'atf_role_33',
+		'source_display_value': 'ATF atf_role_33',
+		'dependent_mapping': sParentId,
+		'target_value': fnGetChoiceId('alm_asset', 'substatus', 'pending_disposal'),
+		'read_only': 'false',
+		'active': 'true',
+		'apply_job_status': 'completed'
+	});
+	var bAutoApprovalOff = (String(gs.getProperty('x_snc_mapping_cm_autoapproval', true)) === 'false');
+	stepResult.setOutputMessage('Location: ' + sLocationId + ' | Parent: ' + sParentId + ' | Auto-approval off: ' + String(bAutoApprovalOff));
+	return ((sLocationId !== '') &amp;&amp; (sParentId !== null) &amp;&amp; (bAutoApprovalOff === true));
+})(outputs, steps, params, stepResult, assertEqual);</value>
+        <variable display_value="Test script">989d9e235324220002c6435723dc3484</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>sys_atf_step</document>
+        <document_key>b941f7dae7074542b03c70c84fc7cd3d</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 13:34:40</sys_created_on>
+        <sys_id>b36ea79f017f4938b48fc392776c0fcc</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 13:34:40</sys_updated_on>
+        <value>3.1</value>
+        <variable display_value="Jasmine version">42f2564b73031300440211d8faf6a777</variable>
+    </sys_variable_value>
+</record_update>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_atf_step">
+    <sys_atf_step action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <callable_outputs/>
+        <copied_from/>
+        <description>Run the role checks as the impersonated user</description>
+        <display_name>Run Server Side Script</display_name>
+        <inputs/>
+        <mugshots_cache_json/>
+        <notes/>
+        <order>3</order>
+        <step_config display_value="Run Server Side Script">41de4a935332120028bc29cac2dc349a</step_config>
+        <sys_class_name>sys_atf_step</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 12:35:49</sys_created_on>
+        <sys_id>1e568df212934e1ca2bb8bb78b23c4b5</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Run Server Side Script</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_atf_step_1e568df212934e1ca2bb8bb78b23c4b5</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 12:35:49</sys_updated_on>
+        <table/>
+        <test display_value="Mapping CM Role T2 Manager cannot create, delete or edit other fields">7bf1a8c57cc44be195eb4b8b1642bdc6</test>
+        <timeout/>
+        <warning_message/>
+    </sys_atf_step>
+    <sys_variable_value action="delete_multiple" query="document_key=1e568df212934e1ca2bb8bb78b23c4b5"/>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>sys_atf_step</document>
+        <document_key>1e568df212934e1ca2bb8bb78b23c4b5</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 13:34:38</sys_created_on>
+        <sys_id>b6df97e17dad466f8b907cefb9174b85</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 13:34:38</sys_updated_on>
+        <value>3.1</value>
+        <variable display_value="Jasmine version">42f2564b73031300440211d8faf6a777</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>sys_atf_step</document>
+        <document_key>1e568df212934e1ca2bb8bb78b23c4b5</document_key>
+        <order>200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 13:34:38</sys_created_on>
+        <sys_id>e71e9349f6e14a12b4fbfa8dc8e9ebbf</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 13:34:38</sys_updated_on>
+        <value>(function (outputs, steps, params, stepResult, assertEqual) {
+	var aErrors = [];
+	var aPassed = [];
+	var _GlobalTools = new global.GlobalTools();
+	function fnCheck(bCondition, sMessage) {
+		if (bCondition === true) {
+			aPassed.push(sMessage);
+		} else {
+			aErrors.push(sMessage);
+		} // if condition
+	} // function fnCheck
+	function fnGetMapping(sSourceValue) {
+		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		grMappingCfg.addQuery('source_value', sSourceValue);
+		grMappingCfg.query();
+		return (grMappingCfg.next()) ? grMappingCfg : null;
+	} // function fnGetMapping
+	function fnGetValue(sSourceValue, sField) {
+		var grMappingCfg = fnGetMapping(sSourceValue);
+		var sValue = (grMappingCfg) ? grMappingCfg.getValue(sField) : '';
+		return ((sValue === null) || (sValue === undefined)) ? '' : String(sValue);
+	} // function fnGetValue
+	function fnSecureUpdate(sSourceValue, oValues) {
+		var grMappingCfgSecure = new GlideRecordSecure('x_snc_mapping_cm_mapping_config');
+		grMappingCfgSecure.addQuery('source_value', sSourceValue);
+		grMappingCfgSecure.query();
+		if (grMappingCfgSecure.next()) {
+			for (var sField in oValues) {
+				grMappingCfgSecure.setValue(sField, oValues[sField]);
+			} // each field
+			return grMappingCfgSecure.update();
+		} // if mapping readable
+		return null;
+	} // function fnSecureUpdate
+	function fnFormSave(sSourceValue, oValues) {
+		var grMappingCfg = fnGetMapping(sSourceValue);
+		for (var sField in oValues) {
+			grMappingCfg.setValue(sField, oValues[sField]);
+		} // each field
+		return grMappingCfg.update();
+	} // function fnFormSave
+	function fnCanRead(sSourceValue) {
+		var grMappingCfgSecure = new GlideRecordSecure('x_snc_mapping_cm_mapping_config');
+		grMappingCfgSecure.addQuery('source_value', sSourceValue);
+		grMappingCfgSecure.query();
+		return grMappingCfgSecure.hasNext();
+	} // function fnCanRead
+	function fnCallAjax(sMethod, sSourceValue) {
+		var grMappingCfg = fnGetMapping(sSourceValue);
+		var sMapId = (grMappingCfg) ? grMappingCfg.getUniqueValue() : '';
+		var oRequest = {
+			'getParameter': function (sName) {
+				return (sName === 'sysparm_mapid') ? sMapId : '';
+			} // function getParameter
+		};
+		var _MappingConfigApplyAJAX = new x_snc_mapping_cm.MappingConfigApplyAJAX(oRequest);
+		return String(_MappingConfigApplyAJAX[sMethod]());
+	} // function fnCallAjax
+	function fnRunUiAction(sActionName, sField, sSourceValue) {
+		var grUiAction = new GlideRecord('sys_ui_action');
+		grUiAction.addQuery('action_name', sActionName);
+		grUiAction.addQuery('table', 'x_snc_mapping_cm_mapping_config');
+		grUiAction.query();
+		if (!grUiAction.next()) {
+			return 'ui action not found';
+		} // if ui action
+		var _GlideScopedEvaluator = new GlideScopedEvaluator();
+		_GlideScopedEvaluator.putVariable('current', fnGetMapping(sSourceValue));
+		_GlideScopedEvaluator.putVariable('action', {
+			'setRedirectURL': function () {
+				return true;
+			} // function setRedirectURL
+		});
+		return _GlideScopedEvaluator.evaluateScript(grUiAction, sField);
+	} // function fnRunUiAction
+	function fnWaitForValue(sSourceValue, sField, aValues, iSeconds) {
+		var sValue = fnGetValue(sSourceValue, sField);
+		for (var i = 0; ((i &lt; iSeconds) &amp;&amp; (aValues.indexOf(sValue) === -1)); i++) {
+			_GlobalTools.sleep(1000);
+			sValue = fnGetValue(sSourceValue, sField);
+		} // wait for value
+		return sValue;
+	} // function fnWaitForValue
+	function fnModuleVisible(sModuleId) {
+		var grModule = new GlideRecord('sys_app_module');
+		if (!grModule.get(sModuleId)) {
+			return false;
+		} // if module
+		var sRoles = grModule.getValue('roles');
+		if (!sRoles) {
+			var grMenu = new GlideRecord('sys_app_application');
+			sRoles = (grMenu.get(grModule.getValue('application'))) ? grMenu.getValue('roles') : '';
+		} // if module without roles inherits menu
+		if (!sRoles) {
+			return true;
+		} // if no roles at all
+		return String(sRoles).split(',').some(function (sRole) {
+			return gs.hasRole(String(sRole).trim());
+		}); // some role
+	} // function fnModuleVisible
+	function fnFinish() {
+		stepResult.setOutputMessage('User: ' + gs.getUserName() + ' | FAILED: ' + aErrors.join(' ; ') + ' | PASSED: ' + aPassed.join(' ; '));
+		return (aErrors.length === 0);
+	} // function fnFinish
+	try {
+		fnCheck(gs.hasRole('x_snc_mapping_cm.mapping_manager') &amp;&amp; !gs.hasRole('admin'), 'impersonated user is manager and not admin');
+		var grMappingCfgNew = new GlideRecordSecure('x_snc_mapping_cm_mapping_config');
+		fnCheck(!grMappingCfgNew.canCreate(), 'cannot create a mapping');
+		grMappingCfgNew.initialize();
+		grMappingCfgNew.setValue('source_value', 'atf_role_created');
+		grMappingCfgNew.insert();
+		fnCheck(fnGetMapping('atf_role_created') === null, 'secure insert did not create a mapping');
+		var grMappingCfg = fnGetMapping('atf_role_writable');
+		fnCheck(!grMappingCfg.canDelete(), 'cannot delete a mapping');
+		var grMappingCfgDelete = new GlideRecordSecure('x_snc_mapping_cm_mapping_config');
+		if (grMappingCfgDelete.get(grMappingCfg.getUniqueValue())) {
+			grMappingCfgDelete.deleteRecord();
+		} // if readable
+		fnCheck(fnGetMapping('atf_role_writable') !== null, 'secure delete did not delete the mapping');
+		['active', 'target_table', 'source_value', 'read_only', 'choice_table', 'parent_tables', 'apply_job_status'].forEach(function (sField) {
+			fnCheck(!grMappingCfg.getElement(sField).canWrite(), 'cannot write ' + sField);
+		}); // each non target field
+		fnSecureUpdate('atf_role_writable', {'active': 'false', 'target_table': 'sys_user'});
+		fnCheck((fnGetValue('atf_role_writable', 'active') === '1') &amp;&amp; (fnGetValue('atf_role_writable', 'target_table') === 'cmn_location'), 'secure update did not change active or target_table');
+		fnCheck(fnModuleVisible('1a6d482fdbd50a108152d03cd39619b6'), 'Mapping Configs module visible');
+		fnCheck(fnModuleVisible('2540cde7dbd90a108152d03cd39619c4'), 'Manual module visible');
+		fnCheck(!fnModuleVisible('63754d6fdbd90a108152d03cd39619d4'), 'Properties module hidden');
+		fnCheck(!fnModuleVisible('e2763c78c3f4ba509ebe8d8dc00131fd'), 'Administration separator hidden');
+		fnCheck(!fnModuleVisible('6ce58d6fdbd90a108152d03cd39619e7'), 'ATF Suite module hidden');
+		fnCheck(!fnModuleVisible('9077b0f8c3f4ba509ebe8d8dc0013112'), 'Import Data Source module hidden');
+		fnCheck(!fnModuleVisible('8fd03e72c3a47e1016a2269dc0013142'), 'Import Sets module hidden');
+	} catch (oEx) {
+		fnCheck(false, 'Exception: ' + String(oEx));
+	} // try
+	return fnFinish();
+})(outputs, steps, params, stepResult, assertEqual);</value>
+        <variable display_value="Test script">989d9e235324220002c6435723dc3484</variable>
+    </sys_variable_value>
+</record_update>

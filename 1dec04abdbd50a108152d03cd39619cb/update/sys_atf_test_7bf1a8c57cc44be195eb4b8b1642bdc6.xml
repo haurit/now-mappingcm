@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_atf_test">
+    <sys_atf_test action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <copied_from/>
+        <description>Impersonates a mapping_manager and asserts canCreate/canDelete are false and secure insert/delete have no effect, that the dictionary read-only fields (active, target_table, source_value, read_only, apply_job_status, ...) cannot be written server-side, and that the Properties, Administration, ATF Suite and Import modules are restricted to admin by their roles.</description>
+        <enable_parameterized_testing>false</enable_parameterized_testing>
+        <fail_on_server_error>true</fail_on_server_error>
+        <name>Mapping CM Role T2 Manager cannot create, delete or edit other fields</name>
+        <parameters/>
+        <remember/>
+        <sn_atf_tg_generated>false</sn_atf_tg_generated>
+        <sys_class_name>sys_atf_test</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 12:35:51</sys_created_on>
+        <sys_id>7bf1a8c57cc44be195eb4b8b1642bdc6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Mapping CM Role T2 Manager cannot create, delete or edit other fields</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_atf_test_7bf1a8c57cc44be195eb4b8b1642bdc6</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 12:35:51</sys_updated_on>
+        <test_origin>manual</test_origin>
+    </sys_atf_test>
+    <sys_variable_value action="delete_multiple" query="document_key=7bf1a8c57cc44be195eb4b8b1642bdc6"/>
+</record_update>
