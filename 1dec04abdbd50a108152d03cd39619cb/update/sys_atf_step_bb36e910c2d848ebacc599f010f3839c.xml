@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_atf_step">
+    <sys_atf_step action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <callable_outputs/>
+        <copied_from/>
+        <description>Run the role checks as the impersonated user</description>
+        <display_name>Run Server Side Script</display_name>
+        <inputs/>
+        <mugshots_cache_json/>
+        <notes/>
+        <order>3</order>
+        <step_config display_value="Run Server Side Script">41de4a935332120028bc29cac2dc349a</step_config>
+        <sys_class_name>sys_atf_step</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 12:35:51</sys_created_on>
+        <sys_id>bb36e910c2d848ebacc599f010f3839c</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Run Server Side Script</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_atf_step_bb36e910c2d848ebacc599f010f3839c</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 12:35:51</sys_updated_on>
+        <table/>
+        <test display_value="Mapping CM Role T8 Admin keeps full access">4da65f7544a3480cba7d35a8bb88b5b7</test>
+        <timeout/>
+        <warning_message/>
+    </sys_atf_step>
+    <sys_variable_value action="delete_multiple" query="document_key=bb36e910c2d848ebacc599f010f3839c"/>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>sys_atf_step</document>
+        <document_key>bb36e910c2d848ebacc599f010f3839c</document_key>
+        <order>200</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 13:34:40</sys_created_on>
+        <sys_id>2a4f808b245a42edab19894c0b81df47</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 13:34:40</sys_updated_on>
+        <value>(function (outputs, steps, params, stepResult, assertEqual) {
+	var aErrors = [];
+	var aPassed = [];
+	var _GlobalTools = new global.GlobalTools();
+	function fnCheck(bCondition, sMessage) {
+		if (bCondition === true) {
+			aPassed.push(sMessage);
+		} else {
+			aErrors.push(sMessage);
+		} // if condition
+	} // function fnCheck
+	function fnGetMapping(sSourceValue) {
+		var grMappingCfg = new GlideRecord('x_snc_mapping_cm_mapping_config');
+		grMappingCfg.addQuery('source_value', sSourceValue);
+		grMappingCfg.query();
+		return (grMappingCfg.next()) ? grMappingCfg : null;
+	} // function fnGetMapping
+	function fnGetValue(sSourceValue, sField) {
+		var grMappingCfg = fnGetMapping(sSourceValue);
+		var sValue = (grMappingCfg) ? grMappingCfg.getValue(sField) : '';
+		return ((sValue === null) || (sValue === undefined)) ? '' : String(sValue);
+	} // function fnGetValue
+	function fnSecureUpdate(sSourceValue, oValues) {
+		var grMappingCfgSecure = new GlideRecordSecure('x_snc_mapping_cm_mapping_config');
+		grMappingCfgSecure.addQuery('source_value', sSourceValue);
+		grMappingCfgSecure.query();
+		if (grMappingCfgSecure.next()) {
+			for (var sField in oValues) {
+				grMappingCfgSecure.setValue(sField, oValues[sField]);
+			} // each field
+			return grMappingCfgSecure.update();
+		} // if mapping readable
+		return null;
+	} // function fnSecureUpdate
+	function fnFormSave(sSourceValue, oValues) {
+		var grMappingCfg = fnGetMapping(sSourceValue);
+		for (var sField in oValues) {
+			grMappingCfg.setValue(sField, oValues[sField]);
+		} // each field
+		return grMappingCfg.update();
+	} // function fnFormSave
+	function fnCanRead(sSourceValue) {
+		var grMappingCfgSecure = new GlideRecordSecure('x_snc_mapping_cm_mapping_config');
+		grMappingCfgSecure.addQuery('source_value', sSourceValue);
+		grMappingCfgSecure.query();
+		return grMappingCfgSecure.hasNext();
+	} // function fnCanRead
+	function fnCallAjax(sMethod, sSourceValue) {
+		var grMappingCfg = fnGetMapping(sSourceValue);
+		var sMapId = (grMappingCfg) ? grMappingCfg.getUniqueValue() : '';
+		var oRequest = {
+			'getParameter': function (sName) {
+				return (sName === 'sysparm_mapid') ? sMapId : '';
+			} // function getParameter
+		};
+		var _MappingConfigApplyAJAX = new x_snc_mapping_cm.MappingConfigApplyAJAX(oRequest);
+		return String(_MappingConfigApplyAJAX[sMethod]());
+	} // function fnCallAjax
+	function fnRunUiAction(sActionName, sField, sSourceValue) {
+		var grUiAction = new GlideRecord('sys_ui_action');
+		grUiAction.addQuery('action_name', sActionName);
+		grUiAction.addQuery('table', 'x_snc_mapping_cm_mapping_config');
+		grUiAction.query();
+		if (!grUiAction.next()) {
+			return 'ui action not found';
+		} // if ui action
+		var _GlideScopedEvaluator = new GlideScopedEvaluator();
+		_GlideScopedEvaluator.putVariable('current', fnGetMapping(sSourceValue));
+		_GlideScopedEvaluator.putVariable('action', {
+			'setRedirectURL': function () {
+				return true;
+			} // function setRedirectURL
+		});
+		return _GlideScopedEvaluator.evaluateScript(grUiAction, sField);
+	} // function fnRunUiAction
+	function fnWaitForValue(sSourceValue, sField, aValues, iSeconds) {
+		var sValue = fnGetValue(sSourceValue, sField);
+		for (var i = 0; ((i &lt; iSeconds) &amp;&amp; (aValues.indexOf(sValue) === -1)); i++) {
+			_GlobalTools.sleep(1000);
+			sValue = fnGetValue(sSourceValue, sField);
+		} // wait for value
+		return sValue;
+	} // function fnWaitForValue
+	function fnModuleVisible(sModuleId) {
+		var grModule = new GlideRecord('sys_app_module');
+		if (!grModule.get(sModuleId)) {
+			return false;
+		} // if module
+		var sRoles = grModule.getValue('roles');
+		if (!sRoles) {
+			var grMenu = new GlideRecord('sys_app_application');
+			sRoles = (grMenu.get(grModule.getValue('application'))) ? grMenu.getValue('roles') : '';
+		} // if module without roles inherits menu
+		if (!sRoles) {
+			return true;
+		} // if no roles at all
+		return String(sRoles).split(',').some(function (sRole) {
+			return gs.hasRole(String(sRole).trim());
+		}); // some role
+	} // function fnModuleVisible
+	function fnFinish() {
+		stepResult.setOutputMessage('User: ' + gs.getUserName() + ' | FAILED: ' + aErrors.join(' ; ') + ' | PASSED: ' + aPassed.join(' ; '));
+		return (aErrors.length === 0);
+	} // function fnFinish
+	try {
+		var grHasRole = new GlideRecord('sys_user_has_role');
+		grHasRole.addQuery('user', gs.getUserID());
+		grHasRole.addQuery('role.name', 'STARTSWITH', 'x_snc_mapping_cm.');
+		grHasRole.query();
+		fnCheck(gs.hasRole('admin') &amp;&amp; !grHasRole.hasNext(), 'impersonated user is admin without the new roles');
+		var grMappingCfgNew = new GlideRecordSecure('x_snc_mapping_cm_mapping_config');
+		fnCheck(grMappingCfgNew.canCreate(), 'can create a mapping');
+		var grMappingCfg = fnGetMapping('atf_role_writable');
+		fnCheck(grMappingCfg.canWrite(), 'can write the mapping');
+		fnCheck(grMappingCfg.canDelete(), 'can delete a mapping');
+		fnCheck(fnModuleVisible('63754d6fdbd90a108152d03cd39619d4'), 'Properties module visible');
+		fnCheck(fnModuleVisible('6ce58d6fdbd90a108152d03cd39619e7'), 'ATF Suite module visible');
+		fnCheck(fnRunUiAction('x_snc_mapping_cm_approve_apply', 'condition', 'atf_role_approval') === true, 'Approve apply is visible for admin');
+		fnRunUiAction('x_snc_mapping_cm_approve_apply', 'script', 'atf_role_approval');
+		var sStatus = fnWaitForValue('atf_role_approval', 'apply_job_status', ['completed', 'error'], 30);
+		fnCheck(sStatus === 'completed', 'admin approval ran the apply job to completed: ' + sStatus);
+	} catch (oEx) {
+		fnCheck(false, 'Exception: ' + String(oEx));
+	} // try
+	return fnFinish();
+})(outputs, steps, params, stepResult, assertEqual);</value>
+        <variable display_value="Test script">989d9e235324220002c6435723dc3484</variable>
+    </sys_variable_value>
+    <sys_variable_value action="INSERT_OR_UPDATE">
+        <document>sys_atf_step</document>
+        <document_key>bb36e910c2d848ebacc599f010f3839c</document_key>
+        <order>100</order>
+        <sys_class_name>sys_variable_value</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 13:34:40</sys_created_on>
+        <sys_id>e2b04b9e027040c1b2f877847df592c7</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 13:34:40</sys_updated_on>
+        <value>3.1</value>
+        <variable display_value="Jasmine version">42f2564b73031300440211d8faf6a777</variable>
+    </sys_variable_value>
+</record_update>

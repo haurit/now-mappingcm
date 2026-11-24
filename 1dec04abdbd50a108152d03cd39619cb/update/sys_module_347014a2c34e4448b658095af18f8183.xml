@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[{
+  "name": "mapcfgmgr",
+  "version": "1.0.8",
+  "description": "Allows to manage mappings from choice lists, reference fields etc. in a controlled fashion.",
+  "license": "UNLICENSED",
+  "imports": {
+    "#now:*": "./@types/servicenow/fluent/*/index.js"
+  },
+  "scripts": {
+    "build": "now-sdk build",
+    "deploy": "now-sdk install",
+    "transform": "now-sdk transform",
+    "types": "now-sdk dependencies"
+  },
+  "devDependencies": {
+    "@servicenow/sdk": "4.12.2",
+    "@servicenow/glide": "27.0.5"
+  }
+}]]></content>
+        <external_source>false</external_source>
+        <path>x_snc_mapping_cm/mapcfgmgr/1.0.8/package.json</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 12:35:52</sys_created_on>
+        <sys_id>347014a2c34e4448b658095af18f8183</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_snc_mapping_cm/mapcfgmgr/1.0.8/package.json</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_module_347014a2c34e4448b658095af18f8183</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 12:35:52</sys_updated_on>
+    </sys_module>
+</record_update>

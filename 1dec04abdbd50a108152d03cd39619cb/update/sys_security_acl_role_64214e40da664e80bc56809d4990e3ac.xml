@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_security_acl_role">
+    <sys_security_acl_role action="INSERT_OR_UPDATE">
+        <sys_class_name>sys_security_acl_role</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 12:35:56</sys_created_on>
+        <sys_id>64214e40da664e80bc56809d4990e3ac</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>MappingConfigApplyAJAX.x_snc_mapping_cm.mapping_approver</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_security_acl display_value="MappingConfigApplyAJAX">47bff177db518a108152d03cd39619e7</sys_security_acl>
+        <sys_update_name>sys_security_acl_role_64214e40da664e80bc56809d4990e3ac</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 12:35:56</sys_updated_on>
+        <sys_user_role display_value="x_snc_mapping_cm.mapping_approver" name="x_snc_mapping_cm.mapping_approver">ad962c67887d4acd9a3a2200851fafa9</sys_user_role>
+    </sys_security_acl_role>
+</record_update>

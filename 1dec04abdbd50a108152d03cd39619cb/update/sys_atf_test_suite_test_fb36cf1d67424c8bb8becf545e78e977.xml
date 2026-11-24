@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_atf_test_suite_test">
+    <sys_atf_test_suite_test action="INSERT_OR_UPDATE">
+        <abort_on_failure>false</abort_on_failure>
+        <order>200</order>
+        <sys_class_name>sys_atf_test_suite_test</sys_class_name>
+        <sys_created_by>tom.hauri</sys_created_by>
+        <sys_created_on>2026-11-24 12:35:52</sys_created_on>
+        <sys_id>fb36cf1d67424c8bb8becf545e78e977</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>38a61bc97a6d40018a2e2fe557a65b25</sys_name>
+        <sys_package display_value="Mapping Configuration Manager" source="x_snc_mapping_cm">1dec04abdbd50a108152d03cd39619cb</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mapping Configuration Manager">1dec04abdbd50a108152d03cd39619cb</sys_scope>
+        <sys_update_name>sys_atf_test_suite_test_fb36cf1d67424c8bb8becf545e78e977</sys_update_name>
+        <sys_updated_by>tom.hauri</sys_updated_by>
+        <sys_updated_on>2026-11-24 12:35:52</sys_updated_on>
+        <test display_value="Mapping CM Role T1 Manager maps and applies">38a61bc97a6d40018a2e2fe557a65b25</test>
+        <test_suite display_value="Mapping Configuration Manager Test Suite">b8098d63db1d0a108152d03cd39619e3</test_suite>
+    </sys_atf_test_suite_test>
+</record_update>
